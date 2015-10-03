@@ -12,7 +12,8 @@
 		echo $e->getMessage();
 		exit;
 	}
-	echo 'Есть подключение к базе';	}
-	
+	echo 'Есть подключение к базе';	
+	}
+	else header('Location: index.php');
 
 ?>
