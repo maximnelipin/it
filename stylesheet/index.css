@@ -1,0 +1,35 @@
+@CHARSET "UTF-8";
+
+
+.button {	
+	
+	margin-top: 1%;
+	margin-left: -5%;
+}
+.text{	
+	margin-left: -5%;
+	
+	
+}
+
+
+p:nth-child(1){
+	font-size:180%;
+	padding-bottom: 2%;
+	margin-left: -5%;
+	color:brown;	
+}
+p:nth-child(even){
+	
+	margin-left: -5%;
+	margin-bottom: 1%;
+	margin-top: 1%;
+	font-size:120%;	
+	color:darkred;
+	
+}
+
+.auth {
+	
+	margin-left: 45%
+}

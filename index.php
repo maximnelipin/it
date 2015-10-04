@@ -6,7 +6,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="stylesheet/reset.css">
-<link rel="stylesheet" type="text/css" href="stylesheet/style.css">
+<link rel="stylesheet" type="text/css" href="stylesheet/general.css">
+<link rel="stylesheet" type="text/css" href="stylesheet/index.css">
 
 <title> Справочник </title>
 </head>
@@ -14,22 +15,15 @@
      <?php
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
 	?>
-    <?php
-    	print '
+    
     	<form action="index.php" method="post">
     		<div class="auth"> 
 				<p> Справочная система </p>
-    			<p>Имя пользователя </p> <p><input class="text" type="text" name="login" /> </p>
-    			<p> Пароль</p> <p><input class="text" type="password" name="pwd"/> </p>
-    			<p> <input class="button" type="submit" value="Вход"/> </p>
+    			<p>Имя пользователя </p> <p><input class="text" type="text" size="27" name="login" /> </p>
+    			<p> Пароль</p> <p><input class="text" type="password" size="27" name="pwd"/> </p>
+    			 <input class="button" type="submit" value="Вход"/>
     		</div>
-    	</form>
-    	';
-    
-    			
-    ?>
-    
-    
+    	</form>    	    
     </body>
  
 </html>

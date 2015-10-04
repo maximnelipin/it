@@ -1,0 +1,46 @@
+@CHARSET "UTF-8";
+body {
+	background-image: url(../content/bg.gif);
+	background-repeat: repeat;
+	font-family: 'Times New Roman';
+}
+
+header {
+	overflow: auto;
+	padding: 10px 30px 10px 30px;
+}
+header a {
+	font-size: 120%;
+}
+header .leftcolumn {
+	float: left;
+	margin-left: 41%	
+}
+header .rightcolumn {
+	float: right;	
+	padding-top: 1%;
+}
+
+label  {
+  float:left; 
+	padding-bottom: 1%;
+  width: 50%;  
+	font-size: 120%;
+	
+}
+
+.button {	
+	padding: 5px 10px 5px 10px;
+	border-radius: 7px;
+	color:azure;
+	background-color:coral;
+	cursor: pointer;
+	font-size: 100%;
+}
+
+.text{	
+	padding: 5px 10px 5px 10px;
+	border-radius: 7px;	
+	background-color: azure;	
+	font-size:100%;	
+}

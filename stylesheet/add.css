@@ -1,0 +1,18 @@
+@CHARSET "UTF-8";
+.field {
+	margin-bottom: 1%;
+	padding-left: 1%;
+	margin-right: 45%;
+	margin-left: 3%;
+}
+.title{	
+	font-size: 160%;
+	color:brown;
+	margin-bottom: 1.5%;
+	position:relative;
+	left:4%;
+}
+
+.button{
+	margin-left:4%;	
+}
