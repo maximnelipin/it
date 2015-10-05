@@ -14,6 +14,6 @@
 	}
 	echo 'Есть подключение к базе';	
 	}
-	else header('Location: index.php');
+	else header('Location: ../index.php');
 
 ?>
