@@ -1,7 +1,7 @@
 <?php
 	session_start();
 	if(isset($_SESSION['user_id']))
-	{	include $_SERVER['DOCUMENT_ROOT'].'/form/addsprintershtml.php';
+	{	
 		include 'mysql_conf.php';
 		try {
 			$conbd=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
@@ -17,14 +17,14 @@
 			include '../form/errorhtml.php';
 			exit;
 		}
-		if (isset($_POST['nameb']))	
+		include $_SERVER['DOCUMENT_ROOT'].'/form/addprintershtml.php';
+		if (isset($_POST['netpath']))	
 		{
-			$drivers=$_POST["drivers"];
-			//преобразуем путь к папке для записи в Mysql
-			$drivers=addslashes($drivers); 
+			
 			
 			try {
-				$sql='insert into sprinters set name="'.$_POST["nameb"].'", cart="'.$_POST["cart"].'", drivers="'.$drivers.'"';
+				$sql='insert into printers set netpath="'.$_POST["netpath"].'", id_address="'.$_POST["id_address"].'", 
+						id_printer="'.$_POST["id_ptinter"].'", note="'.$_POST["note"].'", cabinet="'.$_POST["cabinet"].'"';
 				$conbd->exec($sql);
 			}
 			

@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="../stylesheet/reset.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
-<title>Добавление здания</title>
+<title>Добавление модели принтера</title>
 </head>
 
     <body>

@@ -1,14 +1,3 @@
-<?php
-	    	
-			//mysql_connect($hostsql, $dbuser, $dbpwd);
-			//mysql_select_db($dbname);
-			//$selsql='select name from build';
-	    	//$ressql=mysql_query($selsql);
-	    	//mysql_set_charset( 'utf8' );
-	    	//$ressql=$conbd->exec($selsql);
-	    	
-	    	?>
-
 <!doctype html>
 <html>
 <head>
@@ -16,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="../stylesheet/reset.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
-<title>Добавление здания</title>
+<title>Добавление локации</title>
 </head>
 
     <body>
