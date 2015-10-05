@@ -24,11 +24,11 @@
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
 	?>
 	
-	    <h2 class="title"> Добавление модели принтера</h2>
+	    <h2 class="title"> Добавление этажей здания</h2>
 	    <form action="?"  method="post">
 	    	<div class="field">
-	    		<label for="idbuild" > Модель принтера</label>	    		
-	    		<select required class="text" size="5" name="idbuild">
+	    		<label for="idbuild" > Здание</label>	    		
+	    		<p><select required class="text" size="5" name="idbuild">
 	    			<option disabled>Выберите объект</option>
 	    			<?php 
 	    				$selsql='select id, name from build';
@@ -38,7 +38,8 @@
 	    					echo '<option value='.$res['id'].'>'.$res['name'].' </option>';
 	    				}
 	    				?>
-	    		</select>   	
+	    		</select> 
+	    		</p>  	
 	    	</div>
 	    	<div class="field">
 	    		<label for="floor"> Этаж</label>
