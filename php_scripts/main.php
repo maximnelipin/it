@@ -12,7 +12,7 @@
 		echo $e->getMessage();
 		exit;
 	}
-	echo 'Есть подключение к базе';	
+	include $_SERVER['DOCUMENT_ROOT'].'/form/authhtml.php';
 	}
 	else header('Location: ../index.php');
 

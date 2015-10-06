@@ -62,7 +62,7 @@
 						$ressql=$conbd->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
-	    					echo '<option value='.$res['login'].'>'.$res['login'].'</option>';
+	    					echo '<option value='.$res['login'].'>'.$res['name'].'</option>';
 	    				}
 	    				?>
 	    		</select> 

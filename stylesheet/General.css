@@ -29,6 +29,26 @@ label  {
 	
 }
 
+table, th, td, caption {
+	border-style:solid;
+	border-width:1px;
+	border-collapse: collapse;
+	padding:3px;
+	font-size: 100%;
+	background-color: azure;	
+}
+
+table {
+	margin-left:4%;
+}
+caption {
+	font-size: 120%
+}
+th{
+	font-size:110%;
+	
+}
+
 .button {	
 	padding: 5px 10px 5px 10px;
 	border-radius: 7px;
