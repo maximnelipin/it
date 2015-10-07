@@ -12,7 +12,7 @@
 		echo $e->getMessage();
 		exit;
 	}
-	include $_SERVER['DOCUMENT_ROOT'].'/form/authhtml.php';
+	include $_SERVER['DOCUMENT_ROOT'].'/form/mainhtml.php';
 	}
 	else header('Location: ../index.php');
 

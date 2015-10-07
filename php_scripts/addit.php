@@ -17,13 +17,14 @@
 			include '../form/errorhtml.php';
 			exit;
 		}
+		//Подключаемся к LDAP
+		$conn=ldap_connect($host, $port) or die("LDAP сервер не доступен");
+		//Включаем протокол третьей версии
+		ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
 		include $_SERVER['DOCUMENT_ROOT'].'/form/addithtml.php';
 		if (isset($_POST['addit']))	
 		{
-			//Подключаемся к LDAP
-			$conn=ldap_connect($host, $port) or die("LDAP сервер не доступен");
-			//Включаем протокол третьей версии
-			ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
+			
 			//Задаем атрибуты, которые необходимо выбрать
 			$attr=array("title", "userPrincipalName", "name" );
 			//Если соединение успешно
@@ -52,7 +53,7 @@
     				<th>Должность</th>    			
    					</tr>';
 			//создаем временную таблицу для удаления записей, которых нет в AD.
-			$sql='Create table if not exists tempit (login varchar(50) not null primary key, fio tinytext, func tinytext)';
+			$sql='Create table if not exists tempit (login varchar(50) not null primary key, fio tinytext, func tinytext) CHARSET "utf8"';
 			$condb->exec($sql);
 			//Цикл перебора записей LDAP и внесения их в таблицу
 			while ($i<$res['count'])
@@ -152,8 +153,9 @@
 		}
 		//Если скрипт открыт не через main, то отправляем на главную
 		else header('Location ../php_scripts/main.php');
-		ldap_unbind($conn);
-		$conndb=NULL;
+		if($conn!=null){
+			ldap_unbind($conn);}
+		if($condb!=null) {$condb=NULL;}
 		
 	}
 	//Если без авторизации-на страницу авторизации
