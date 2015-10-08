@@ -40,6 +40,7 @@ table, th, td, caption {
 
 table {
 	margin-left:4%;
+	margin-top:1%;
 }
 caption {
 	font-size: 120%

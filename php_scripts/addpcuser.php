@@ -27,7 +27,7 @@
 		{
 			
 			//Задаем атрибуты, которые необходимо выбрать
-			$attruser=array("title", "userPrincipalName", "name", "department" );
+			$attruser=array("title", "userPrincipalName", "displayName", "department" );
 			$attrpc=array("name", "description");
 			//Если соединение успешно
 			if($conn)
@@ -53,7 +53,7 @@
 				else die("Введён неверный логин или пароль или недоступен сервер LDAP. <a href='main.php'> Попробовать ещё раз </a>");
 			}
 			//Обнуляем переменную цикла
-			$i=1;
+			$i=0;
 			//Готовим шапку таблицы
 			echo '<table>
    					<caption>Сотрудники ИТ-отдела</caption>
@@ -84,14 +84,14 @@
 				$name='';
 				
 				//присваиваем переменным значения из очередной строки результата запроса LDAP
-				$name=$resuser[$i]['name'][0]." ";
-				$login=$resuser[$i]['userprincipalname'][0]." ";
+				$name=$resuser[$i]['displayname'][0];
+				$login=$resuser[$i]['userprincipalname'][0];
 				//Если должность или отдел есть, то ставим так же занносим её в переменную
 				//иначе без проверки будет ошибка
 				if(isset($resuser[$i]['title'][0]))
-					{$title=$resuser[$i]['title'][0]." ";}		
+					{$title=$resuser[$i]['title'][0];}		
 				if(isset($resuser[$i]['department'][0]))
-					{$dept=$resuser[$i]['department'][0]." ";}
+					{$dept=$resuser[$i]['department'][0];}
 				//Заполняем временную таблицу записями из AD
 				$sql='insert into tempuser set  login="'.$login.'", fio="'.$name.'", func="'.$title.'", dept="'.$dept.'"';
 				$condb->exec($sql);
@@ -141,14 +141,14 @@
 			while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 			{	//Делаем выборку из tempuser
 				$sql='select login from tempuser where login="'.$res['login'].'"';
-				$restempit=$condb->query($sql);
+				$restempuser=$condb->query($sql);
 				//Если логин есть и в listuser, и в tempuser(AD)
-				if ($restempit->fetch(PDO::FETCH_ASSOC))
+				if ($restempuser->fetch(PDO::FETCH_ASSOC))
 				{	//Выводим его как результат синхронизации
 					echo '<tr><td>'.$res['fio'].'</td><td>'.$res['func'].'</td><td>'.$res['dept'].'</td><td>'.$res['login'].'</td> </tr>';					
 				}
 				else 
-				{	//иначе удаяем запись с таким логином из таблицы itusers
+				{	//иначе удаяем запись с таким логином из таблицы listuser
 					try {
 						$sql='delete from listuser where login="'.$res['login'].'"';
 						$condb->exec($sql);
@@ -165,10 +165,22 @@
 				
 			}
 			//после окончания цикла заканчиваем вывод таблицы
-			//echo '</table>';
+			echo '</table>';
 			//----------------------------------------------------------------------------------
 			//-----------------------------Добавляем ПК в базу----------------------------------
 			//----------------------------------------------------------------------------------
+			echo '<p> </p>';
+			echo '<table>
+   					<caption>Компьютеры</caption>
+  					 <tr>
+					<th>Имя</th>
+    				<th>Логин пользователя</th>
+					<th>Описание из AD</th>
+					<th>Примечание</th>
+   					</tr>';
+			
+			//-------Добавляем во временную таблицу----------
+			
 			//Цикл добавления из первого OU
 			$i=0;
 			while ($i<$respc1['count'])
@@ -188,7 +200,7 @@
 				//Заполняем временную таблицу записями из AD
 				$sql='insert into temppc set  name="'.$namepc.'", descrip="'.$descrip.'"';
 				$condb->exec($sql);
-				echo '<tr><td>'.$namepc.'</td><td>'.$descrip.'</td></tr>';
+				
 				$i++;
 			}
 			$i=0;
@@ -211,15 +223,135 @@
 				$sql='insert into temppc set  name="'.$namepc.'", descrip="'.$descrip.'"';
 				$condb->exec($sql);
 				$i++;
-				//echo '<tr><td>'.'123'.'</td><td>'.'123'.'</td><td>'.'123'.'</td></tr>';
-				echo '<tr><td>'.$namepc.'</td><td>'.$descrip.'</td></tr>';
+				//echo '<tr><td>'.$namepc.'</td><td>'.$descrip.'</td></tr>';
 			}
 			
+			//--------Добавляем во временную таблицу Логины пользователей
+			//Выбираем всех пользователей
+			$sql='select login, fio from listuser';
+			$resusersql=$condb->query($sql);
+			//пока всех не переберём
+			while ($resuser=$resusersql->fetch(PDO::FETCH_ASSOC))
+			{
+				//отбираем ПК, у которых в описании стоит выбранный пользователь
+				$sql='select name from temppc where descrip like "%'.$resuser['fio'].'%"';
+				$respcsql=$condb->query($sql);
+				//заносим в поле login в отобранных записях пользователя
+				while ($respc=$respcsql->fetch(PDO::FETCH_ASSOC))
+				{
+					try {
+					$sql='update temppc set login="'.$resuser['login'].'" where name="'.$respc['name'].'"';
+					$condb->exec($sql);
+					}
+					catch (PDOException $e)
+					{
+							
+						$error= 'Не удалось выполнить запрос'.$e->getMessage().$login;
+						$urlerr=$_SERVER['PHP_SELF'];
+						include '../form/errorhtml.php';
+						exit;
+					}
+				}
+			}
+			//------Пененосим в базу----------
+			
+			//делаем выборку из listpc
+			$sql='select * from temppc order by name';
+			$ressql=$condb->query($sql);
+			//Цикл перебора записей  LDAP и внесения их в таблицу
+			while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
+			{				
+				//Делаем запрос на выборку записи из таблицы listpc с именем $res['name']
+				$sql='select name from listpc where name="'.$res['name'].'"';
+				$restempsql=$condb->query($sql);
+				//Если ПК в таблице listpc нет
+				if (!($restempsql->fetch(PDO::FETCH_ASSOC)))
+				{
+					//Добавляем его в таблицу
+					try {
+			
+						$sql='insert into listpc set  name="'.$res['name'].'", login="'.$res['login'].'", descrip="'.$res['descrip'].'"';
+						$condb->exec($sql);
+					}
+					catch (PDOException $e)
+					{
+							
+						$error= 'Не удалось выполнить запрос'.$e->getMessage().$login."insert";
+						$urlerr=$_SERVER['PHP_SELF'];
+						include '../form/errorhtml.php';
+						exit;
+					}
+				}
+				else
+				{	//если есть такой ПК в таблице, обновляем связанную запись
+					try {
+						$sql='update listpc set   login="'.$res['login'].'", descrip="'.$res['descrip'].'" where name="'.$res['name'].'"';
+						$condb->exec($sql);
+					}
+					catch (PDOException $e)
+					{
+			
+						$error= 'Не удалось выполнить запрос'.$e->getMessage().$login."update";
+						$urlerr=$_SERVER['PHP_SELF'];
+						include '../form/errorhtml.php';
+						exit;
+					}
+				}
+			}
+			
+			
+			//Удаляем отсутсвующие ПК в AD из базы
+			//делаем выборку из listpc
+			$sql='select * from listpc order by name';
+			$ressql=$condb->query($sql);
+			//перебираем записи из listpc
+			while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
+			{	//Делаем выборку из tempuser
+				$sql='select name from temppc where name="'.$res['name'].'"';
+				$restemppc=$condb->query($sql);
+				//Если имя есть и в listuser, и в temppc(AD)
+				if ($restemppc->fetch(PDO::FETCH_ASSOC))
+				{	//Выводим его как результат синхронизации
+				echo '<tr><td>'.$res['name'].'</td><td>'.$res['login'].'</td><td>'.$res['descrip'].'</td><td>'.$res['note'].'</td> </tr>';
+				}
+				else
+				{	//иначе удаяем запись с таким именем из таблицы listuser
+				try {
+					$sql='delete from listpc where name="'.$res['name'].'"';
+					$condb->exec($sql);
+				}
+				catch (PDOException $e)
+				{
+						
+					$error= 'Не удалось выполнить запрос'.$e->getMessage().$login;
+					$urlerr=$_SERVER['PHP_SELF'];
+					include '../form/errorhtml.php';
+					exit;
+				}
+				}
+			
+			}
+			
+			
+			
+			
+			
+			//Выбираем всех пользователей
+			//$sql='select * from temppc';
+			//$respcsql=$condb->query($sql);
+			//while ($respc=$respcsql->fetch(PDO::FETCH_ASSOC))
+				//{
+				
+					//echo '<tr><td>'.$respc['name'].'</td><td>'.$respc['login'].'</td><td>'.$respc['descrip'].'</td></tr>';
+				
+				//}
 			//после окончания цикла заканчиваем вывод таблицы
 			echo '</table>';
 			//header('Location .');
 			//Чистим временную таблицу
 			$sql='delete from tempuser';
+			$condb->exec($sql);
+			$sql='delete from temppc';
 			$condb->exec($sql);
 			
 		}
