@@ -20,3 +20,11 @@ select {
 .button{
 	margin-left:4%;	
 }
+.divon{
+	display:block;
+	
+}
+.divoff{
+	display:none;
+	
+}
