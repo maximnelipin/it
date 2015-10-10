@@ -38,12 +38,20 @@
 	    		<p><select required class="text" size="5" name="id_address">
 	    			<option disabled>Выберите объект</option>
 	    			<?php 
-	    				$selsql='SELECT build.name, location.id, location.floor FROM build
-								RIGHT JOIN location ON build.id = location.id_build ORDER BY name, floor';
+	    				$selsql='SELECT build.name as build, floor.id as id_floor, floor.floor as floor FROM build
+								RIGHT JOIN floor ON build.id = floor.id_build ORDER BY name, floor';
 						$ressql=$conbd->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
-	    					echo '<option value='.$res['id'].'>'.$res['name']. " ".$res['floor'].' этаж </option>';
+	    					$selsql='SELECT id, cabinet FROM cabinet WHERE id_floor='.$res[id_floor].'ORDER BY cabinet';
+	    					$rescabsql=$conbd->query($selsql);
+	    					while ($rescab=$rescabsql->fetch(PDO::FETCH_ASSOC))
+	    					{
+	    						echo '<option value='.$rescab['id'].'>'.$res['build']. " ".$res['floor'].' этаж Кабинет "'.$rescab['cabinet'].'"</option>';
+	    						
+	    					}
+	    					
+	    					
 	    				}
 	    				?>
 	    		</select> 
