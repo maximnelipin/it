@@ -28,3 +28,10 @@ select {
 	display:none;
 	
 }
+.radio {
+	font-size: 120%;
+	float:right;
+	margin-right:81%;
+	margin-bottom:1%;
+	
+}

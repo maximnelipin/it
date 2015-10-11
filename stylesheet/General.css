@@ -21,6 +21,8 @@ header .rightcolumn {
 	padding-top: 1%;
 }
 
+
+
 label  {
   float:left; 
 	padding-bottom: 1%;
@@ -28,6 +30,8 @@ label  {
 	font-size: 120%;
 	
 }
+
+
 
 table, th, td, caption {
 	border-style:solid;

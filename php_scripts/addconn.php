@@ -6,9 +6,9 @@
 	{	
 		
 		try {
-			$conbd=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
-			$conbd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$conbd->exec('SET NAMES "utf8"');
+			$condb=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
+			$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$condb->exec('SET NAMES "utf8"');
 		}
 		catch (PDOException $e)
 		{
@@ -19,25 +19,34 @@
 			include '../form/errorhtml.php';
 			exit;
 		}
-		include $_SERVER['DOCUMENT_ROOT'].'/form/addprintershtml.php';
-		if (isset($_POST['name']))	
+		include $_SERVER['DOCUMENT_ROOT'].'/form/addconnhtml.php';
+		if (isset($_POST['gateway']))	
 		{
+			$id_extnet='';
+			$id_ppp='';
+			$id_comp='';
+			if($_POST['radextnet']=="sel")
+				{$id_extnet=$_POST['id_extnet'];}
+			if($_POST['radextnet']=="add")
+				{
+					try {
+					$fields=array('extip', 'extmask', 'extgw', 'extdns1', 'extdns2');					
+					$sql='insert into extnet set '.pdoSet($fields,$values);
+					$sqlprep=$condb->prepare($sql);
+					$sqlprep->execute($values);
+					$id_extnet=$condb->lastInsertId();
+					}
+					catch (PDOException $e)
+					{
+						echo 'Не удалось выполнить запрос';
+						echo $e->getMessage();
+						exit;
+					}
+				}
 			
-			//-----------Добавляем здание------
-			try {
-				$fields=array("name","id_cabinet","type","descrip","phys","rack","units","login","note");
-				$sql='insert into servers set '.pdoSet($fields,$values);
-				$sqlprep=$condb->prepare($sql);
-				$sqlprep->execute($values);			
+			echo $id_extnet;
 			
-			}
 			
-			catch (PDOException $e)
-			{
-				echo 'Не удалось выполнить запрос';
-				echo $e->getMessage();
-				exit;
-			}		
 			
 			
 			
