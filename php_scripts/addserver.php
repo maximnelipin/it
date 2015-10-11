@@ -6,9 +6,9 @@
 	{	
 		
 		try {
-			$conbd=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
-			$conbd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$conbd->exec('SET NAMES "utf8"');
+			$condb=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
+			$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$condb->exec('SET NAMES "utf8"');
 		}
 		catch (PDOException $e)
 		{
@@ -19,13 +19,14 @@
 			include '../form/errorhtml.php';
 			exit;
 		}
-		include $_SERVER['DOCUMENT_ROOT'].'/form/addprintershtml.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/addserverhtml.php';
 		if (isset($_POST['name']))	
 		{
 			
 			//-----------Добавляем здание------
 			try {
 				$fields=array("name","id_cabinet","type","descrip","phys","rack","units","login","note");
+				echo $_POST['id_cabinet'];
 				$sql='insert into servers set '.pdoSet($fields,$values);
 				$sqlprep=$condb->prepare($sql);
 				$sqlprep->execute($values);			

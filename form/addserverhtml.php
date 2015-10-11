@@ -27,11 +27,11 @@
 	    			<?php 
 	    				$selsql='SELECT build.name as build, floor.id as id_floor, floor.floor as floor FROM build
 								RIGHT JOIN floor ON build.id = floor.id_build ORDER BY name, floor';
-						$ressql=$conbd->query($selsql);
+						$ressql=$condb->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
-	    					$selsql='SELECT id, cabinet FROM cabinet WHERE id_floor='.$res[id_floor].'ORDER BY cabinet';
-	    					$rescabsql=$conbd->query($selsql);
+	    					$selsql='SELECT id, cabinet FROM cabinet WHERE id_floor='.$res['id_floor'].' ORDER BY cabinet';
+	    					$rescabsql=$condb->query($selsql);
 	    					while ($rescab=$rescabsql->fetch(PDO::FETCH_ASSOC))
 	    					{
 	    						echo '<option value='.$rescab['id'].'>'.$res['build']. " ".$res['floor'].' этаж Кабинет "'.$rescab['cabinet'].'"</option>';
@@ -63,12 +63,12 @@
 	    		<input type="text" class="text" size="70" width="3" name="units">
 	    	</div>
 	    	<div class="field">
-	    		<label for="login"> Номер(а) юнитов в стойке</label>
-	    		<select required class="text" size="5" name="id_cabinet">
+	    		<label for="login"> Ответственный</label>
+	    		<select required class="text" size="5" name="login">
 	    			<option disabled>Выберите объект</option>
 	    			<?php 
 	    				$selsql='SELECT login, fio FROM itusers';
-						$ressql=$conbd->query($selsql);
+						$ressql=$condb->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{    					
 	    						echo '<option value='.$res['login'].'>'.$res['fio'].'</option>';
