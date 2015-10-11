@@ -19,15 +19,16 @@
 	    <form action="?"  method="post">	    	
 		    	<div class="field">
 		    		<label for="id_floor" > Номер этажа</label>
-		    		<p><select required class="text" size="5" name="id_floor">
+		    		<select required class="text" size="5" name="id_floor">
 	    			<option disabled>Выберите этаж</option>
 	    			<?php 
-	    				$selsql='SELECT build.name, location.id, location.floor FROM build
-								RIGHT JOIN location ON build.id = location.id_build ORDER BY name, floor';
-						$ressql=$conbd->query($selsql);
+						$selsql='SELECT build.name as build, floor.id as id_floor, floor.floor as floor FROM build
+								RIGHT JOIN floor ON build.id = floor.id_build ORDER BY name, floor';
+						$ressql=$condb->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
-	    					echo '<option value='.$res['id'].'>'.$res['name']. " ".$res['floor'].' этаж </option>';
+	    					echo '<option value='.$res['id_floor'].'>'.$res['build']. " ".$res['floor'].' этаж </option>';
+	    					    					
 	    				}
 	    				?>
 	    		</select>

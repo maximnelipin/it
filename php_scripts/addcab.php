@@ -3,7 +3,7 @@
 	include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
 	session_start();
 	if(isset($_SESSION['user_id']))
-	{	include $_SERVER['DOCUMENT_ROOT'].'/form/addfloorhtml.php';
+	{	
 		
 		try {
 			$condb=new PDO('mysql:host=192.168.0.75;dbname=IT_INFO', 'itinfo', 'Passw0rd');
@@ -16,13 +16,14 @@
 			echo $e->getMessage();
 			exit;
 		}
+		include $_SERVER['DOCUMENT_ROOT'].'/form/addcabhtml.php';
 		if (isset($_POST['cabinet']))	
 		{
 			
 			//Получаем список всех кабинетов на этаже
-			$Dcab=str_getcsv($_POST["cabinet"], ";");			
+			//$Dcab=str_getcsv($_POST["cabinet"], ",");			
 			//----------вставка этажей и кабинетов на них--------------
-			addCab($_POST['id_floor'], $Dcab);				
+			addCab($_POST['id_floor'], $_POST['cabinet'], $condb);				
 			}			
 			header('Location .');
 			exit;

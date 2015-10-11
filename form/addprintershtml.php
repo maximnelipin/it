@@ -43,7 +43,7 @@
 						$ressql=$conbd->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
-	    					$selsql='SELECT id, cabinet FROM cabinet WHERE id_floor='.$res[id_floor].'ORDER BY cabinet';
+	    					$selsql='SELECT id, cabinet FROM cabinet WHERE id_floor='.$res['id_floor'].' ORDER BY cabinet';
 	    					$rescabsql=$conbd->query($selsql);
 	    					while ($rescab=$rescabsql->fetch(PDO::FETCH_ASSOC))
 	    					{

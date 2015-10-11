@@ -26,8 +26,8 @@
 				$sqlprep=$condb->prepare($sql);
 				$sqlprep->execute($values);
 				//Получаем id введённого здания
-				$id_build=$conn->lastInsertId();
-				echo $sql."W";
+				$id_build=$condb->lastInsertId();
+				//echo $sql."W";
 				
 			}
 				
@@ -42,7 +42,7 @@
 			//Получаем список всех кабинетов на этажах
 			$Dcab=str_getcsv($_POST["cabinet"], ";");			
 			//----------вставка этажей и кабинетов на них--------------
-			addFloor($id_build, $Dfloor, $Dcab);				
+			addFloor($id_build, $Dfloor, $Dcab,$condb);				
 			}			
 			header('Location .');
 			exit;

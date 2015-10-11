@@ -23,7 +23,7 @@
 	    			<option disabled>Выберите объект</option>
 	    			<?php 
 	    				$selsql='SELECT name, id FROM build ORDER BY name';
-						$ressql=$conbd->query($selsql);
+						$ressql=$condb->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
 	    					echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
