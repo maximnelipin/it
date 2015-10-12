@@ -1,4 +1,6 @@
 <?php
+//Данная функция взята с http://phpfaq.ru/pdo. Все права принадлежат автору
+//Если имена форм совпадают с полями таблице, то функция формирует строку для insert/update set
 function pdoSet($fields, &$values, $source = array()) {
 	$set = '';
 	$values = array();
@@ -11,6 +13,7 @@ function pdoSet($fields, &$values, $source = array()) {
 	}
 	return substr($set, 0, -2);
 }
+
 //-----------Функция добавления кабинета на этаж
 function addCab($id_floor, $Dcab,$condb, $i=null){
 	//Если это массив

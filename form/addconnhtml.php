@@ -9,7 +9,9 @@
 function selextnet(){
 	
 	document.getElementById("selextnet").className="divon";
+	document.getElementById("id_extnet").required=true;
 	document.getElementById("addextnet").className="divoff";
+	document.getElementById("extip").required=false;
 	return 0;
 	
 }
@@ -18,6 +20,8 @@ function addextnet(){
 	
 	document.getElementById("addextnet").className="divon";
 	document.getElementById("selextnet").className="divoff";
+	document.getElementById("id_extnet").required=false;
+	document.getElementById("extip").required=true;
 	return 0;
 }
 
@@ -25,6 +29,7 @@ function selppp(){
 	
 	document.getElementById("selppp").className="divon";
 	document.getElementById("addppp").className="divoff";
+	document.getElementById("srv").required=false;
 	return 0;
 	
 }
@@ -33,13 +38,16 @@ function addppp(){
 	
 	document.getElementById("addppp").className="divon";
 	document.getElementById("selppp").className="divoff";
+	document.getElementById("srv").required=true;
 	return 0;
 }
 
 function selcomp(){
 	
 	document.getElementById("selcomp").className="divon";
+	document.getElementById("id_company").required=true;
 	document.getElementById("addcomp").className="divoff";
+	document.getElementById("name").required=false;
 	return 0;
 	
 }
@@ -47,7 +55,9 @@ function selcomp(){
 function addcomp(){
 	
 	document.getElementById("addcomp").className="divon";
+	document.getElementById("id_company").required=false;
 	document.getElementById("selcomp").className="divoff";
+	document.getElementById("name").required=true;
 	return 0;
 }
 
@@ -65,7 +75,7 @@ function addcomp(){
 	     <form action="?"  method="post">
 	     	<div class="field">
 	    		<label for="gateway"> Шлюз ЛВС</label>
-	    		<input type="text" class="text" size="70"  name="gateway">
+	    		<input type="text" class="text" size="70"  name="gateway" required>
 	    	</div>	    	
 	    	<div class="field">
 	    		<label for="id_address" > Кабинет, куда подходит кабель</label>	    		
@@ -111,7 +121,7 @@ function addcomp(){
 		    		Ввести <input type="radio" class="text"  name="radextnet" value="add" onClick=addextnet();>
 	    		</div>
 	    		<div id=selextnet name=selextnet class="divon">
-		    		<select  class="text" size="5" name="id_extnet">
+		    		<select  class="text"  size="5" name="id_extnet" id="id_extnet">
 		    		<option disabled>Выберите параметры</option>
 		    		<?php 
 		    				$selsql='SELECT id, extip FROM extnet order by extip';
@@ -127,7 +137,7 @@ function addcomp(){
 	    		<div id=addextnet name=addextnet class="divoff">
 	    			<div class="field">
 			    		<label for="extip"> Внешний IP-адрес</label>
-			    		<input type="text" class="text" size="70" width="3" name="extip">
+			    		<input type="text" class="text" size="70" width="3" name="extip"  id="extip">
 	    			</div>
 	    			<div class="field">
 			    		<label for="extmask"> Внешняя маска</label>
@@ -175,8 +185,8 @@ function addcomp(){
 		    		Ввести <input type="radio" class="text"  name="radppp" value="add" onClick=addppp();>
 	    		</div>
 	    		<div id=selppp name=selppp class="divon">
-		    		<select class="text" size="5" name="id_ppp">
-		    		<option disabled>Выберите параметры</option>
+		    		<select class="text" size="5" name="id_ppp" id='id_ppp'>
+		    		<option selected value='none'>PPP Отсутствует</option>
 		    		<?php 
 		    				$selsql='SELECT id, srv,typeppp FROM ppp order by srv';
 							$ressql=$condb->query($selsql);
@@ -196,7 +206,7 @@ function addcomp(){
 	    			
 	    			<div class="field">
 			    		<label for="srv"> Сервер PPP</label>
-			    		<input type="text" class="text" size="70" width="3" name="srv">
+			    		<input type="text" class="text" size="70" width="3" name="srv" id="srv">
 	    			</div>
 	    			<div class="field">
 			    		<label for="login"> Логин PPP</label>
@@ -225,7 +235,7 @@ function addcomp(){
 		    		Ввести <input type="radio" class="text"  name="radcomp" value="add" onClick=addcomp();>
 	    		</div>
 	    		<div id=selcomp name=selcomp class="divon">
-		    		<select  class="text" size="5" name="id_company">
+		    		<select  class="text" size="5" name="id_company" id='id_company'>
 		    		<option disabled>Выберите параметры</option>
 		    		<?php 
 		    				$selsql='SELECT id, name FROM company order by name';
@@ -241,7 +251,7 @@ function addcomp(){
 	    		<div id=addcomp name=addcomp class="divoff">
 	    			<div class="field">
 			    		<label for="name"> Название компании</label>
-			    		<input type="text" class="text" size="70" width="3" name="name">
+			    		<input type="text" class="text" size="70" width="3" name="name" id="name">
 	    			</div>
 	    			
 	    			<div class="field">
