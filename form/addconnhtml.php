@@ -4,7 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="../stylesheet/reset.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
-<link rel="stylesheet" type="text/css" href="../stylesheet/add.css"><script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
+<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script language="javascript">
 function selextnet(){
 	
