@@ -8,7 +8,24 @@
 		include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
 		//include "makefont/makefont.php";
 		//MakeFont('makefont/times.ttf','times.afm','cp1251');
-		//создаем HEADER
+		//--------Коннект к базе
+		include 'mysql_conf.php';
+		try {
+			$condb=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
+			$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			//Исходная кодировка базы в utf8, cp1251 подключена для формирования pdf
+			$condb->exec('SET NAMES "CP1251"');
+		}
+		catch (PDOException $e)
+		{
+			$error= 'Не удалось выполнить запрос'.$e->getMessage();
+			$urlerr=$_SERVER['PHP_SELF'];
+			//$_SESSION['erroor']=$error;
+			//$_SESSION['urlerr']=$urlerr;
+			include '../form/errorhtml.php';
+			exit;
+		}
+		
 		$monyear=str_getcsv($_REQUEST["monyear"], ",");
 		
 		
@@ -21,7 +38,7 @@
 		//Устанавливаем шрифт
 		$pdf->SetFont('ArialMT','',16);
 		//Заливка выходных дней
-		$pdf->SetFillColor(255,18,18);
+		$pdf->SetFillColor(171,255,0);
 		//Заголовок
 		$pdf->SetTitle(numToMonth($monyear[0]).' '.$monyear[1],true);
 		$pdf->Cell(60,20,"Октябрь 2015 ",1,1,'L',false);
@@ -77,12 +94,39 @@
 				if($j==6) $ln=1;
 				if(!empty($month[$i][$j]))
 				{
+					$sql="select schedule.dateduty as dateduty, itusers.fio as fio from schedule 
+							right join itusers on itusers.login=schedule.login where 
+							day(schedule.dateduty)=".$month[$i][$j]." 
+							AND	month(schedule.dateduty)=".$monyear[0]."
+							AND year(schedule.dateduty)=".$monyear[1];
+					$ressql=$condb->query($sql);
+					if($res=$ressql->fetch(PDO::FETCH_ASSOC))
+					{
+						$fio=str_getcsv($res["fio"], " ");
+					}
+					else $fio=array();
+						
 					//Если суббота или воскресенье
 					if($j==5 || $j==6)
-						$pdf->Cell(40,20,$month[$i][$j]."Бочаров",1,$ln,'L',true);
-					else $pdf->Cell(40,20,$month[$i][$j],1,$ln,'L',false);
+					{
+						$pdf->Cell(8,20,$month[$i][$j],1,0,'C',true);
+						if(isset($fio[0]))
+						{
+							$pdf->Cell(32,20,$fio[0],1,$ln,'C',true);
+						}
+						else $pdf->Cell(32,20," ",1,$ln,'C',true);
+						
+					}	
+					else 
+					{	$pdf->Cell(8,20,$month[$i][$j],1,0,'C',false);
+						if(isset($fio[0]))
+						{
+							$pdf->Cell(32,20,$fio[0],1,$ln,'C',false);
+						}
+						else $pdf->Cell(32,20," ",1,$ln,'C',false);
+					}
 				}
-				else $pdf->Cell(40,20," ",1,$ln,'L',false);
+				else $pdf->Cell(40,20," ",1,$ln,'C',false);
 			}
 			
 		}	
