@@ -77,7 +77,7 @@
 		{
 			$weekCount++;
 			for($i=0;$i<7;$i++)
-			{
+			{	
 				$month[$weekCount][$i]=$dayCount;
 				$dayCount++;
 				//Если конец месяца - выход из цикла
@@ -86,25 +86,46 @@
 			//Если конец месяца - выход из цикла
 			if($dayCount>$dayInMon) break;
 		}
-		
+		//Выбираем все дни, в которые дежурили в этот месяц
+		$sql="select day(dateduty) as daym from schedule where AND	month(schedule.dateduty)=".$monyear[0].
+				"AND year(schedule.dateduty)=".$monyear[1]."order by day(dateduty)";
+		$resdaysql=$condb->query($sql);
+		//получаем массив с результатами
+		//$resday=$resdaysql->fetch(PDO::FETCH_ASSOC);
+		$resday=$resdaysql->fetchall();
+		//выводим месяц
 		for($i=0;$i<count($month);$i++)
-		{	$ln=0;
+		{	//Флаг перехода к новой неделе
+			$ln=0;
+			//обрабатываем неделю
 			for($j=0;$j<7;$j++)
-			{
+			{	//Если восвресенье, то после него переходим на новую строку
 				if($j==6) $ln=1;
+				
+				//Если в массиве не пустой элемент
 				if(!empty($month[$i][$j]))
-				{
-					$sql="select schedule.dateduty as dateduty, itusers.fio as fio from schedule 
-							right join itusers on itusers.login=schedule.login where 
-							day(schedule.dateduty)=".$month[$i][$j]." 
+				{	$fio=array();//обнуляем массив с ФИО сотрудника
+					reset($resday);
+					foreach ($resday as $resd)
+					{	//Сравниваем все дни дежурства в выбранный мксяц с выводимыми днями
+						if($resd['daym']==$month[$i][$j])
+						{//Если совпал делаем выборку фамилии дежурившего
+							$sql="select schedule.dateduty as dateduty, itusers.fio as fio from schedule
+							right join itusers on itusers.login=schedule.login where
+							day(schedule.dateduty)=".$month[$i][$j]."
 							AND	month(schedule.dateduty)=".$monyear[0]."
 							AND year(schedule.dateduty)=".$monyear[1];
-					$ressql=$condb->query($sql);
-					if($res=$ressql->fetch(PDO::FETCH_ASSOC))
-					{
-						$fio=str_getcsv($res["fio"], " ");
-					}
-					else $fio=array();
+							$ressql=$condb->query($sql);
+							if($res=$ressql->fetch(PDO::FETCH_ASSOC))
+							{
+								$fio=str_getcsv($res["fio"], " ");
+							}
+						//удаляем использованное значение
+						unset($resday['daym']);
+						break;
+						}
+						
+					}					 
 						
 					//Если суббота или воскресенье
 					if($j==5 || $j==6)
@@ -130,7 +151,6 @@
 			}
 			
 		}	
-		$pdf->Ln(20);
 		$pdf->Output(numToMonth($monyear[0]).' '.$monyear[1],'I');		
 		
 	}
