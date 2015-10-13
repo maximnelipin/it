@@ -1,54 +1,17 @@
-@CHARSET "UTF-8";
-body {
-	background-image: url(../content/bg.gif);
-	background-repeat: repeat;
-	font-family: 'Times New Roman';
-}
-
-header {
-	overflow: auto;
-	padding: 10px 30px 10px 30px;
-}
-header a {
-	font-size: 120%;
-}
-header .leftcolumn {
-	float: left;
-	margin-left: 41%	
-}
-header .rightcolumn {
-	float: right;	
-	padding-top: 1%;
-}
-
-
-
-label  {
-  float:left; 
-	padding-bottom: 1%;
-  width: 50%;  
-	font-size: 120%;
-	
-}
-
-
-.title{	
-	font-size: 160%;
-	color:brown;
-	margin-bottom: 1.5%;
-	position:relative;
-	left:4%;
-}
-
 
 table, th, td, caption {
 	border-style:solid;
 	border-width:1px;
 	border-collapse: collapse;
 	padding:3px;
-	font-size: 100%;
+	font-size: 130%;
 	background-color: azure;	
 }
+td{
+	width:3%;
+	height: 50px;
+}
+
 
 table {
 	margin-left:4%;
@@ -61,6 +24,9 @@ caption {
 th{
 	font-size:110%;
 	
+}
+.weekend{
+	background-color:  cadetblue;	
 }
 
 .button {	

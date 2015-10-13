@@ -5,4 +5,5 @@ encoding//html/header.html=UTF-8
 encoding//php_scripts/addbuild.php=UTF-8
 encoding//php_scripts/auth.php=UTF-8
 encoding//php_scripts/main.php=UTF-8
+encoding//php_scripts/schedpdf.php=CP1251
 encoding/index.php=UTF-8

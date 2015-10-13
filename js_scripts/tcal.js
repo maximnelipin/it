@@ -6,10 +6,10 @@
 var A_TCALCONF = {
 	'cssprefix'  : 'tcal',
 	'months'     : ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-	'weekdays'   : ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+	'weekdays'   : ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
 	'longwdays'  : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
 	'yearscroll' : true, // show year scroller
-	'weekstart'  : 0, // first day of week: 0-Su or 1-Mo
+	'weekstart'  : 1, // first day of week: 0-Su or 1-Mo
 	'prevyear'   : 'Previous Year',
 	'nextyear'   : 'Next Year',
 	'prevmonth'  : 'Previous Month',
@@ -89,7 +89,7 @@ function f_tcalGetHTML (d_date) {
 
 			if (d_current.getMonth() != d_date.getMonth())
 				a_class[a_class.length] = s_pfx + 'OtherMonth';
-			if (d_current.getDay() == 5 || d_current.getDay() == 6)
+			if (d_current.getDay() == 0 || d_current.getDay() == 6)
 				a_class[a_class.length] = s_pfx + 'Weekend';
 			if (d_current.valueOf() == d_today.valueOf())
 				a_class[a_class.length] = s_pfx + 'Today';
