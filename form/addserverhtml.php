@@ -19,7 +19,7 @@
 	    		<input type="text" class="text" size="70"  name="name">
 	    	</div>
 	    	
-	    	</div>
+	    	
 	    	<div class="field">
 	    		<label for="id_cabinet" > Кабинет расположения</label>	    		
 	    		<select required class="text" size="5" name="id_cabinet">

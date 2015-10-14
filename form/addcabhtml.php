@@ -5,10 +5,8 @@
 <link rel="stylesheet" type="text/css" href="../stylesheet/reset.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
-<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-<script src="app.js"></script>
+
 <title>Добавление кабинетов</title>
-</script>
 </head>
 
     <body>

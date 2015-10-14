@@ -16,11 +16,11 @@
 	    <form action="?"  method="post">
 	    	<div class="field">
 	    		<label for="name" > Название инструкции</label>
-	    		<input type="text" class="text" size="70" name="name"></textarea>    	
+	    		<input type="text" class="text" size="70" name="name">   	
 	    	</div>
 	    	<div class="field">
 	    		<label for="url"> URL-путь к странице с инструкцией</label>
-	    		<input type="text" class="text" size="70"  name="url"></textarea> 
+	    		<input type="text" class="text" size="70"  name="url"> 
 	    	</div>	    	
 	    	<div>
 	    		<input type="submit" class="button" value="Добавить">

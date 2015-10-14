@@ -16,35 +16,35 @@
 	    <form action="?"  method="post">
 	    	<div class="field">
 	    		<label for="name" > Название контрагента</label>
-	    		<input type="text" class="text" size="70" name="name"></textarea>    	
+	    		<input type="text" class="text" size="70" name="name">    	
 	    	</div>
 	    	<div class="field">
 	    		<label for="manager"> ФИО менеджера</label>
-	    		<input type="text" class="text" size="70"  name="manager"></textarea> 
+	    		<input type="text" class="text" size="70"  name="manager">
 	    	</div>
 	    	<div class="field">
 	    		<label for="telman"> Телефон менеджера</label>
-	    		<input type="text" class="text" size="70"  name="telman"></textarea> 
+	    		<input type="text" class="text" size="70"  name="telman">
 	    	</div>
 	    	<div class="field">
 	    		<label for="emailman"> Электронная почта менеджера</label>
-	    		<input type="text" class="text" size="70"  name="emailman"></textarea> 
+	    		<input type="text" class="text" size="70"  name="emailman">
 	    	</div>
 	    	<div class="field">
 	    		<label for="address"> Адрес офиса обслуживания</label>
-	    		<input type="text" class="text" size="70"  name="address"></textarea> 
+	    		<input type="text" class="text" size="70"  name="address"> 
 	    	</div>
 	    	<div class="field">
 	    		<label for="type"> Тип предоставляемой/покупаемой услуг</label>
-	    		<input type="text" class="text" size="70"  name="type"></textarea> 
+	    		<input type="text" class="text" size="70"  name="type"> 
 	    	</div>
 	    	<div class="field">
 	    		<label for="netpath"> Папка с документами</label>
-	    		<input type="text" class="text" size="70"  name="netpath"></textarea> 
+	    		<input type="text" class="text" size="70"  name="netpath">
 	    	</div>
 	    	<div class="field">
 	    		<label for="note"> Примечание</label>
-	    		<input type="text" class="text" size="70"  name="note"></textarea> 
+	    		<input type="text" class="text" size="70"  name="note">
 	    	</div>
 	    	<div>
 	    		<input type="submit" class="button" value="Добавить">

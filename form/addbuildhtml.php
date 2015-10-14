@@ -16,11 +16,11 @@
 	    <form action="?"  method="post">
 	    	<div class="field">
 	    		<label for="nameb" > Название объекта</label>
-	    		<input type="text" class="text" size="70" name="nameb"></textarea>    	
+	    		<input type="text" class="text" size="70" name="nameb">  	
 	    	</div>
 	    	<div class="field">
 	    		<label for="address"> Адрес объекта</label>
-	    		<input type="text" class="text" size="70"  name="address"></textarea> 
+	    		<input type="text" class="text" size="70"  name="address">
 	    	</div>
 	    	<div>
 	    		<input type="submit" class="button" value="Добавить">

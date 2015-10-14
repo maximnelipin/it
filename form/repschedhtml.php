@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="../stylesheet/reset.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
-<link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
+<link rel="stylesheet" type="text/css" href="../stylesheet/report.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/tcal.css">
 <script src="../js_scripts/tcal.js"></script>
 <title><?php 

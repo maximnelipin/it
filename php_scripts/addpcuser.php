@@ -21,7 +21,7 @@
 		$conn=ldap_connect($host, $port) or die("LDAP сервер не доступен");
 		//Включаем протокол третьей версии
 		ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
-		include $_SERVER['DOCUMENT_ROOT'].'/form/addithtml.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/addpcuserhtml.php';
 		
 		if (isset($_POST['addpcuser']))	
 		{
@@ -56,7 +56,7 @@
 			$i=0;
 			//Готовим шапку таблицы
 			echo '<table>
-   					<caption>Сотрудники ИТ-отдела</caption>
+   					<caption>Пользователи</caption>
   					 <tr>
 					<th>ФИО</th>
     				<th>Должность</th>

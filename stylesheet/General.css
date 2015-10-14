@@ -36,6 +36,7 @@ label  {
 	font-size: 160%;
 	color:brown;
 	margin-bottom: 1.5%;
+	position:  relative;
 	width:50%;
 	left:4%;
 }

@@ -16,15 +16,15 @@
 	    <form action="?"  method="post">
 	    	<div class="field">
 	    		<label for="nameb" > Модель принтера</label>
-	    		<input type="text" class="text" size="70" name="nameb"></textarea>    	
+	    		<input type="text" class="text" size="70" name="nameb">   	
 	    	</div>
 	    	<div class="field">
 	    		<label for="address"> Тип картриджа</label>
-	    		<input type="text" class="text" size="70"  name="cart"></textarea> 
+	    		<input type="text" class="text" size="70"  name="cart">
 	    	</div>
 	    	<div class="field">
 	    		<label for="address"> Папка с драйверами</label>
-	    		<input type="text" class="text" size="70"  name="drivers"></textarea> 
+	    		<input type="text" class="text" size="70"  name="drivers">
 	    	</div>
 	    	<div>
 	    		<input type="submit" class="button" value="Добавить">

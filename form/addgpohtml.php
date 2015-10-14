@@ -16,11 +16,11 @@
 	    <form action="?"  method="post">
 	    	<div class="field">
 	    		<label for="name" > Имя политики в AD</label>
-	    		<input type="text" class="text" size="70" name="name"></textarea>    	
+	    		<input type="text" class="text" size="70" name="name">   	
 	    	</div>
 	    	<div class="field">
 	    		<label for="container"> Связанные контайнеры, через запятую</label>
-	    		<input type="text" class="text" size="70"  name="container"></textarea> 
+	    		<input type="text" class="text" size="70"  name="container">
 	    	</div>
 	    	<div class="field">
 	    		<label for="netpath"> Путь к связанным файлам, через запятую </label>

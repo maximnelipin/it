@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-<script language="javascript">
+<script type="text/javascript">
 function selextnet(){
 	
 	document.getElementById("selextnet").className="divon";
@@ -63,7 +63,7 @@ function addcomp(){
 }
 
 </script>
-<title>Добавление сервера</title>
+<title>Добавление подключения</title>
 
 </head>
 
@@ -80,7 +80,7 @@ function addcomp(){
 	    	</div>	    	
 	    	<div class="field">
 	    		<label for="id_address" > Кабинет, куда подходит кабель</label>	    		
-	    		<select required class="text" size="5" name="id_address>
+	    		<select required class="text" size="5" name="id_address">
 	    			<option disabled>Выберите объект</option>
 	    			<?php
 	    				$selsql='SELECT build.name as build, floor.id as id_floor, floor.floor as floor FROM build
@@ -121,7 +121,7 @@ function addcomp(){
 		    		Выбрать <input type="radio" class="text"  name="radextnet" value="sel" checked onClick=selextnet();>
 		    		Ввести <input type="radio" class="text"  name="radextnet" value="add" onClick=addextnet();>
 	    		</div>
-	    		<div id=selextnet name=selextnet class="divon">
+	    		<div id="selextnet"  class="divon">
 		    		<select  class="text"  size="5" name="id_extnet" id="id_extnet">
 		    		<option disabled>Выберите параметры</option>
 		    		<?php 
@@ -135,7 +135,7 @@ function addcomp(){
 		    				?>
 	    				</select> 
 	    		</div>
-	    		<div id=addextnet name=addextnet class="divoff">
+	    		<div id="addextnet"  class="divoff">
 	    			<div class="field">
 			    		<label for="extip"> Внешний IP-адрес</label>
 			    		<input type="text" class="text" size="70" width="3" name="extip"  id="extip">
@@ -185,7 +185,7 @@ function addcomp(){
 		    		Выбрать <input type="radio" class="text"  name="radppp" value="sel" checked onClick=selppp();>
 		    		Ввести <input type="radio" class="text"  name="radppp" value="add" onClick=addppp();>
 	    		</div>
-	    		<div id=selppp name=selppp class="divon">
+	    		<div id="selppp"  class="divon">
 		    		<select class="text" size="5" name="id_ppp" id='id_ppp'>
 		    		<option selected value='none'>PPP Отсутствует</option>
 		    		<?php 
@@ -199,7 +199,7 @@ function addcomp(){
 		    				?>
 	    				</select> 
 	    		</div>
-	    		<div id=addppp name=addppp class="divoff">
+	    		<div id="addppp"  class="divoff">
 	    			<div class="field">
 			    		<label for="typeppp"> Тип PPP</label>
 			    		<input type="text" class="text" size="70" width="3" name="typeppp">
@@ -235,7 +235,7 @@ function addcomp(){
 		    		Выбрать <input type="radio" class="text"  name="radcomp" value="sel" checked onClick=selcomp();>
 		    		Ввести <input type="radio" class="text"  name="radcomp" value="add" onClick=addcomp();>
 	    		</div>
-	    		<div id=selcomp name=selcomp class="divon">
+	    		<div id="selcomp"  class="divon">
 		    		<select  class="text" size="5" name="id_company" id='id_company'>
 		    		<option disabled>Выберите параметры</option>
 		    		<?php 
@@ -249,7 +249,7 @@ function addcomp(){
 		    				?>
 	    				</select> 
 	    		</div>
-	    		<div id=addcomp name=addcomp class="divoff">
+	    		<div id="addcomp"  class="divoff">
 	    			<div class="field">
 			    		<label for="name"> Название компании</label>
 			    		<input type="text" class="text" size="70" width="3" name="name" id="name">

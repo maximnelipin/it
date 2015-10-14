@@ -32,11 +32,11 @@
 	    	</div>
 	    	<div class="field">
 	    		<label for="floor"> Этаж</label>
-	    		<input type="text" class="text" size="70"  name="floor"></textarea> 
+	    		<input type="text" class="text" size="70"  name="floor">
 	    	</div>
 	    	<div class="field">
 	    		<label for="note"> Примечание</label>
-	    		<input type="text" class="text" size="70" width="3" name="note"></textarea> 
+	    		<input type="text" class="text" size="70" width="3" name="note">
 	    	</div>
 	    	<div>
 	    		<input type="submit" class="button" value="Добавить">
