@@ -16,7 +16,7 @@
 	     <form action="?"  method="post">
 	     	<div class="field">
 	    		<label for="number"> Номер</label>
-	    		<input type="text" class="text" size="70"  name="number">
+	    		<input type="text" class="text" size="70"  name="number" required>
 	    	</div>
 	    	<div class="field">
 	    		<label for="account" > Лицевой счёт</label>	    		
@@ -28,7 +28,7 @@
 	    			<option disabled>Выберите объект</option>
 	    			<?php 
 	    				$selsql='SELECT name, id FROM build ORDER BY name';
-						$ressql=$conbd->query($selsql);
+						$ressql=$condb->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
 	    					echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
@@ -43,7 +43,7 @@
 	    			<option disabled>Выберите оператора</option>
 	    			<?php 
 	    				$selsql='SELECT id, name FROM isp ORDER BY name';
-						$ressql=$conbd->query($selsql);
+						$ressql=$condb->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
 	    					echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
@@ -58,15 +58,23 @@
 	    		<p><select required class="text" size="5" name="login">
 	    			<option disabled>Выберите пользователя</option>
 	    			<?php 
-	    				$selsql='SELECT login, name FROM listuser ORDER BY name';
-						$ressql=$conbd->query($selsql);
+	    				$selsql='SELECT login, fio FROM listuser ORDER BY fio';
+						$ressql=$condb->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
-	    					echo '<option value='.$res['login'].'>'.$res['name'].'</option>';
+	    					echo '<option value='.$res['login'].'>'.$res['fio'].'</option>';
 	    				}
 	    				?>
 	    		</select> 
 	    		</p>  	
+	    	</div>
+	    	<div class="field">
+	    		<label for="balance"> Баланс</label>
+	    		<input type="text" class="text" size="70" width="3" name="balance">
+	    	</div>
+	    	<div class="field">
+	    		<label for="pay"> Ежемесячная плата</label>
+	    		<input type="text" class="text" size="70" width="3" name="pay">
 	    	</div>
 	    	
 	    	<div class="field">

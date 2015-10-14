@@ -4,9 +4,9 @@
 	{	
 		include 'mysql_conf.php';
 		try {
-			$conbd=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
-			$conbd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$conbd->exec('SET NAMES "utf8"');
+			$condb=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
+			$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$condb->exec('SET NAMES "utf8"');
 		}
 		catch (PDOException $e)
 		{
@@ -18,22 +18,25 @@
 			exit;
 		}
 		include $_SERVER['DOCUMENT_ROOT'].'/form/addsimhtml.php';
+		include 'func.php';
 		if (isset($_POST['number']))	
 		{
 			//$login=$_POST["login"];
 			//преобразуем путь к папке для записи в Mysql
 			//$login=addslashes($login);
 			try {
-				$sql='insert into sim set number="'.$_POST["number"].'", id_address="'.$_POST["id_address"].'", 
-						id_operator="'.$_POST["id_operator"].'", account="'.$_POST["account"].
-						'", login="'.$_POST["login"].'", pwdlk="'.$_POST["pwdlk"].'", note="'.$_POST["note"].'"';
-				$conbd->exec($sql);
+				
+				$fields=array("number","account","id_address","id_operator","login","balance","pay","pwdlk","note");
+				$sql='insert into sim set '.pdoSet($fields,$values);
+				$sqlprep=$condb->prepare($sql);
+				$sqlprep->execute($values);			
+				
 			}
 			
 			catch (PDOException $e)
 			{
 				
-				$error= 'Не удалось выполнить запрос'.$e->getMessage().$login;	
+				$error= 'Не удалось выполнить запрос'.$e->getMessage();	
 				$urlerr=$_SERVER['PHP_SELF'];
 				//$_SESSION['error']=$error;
 				//$_SESSION['urlerr']=$urlerr;

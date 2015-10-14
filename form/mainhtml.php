@@ -45,8 +45,8 @@
 	    		</select>
 	    		   	
 	    	</div>
-	    	<input type="submit" class="button" size="70" name="schedule" value="В HTML" onClick="document.getElementById('sched').action = 'schedule.php'">
-	    	<input type="submit" class="button" size="70" name="schedpdf" value="В PDF" onClick="document.getElementById('sched').action = 'schedpdf.php'">	    	    	   
+	    	<input type="submit" class="button" size="70" name="schedule" onClick="document.getElementById('sched').action = 'schedule.php'">
+	    	<input type="submit" class="button" size="70" name="schedpdf" onClick="document.getElementById('sched').action = 'schedpdf.php'">	    	    	   
 	    </form>
 	    
 	    <?php

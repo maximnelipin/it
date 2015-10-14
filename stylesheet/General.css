@@ -36,7 +36,7 @@ label  {
 	font-size: 160%;
 	color:brown;
 	margin-bottom: 1.5%;
-	position:relative;
+	width:50%;
 	left:4%;
 }
 
@@ -82,4 +82,10 @@ th{
 	margin-top:2px;
 	margin-left: 3%;
 	
+}
+.field {
+	margin-bottom: 1%;
+	padding-left: 1%;
+	margin-right: 45%;
+	margin-left: 3%;
 }

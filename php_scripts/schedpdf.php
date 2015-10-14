@@ -6,8 +6,6 @@
 	{//подключаем файл работы с pdf.
 		include 'fpdf.php';
 		include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
-		//include "makefont/makefont.php";
-		//MakeFont('makefont/times.ttf','times.afm','cp1251');
 		//--------Коннект к базе
 		include 'mysql_conf.php';
 		try {
@@ -26,6 +24,7 @@
 			exit;
 		}
 		
+		//Выделяем месяц и год
 		$monyear=str_getcsv($_REQUEST["monyear"], ",");
 		
 		
@@ -41,8 +40,8 @@
 		$pdf->SetFillColor(171,255,0);
 		//Заголовок
 		$pdf->SetTitle(numToMonth($monyear[0]).' '.$monyear[1],true);
-		$pdf->Cell(60,20,"Октябрь 2015 ",1,1,'L',false);
-		
+		//Вывод месяца идёт с перекодировкой в cp1251
+		$pdf->Cell(80,20,iconv("utf-8","cp1251",numToMonth($monyear[0]).' '.$monyear[1]),1,1,'С',false);
 		$pdf->Ln(20);
 		//Получаем количество дней в месяце
 		$dayInMon=date('t');
@@ -50,6 +49,7 @@
 		$dayCount=1;
 		//Счётчик недель
 		$weekCount=0;
+		//Меняем размер шрифта
 		$pdf->SetFont('ArialMT','',12);
 		
 		//Обрабатываем первую неделю месяца
@@ -86,12 +86,12 @@
 			//Если конец месяца - выход из цикла
 			if($dayCount>$dayInMon) break;
 		}
+		
 		//Выбираем все дни, в которые дежурили в этот месяц
-		$sql="select day(dateduty) as daym from schedule where AND	month(schedule.dateduty)=".$monyear[0].
-				"AND year(schedule.dateduty)=".$monyear[1]."order by day(dateduty)";
+		$sql="select day(dateduty) as daym from schedule where month(dateduty)=".$monyear[0].
+				" AND year(dateduty)=".$monyear[1]." order by day(dateduty)";
 		$resdaysql=$condb->query($sql);
 		//получаем массив с результатами
-		//$resday=$resdaysql->fetch(PDO::FETCH_ASSOC);
 		$resday=$resdaysql->fetchall();
 		//выводим месяц
 		for($i=0;$i<count($month);$i++)
@@ -105,23 +105,26 @@
 				//Если в массиве не пустой элемент
 				if(!empty($month[$i][$j]))
 				{	$fio=array();//обнуляем массив с ФИО сотрудника
+					//Переходим в массиве на первый элемент
 					reset($resday);
+					//Перебираем все элементы
 					foreach ($resday as $resd)
-					{	//Сравниваем все дни дежурства в выбранный мксяц с выводимыми днями
+					{	//Сравниваем все дни дежурства в выбранный месяц с выводимыми днями
 						if($resd['daym']==$month[$i][$j])
 						{//Если совпал делаем выборку фамилии дежурившего
 							$sql="select schedule.dateduty as dateduty, itusers.fio as fio from schedule
 							right join itusers on itusers.login=schedule.login where
 							day(schedule.dateduty)=".$month[$i][$j]."
-							AND	month(schedule.dateduty)=".$monyear[0]."
-							AND year(schedule.dateduty)=".$monyear[1];
+							 AND	month(schedule.dateduty)=".$monyear[0]."
+							 AND year(schedule.dateduty)=".$monyear[1];
 							$ressql=$condb->query($sql);
 							if($res=$ressql->fetch(PDO::FETCH_ASSOC))
 							{
 								$fio=str_getcsv($res["fio"], " ");
 							}
-						//удаляем использованное значение
+						//удаляем использованное значение из массива
 						unset($resday['daym']);
+						//Выходим из цикла
 						break;
 						}
 						
@@ -129,28 +132,33 @@
 						
 					//Если суббота или воскресенье
 					if($j==5 || $j==6)
-					{
+					{	//Выводим подцвеченными
 						$pdf->Cell(8,20,$month[$i][$j],1,0,'C',true);
+						//Если есть фамилия дежурившего
 						if(isset($fio[0]))
-						{
+						{	//Выводим её
 							$pdf->Cell(32,20,$fio[0],1,$ln,'C',true);
 						}
 						else $pdf->Cell(32,20," ",1,$ln,'C',true);
 						
 					}	
 					else 
-					{	$pdf->Cell(8,20,$month[$i][$j],1,0,'C',false);
+					{	//Выводим без цыета
+						$pdf->Cell(8,20,$month[$i][$j],1,0,'C',false);
+						//Если есть фамилия дежурившего
 						if(isset($fio[0]))
-						{
+						{	//Выводим её
 							$pdf->Cell(32,20,$fio[0],1,$ln,'C',false);
 						}
 						else $pdf->Cell(32,20," ",1,$ln,'C',false);
 					}
 				}
+				//Если нет даты на это поле, выводим просто пустое 
 				else $pdf->Cell(40,20," ",1,$ln,'C',false);
 			}
 			
-		}	
+		}
+		//Выводим жокумент в браузер и отображаем его в просмотрщике
 		$pdf->Output(numToMonth($monyear[0]).' '.$monyear[1],'I');		
 		
 	}

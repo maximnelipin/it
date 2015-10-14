@@ -8,8 +8,6 @@ table, th, td, caption {
 	background-color: azure;	
 }
 td{
-	width:3%;
-	height: 50px;
 }
 
 
@@ -17,12 +15,17 @@ table {
 	margin-left:4%;
 	margin-top:1%;
 	margin-bottom:1%;
+	
 }
 caption {
 	font-size: 120%
 }
 th{
 	font-size:110%;
+	
+}
+td{
+	font-size:100%;
 	
 }
 .weekend{

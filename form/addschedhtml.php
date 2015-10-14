@@ -7,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/tcal.css">
 <script src="../js_scripts/tcal.js"></script>
-<title>Добавление сервера</title>
+<title>Добавление дежурства</title>
 </head>
 
     <body>
