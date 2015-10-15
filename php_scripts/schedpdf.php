@@ -16,11 +16,12 @@
 		}
 		catch (PDOException $e)
 		{
-			$error= 'Не удалось выполнить запрос'.$e->getMessage();
-			$urlerr=$_SERVER['PHP_SELF'];
-			//$_SESSION['erroor']=$error;
+			$error= 'Не удалось выполнить запрос'.$e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.
+					$_SERVER['PHP_SELF'].'</a>';
+			$error=iconv("cp1251","utf-8",$error);
+			$_SESSION['error']=$error;
 			//$_SESSION['urlerr']=$urlerr;
-			include '../form/errorhtml.php';
+			include '../php_scripts/error.php';
 			exit;
 		}
 		
@@ -158,6 +159,9 @@
 			}
 			
 		}
+		
+		if($condb!=null) {
+			$condb=NULL;}
 		//Выводим жокумент в браузер и отображаем его в просмотрщике
 		$pdf->Output(numToMonth($monyear[0]).' '.$monyear[1],'I');		
 		

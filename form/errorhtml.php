@@ -18,9 +18,7 @@
 	    	<?php
 			echo $error;
 			?>
-			<div>
-			<a href=<?php echo $urlerr; ?> > <?php echo $urlerr; ?> </a>
-			</div>
+			
 	    </div>
 	</body>    
 </html>

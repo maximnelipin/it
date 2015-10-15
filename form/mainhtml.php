@@ -11,6 +11,7 @@
     <body>
     <?php
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
+	include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/error.php';
 	include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
 	?>
 	    <h2 class="title"> Главная страница</h2>

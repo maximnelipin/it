@@ -5,13 +5,24 @@
 <link rel="stylesheet" type="text/css" href="../stylesheet/reset.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
+<?php	
+
+	?>
 <title>Добавление сим-карты</title>
 </head>
 
-    <body>
-    <?php
+    <body >
+    
+	
+	<?php
+	//include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/error.php';
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
 	?>
+	
+
+
+
+
 	    <h2 class="title"> Добавление сим-карты</h2>
 	     <form action="?"  method="post">
 	     	<div class="field">
@@ -86,7 +97,7 @@
 	    		<input type="text" class="text" size="70" width="3" name="note">
 	    	</div>
 	    	<div>
-	    		<input type="submit" class="button" value="Добавить">
+	    		<input type="submit" class="button" value="Добавить" >
 	    	</div>
 	    
 	    </form>
