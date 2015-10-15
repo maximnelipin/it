@@ -11,11 +11,9 @@
 		}
 		catch (PDOException $e)
 		{
-			$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.
-					$_SERVER['PHP_SELF'].'</a>';	
+			$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';	
 			$error=iconv("cp1251","utf-8",$error);
 			$_SESSION['error']=$error;
-			$_SESSION['urlerr']=$urlerr;
 			include '../form/errorhtml.php';
 			exit;
 			
@@ -40,8 +38,7 @@
 			catch (PDOException $e)
 			{
 				
-				$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.
-				$_SERVER['PHP_SELF'].'</a>';	
+				$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';	
 				$error=iconv("cp1251","utf-8",$error);
 				$_SESSION['error']=$error;
 				include '../form/errorhtml.php';

@@ -10,10 +10,9 @@
 		}
 		catch (PDOException $e)
 		{
-			$error= 'Не удалось выполнить запрос'.$e->getMessage();	
-			$urlerr=$_SERVER['PHP_SELF'];
-			//$_SESSION['erroor']=$error;
-			//$_SESSION['urlerr']=$urlerr;
+			$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';	
+			$error=iconv("cp1251","utf-8",$error);
+			$_SESSION['error']=$error;
 			include '../form/errorhtml.php';
 			exit;
 		}
@@ -37,6 +36,10 @@
 				//Если успешно
 				if($bind)
 				{
+					//выбираем пользователей-текущих сотрудников отдела, группа it_core
+					$selit=ldap_search($conn, $itou, 'memberOf='.$groupit, $attruser);
+					//получаем результаты  запроса
+					$resit=ldap_get_entries($conn, $selit);					
 					//выбираем пользователей
 					$seluser=ldap_search($conn, $userou, '(&(objectCategory=user)(objectClass=user))', $attruser);
 					//получаем пользователей из AD
@@ -66,11 +69,11 @@
 			//создаем временную таблицу для удаления записей, которых нет в AD.
 			$sql='Create table if not exists tempuser (login varchar(50) not null primary key, fio tinytext, func tinytext, dept tinytext) CHARSET "utf8"';
 			$condb->exec($sql);
-			$sql='delete from tempuser';
+			$sql='delete from tempuser where 1';
 			$condb->exec($sql);
 			$sql='Create table if not exists temppc (name varchar(30) not null primary key, login varchar(50),descrip tinytext) CHARSET "utf8"';
 			$condb->exec($sql);
-			$sql='delete from temppc';
+			$sql='delete from temppc where 1';
 			$condb->exec($sql);
 			//---------------------------Занесение пользователей в базу------------------------
 			//Цикл перебора записей  LDAP и внесения их в таблицу
@@ -110,8 +113,9 @@
 					catch (PDOException $e)
 					{
 					
-						$error= 'Не удалось выполнить запрос'.$e->getMessage().$login."insert";
-						$urlerr=$_SERVER['PHP_SELF'];
+						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';	
+						$error=iconv("cp1251","utf-8",$error);
+						$_SESSION['error']=$error;
 						include '../form/errorhtml.php';
 						exit;
 					}								
@@ -125,11 +129,75 @@
 					catch (PDOException $e)
 					{
 								
-						$error= 'Не удалось выполнить запрос'.$e->getMessage().$login."update";
-						$urlerr=$_SERVER['PHP_SELF'];							
+						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';	
+						$error=iconv("cp1251","utf-8",$error);
+						$_SESSION['error']=$error;
 						include '../form/errorhtml.php';
 						exit;
 					}					
+				}
+				$i++;
+			}
+				//-------------Добавление ИТ-спецов к общему списку
+				$i=0;
+				while ($i<$resit['count'])
+				{
+					//Индексы полей выборки LDAP в НИЖНЕМ РЕГИСТРЕ
+					//Обнуляем перменные в начале итерации
+					$title='';
+					$login='';
+					$dept='';
+					$name='';
+				
+					//присваиваем переменным значения из очередной строки результата запроса LDAP
+					$name=$resit[$i]['displayname'][0];
+					$login=$resit[$i]['userprincipalname'][0];
+					//Если должность или отдел есть, то ставим так же занносим её в переменную
+					//иначе без проверки будет ошибка
+					if(isset($resit[$i]['title'][0]))
+					{$title=$resit[$i]['title'][0];}
+					if(isset($resit[$i]['department'][0]))
+					{$dept=$resit[$i]['department'][0];}
+					//Заполняем временную таблицу записями из AD
+					$sql='insert into tempuser set  login="'.$login.'", fio="'.$name.'", func="'.$title.'", dept="'.$dept.'"';
+					$condb->exec($sql);
+					//Делаем запрос на выборку записи из таблицы listuser с логином $login
+					$sql='select login from listuser where login="'.$login.'"';
+					$ressql=$condb->query($sql);
+					//Если пользователя в таблице itusers нет
+				if (!($ressql->fetch(PDO::FETCH_ASSOC)))
+				{
+					//Добавляем его в таблицу
+					try {
+				
+						$sql='insert into listuser set  login="'.$login.'", fio="'.$name.'", func="'.$title.'", dept="'.$dept.'"';
+						$condb->exec($sql);
+					}
+					catch (PDOException $e)
+					{
+							
+						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';	
+						$error=iconv("cp1251","utf-8",$error);
+						$_SESSION['error']=$error;
+						include '../form/errorhtml.php';
+						exit;
+					}
+				}
+				else
+				{	//если есть такой логин в таблице, обновляем связанную запись
+				try {
+					$sql='update listuser set   fio="'.$name.'", func="'.$title.'", dept="'.$dept.'" where login="'.$login.'"';
+					$condb->exec($sql);
+				}
+				catch (PDOException $e)
+				{
+				
+					$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';	
+					$error=iconv("cp1251","utf-8",$error);
+					$_SESSION['error']=$error;
+					include '../form/errorhtml.php';
+					exit;
+				}
 				}
 				//Инкремент переменной цикла-счётчика записей
 			 	$i++;			
@@ -156,8 +224,9 @@
 					catch (PDOException $e)
 					{
 					
-						$error= 'Не удалось выполнить запрос'.$e->getMessage().$login;
-						$urlerr=$_SERVER['PHP_SELF'];
+						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';	
+						$error=iconv("cp1251","utf-8",$error);
+						$_SESSION['error']=$error;
 						include '../form/errorhtml.php';
 						exit;
 					}
@@ -198,8 +267,19 @@
 				{$descrip=$respc1[$i]['description'][0]." ";}
 				
 				//Заполняем временную таблицу записями из AD
-				$sql='insert into temppc set  name="'.$namepc.'", descrip="'.$descrip.'"';
-				$condb->exec($sql);
+				try 
+				{
+					$sql='insert into temppc set  name="'.$namepc.'", descrip="'.$descrip.'"';
+					$condb->exec($sql);
+				}
+				catch (PDOException $e)
+				{
+					$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';
+					$error=iconv("cp1251","utf-8",$error);
+					$_SESSION['error']=$error;
+					include '../form/errorhtml.php';
+					exit;
+				}
 				
 				$i++;
 			}
@@ -220,8 +300,20 @@
 				{$descrip=$respc2[$i]['description'][0]." ";}
 			
 				//Заполняем временную таблицу записями из AD
-				$sql='insert into temppc set  name="'.$namepc.'", descrip="'.$descrip.'"';
-				$condb->exec($sql);
+				try 
+				{
+					$sql='insert into temppc set  name="'.$namepc.'", descrip="'.$descrip.'"';
+					$condb->exec($sql);
+				}
+				catch (PDOException $e)
+				{
+					$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';
+					$error=iconv("cp1251","utf-8",$error);
+					$_SESSION['error']=$error;
+					include '../form/errorhtml.php';
+					exit;
+				}
+				
 				$i++;
 				//echo '<tr><td>'.$namepc.'</td><td>'.$descrip.'</td></tr>';
 			}
@@ -240,14 +332,15 @@
 				while ($respc=$respcsql->fetch(PDO::FETCH_ASSOC))
 				{
 					try {
-					$sql='update temppc set login="'.$resuser['login'].'" where name="'.$respc['name'].'"';
-					$condb->exec($sql);
+						$sql='update temppc set login="'.$resuser['login'].'" where name="'.$respc['name'].'"';
+						$condb->exec($sql);
 					}
 					catch (PDOException $e)
 					{
 							
-						$error= 'Не удалось выполнить запрос'.$e->getMessage().$login;
-						$urlerr=$_SERVER['PHP_SELF'];
+						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';
+						$error=iconv("cp1251","utf-8",$error);
+						$_SESSION['error']=$error;
 						include '../form/errorhtml.php';
 						exit;
 					}
@@ -276,8 +369,9 @@
 					catch (PDOException $e)
 					{
 							
-						$error= 'Не удалось выполнить запрос'.$e->getMessage().$login."insert";
-						$urlerr=$_SERVER['PHP_SELF'];
+						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';
+						$error=iconv("cp1251","utf-8",$error);
+						$_SESSION['error']=$error;
 						include '../form/errorhtml.php';
 						exit;
 					}
@@ -291,8 +385,9 @@
 					catch (PDOException $e)
 					{
 			
-						$error= 'Не удалось выполнить запрос'.$e->getMessage().$login."update";
-						$urlerr=$_SERVER['PHP_SELF'];
+						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';
+						$error=iconv("cp1251","utf-8",$error);
+						$_SESSION['error']=$error;
 						include '../form/errorhtml.php';
 						exit;
 					}
@@ -312,22 +407,23 @@
 				//Если имя есть и в listuser, и в temppc(AD)
 				if ($restemppc->fetch(PDO::FETCH_ASSOC))
 				{	//Выводим его как результат синхронизации
-				echo '<tr><td>'.$res['name'].'</td><td>'.$res['login'].'</td><td>'.$res['descrip'].'</td><td>'.$res['note'].'</td> </tr>';
+					echo '<tr><td>'.$res['name'].'</td><td>'.$res['login'].'</td><td>'.$res['descrip'].'</td><td>'.$res['note'].'</td> </tr>';
 				}
 				else
 				{	//иначе удаяем запись с таким именем из таблицы listuser
-				try {
-					$sql='delete from listpc where name="'.$res['name'].'"';
-					$condb->exec($sql);
-				}
-				catch (PDOException $e)
-				{
-						
-					$error= 'Не удалось выполнить запрос'.$e->getMessage().$login;
-					$urlerr=$_SERVER['PHP_SELF'];
-					include '../form/errorhtml.php';
-					exit;
-				}
+					try {
+						$sql='delete from listpc where name="'.$res['name'].'"';
+						$condb->exec($sql);
+					}
+					catch (PDOException $e)
+					{
+							
+						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';
+						$error=iconv("cp1251","utf-8",$error);
+						$_SESSION['error']=$error;
+						include '../form/errorhtml.php';
+						exit;
+					}
 				}
 			
 			}			
@@ -350,5 +446,5 @@
 		
 	}
 	//Если без авторизации-на страницу авторизации
-	else header('Location ../index.php');
+	else header('Location ../index.php?'.$_SERVER['PHP_SELF']);
 ?>
