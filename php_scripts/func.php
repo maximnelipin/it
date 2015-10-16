@@ -49,8 +49,7 @@ function addCab($id_floor, $Dcab,$condb, $i=null){
 		}
 	}
 	catch (PDOException $e) {
-		echo 'Не удалось выполнить запрос';
-		echo $e->getMessage();
+		include '../form/errorhtml.php';
 		exit;
 			
 	}
@@ -79,8 +78,7 @@ function addFloor($id_build, $Dfloor, $Dcab,$condb){
 		}		
 	}
 	catch (PDOException $e) {
-		echo 'Не удалось выполнить запрос';
-		echo $e->getMessage();
+		include '../form/errorhtml.php';
 		exit;			
 	}	
 }

@@ -16,20 +16,17 @@
 	    <form action="?"  method="post">
 	    	<div class="field">
 	    		<label for="name" > Название инструкции</label>
-	    		<input type="text" class="text" size="70" name="name">   	
+	    		<input type="text" class="text" size="70" name="name" required>   	
 	    	</div>
 	    	<div class="field">
 	    		<label for="url"> URL-путь к странице с инструкцией</label>
-	    		<input type="text" class="text" size="70"  name="url"> 
+	    		<input type="text" class="text" size="70"  name="url" required> 
 	    	</div>	    	
 	    	<div>
 	    		<input type="submit" class="button" value="Добавить">
 	    	</div>
 	    	    
 	    </form>
-	    <?php
-	
-		?>
     </body>
     
 </html>

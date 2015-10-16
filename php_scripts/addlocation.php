@@ -10,10 +10,6 @@
 		}
 		catch (PDOException $e)
 		{
-			$error= 'Не удалось выполнить запрос'.$e->getMessage();	
-			$urlerr=$_SERVER['PHP_SELF'];
-			//$_SESSION['erroor']=$error;
-			//$_SESSION['urlerr']=$urlerr;
 			include '../form/errorhtml.php';
 			exit;
 		}
@@ -30,17 +26,15 @@
 			catch (PDOException $e)
 			{
 				
-				$error= 'Не удалось выполнить запрос'.$e->getMessage();	
-				$urlerr=$_SERVER['PHP_SELF'];
-				//$_SESSION['error']=$error;
-				//$_SESSION['urlerr']=$urlerr;
 				include '../form/errorhtml.php';
 				exit;
 			}
 			
 			header('Location .');
 			exit;
-		}	
+		}
+		if($condb!=null) {$condb=NULL;}
 	}
-	else header('Location ../index.php');
+	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
+	exit;
 ?>

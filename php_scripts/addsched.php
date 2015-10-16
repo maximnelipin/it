@@ -1,10 +1,10 @@
 <?php
 	session_start();
-	include 'func.php';
-	include 'mysql_conf.php';
+	
 	if(isset($_SESSION['user_id']))
 	{	
-		
+		include 'func.php';
+		include 'mysql_conf.php';
 		try {
 			$condb=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
 			$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -12,14 +12,10 @@
 		}
 		catch (PDOException $e)
 		{
-			$error= 'Не удалось выполнить запрос'.$e->getMessage();	
-			$urlerr=$_SERVER['PHP_SELF'];
-			//$_SESSION['erroor']=$error;
-			//$_SESSION['urlerr']=$urlerr;
 			include '../form/errorhtml.php';
 			exit;
 		}
-		include $_SERVER['DOCUMENT_ROOT'].'/form/addschedhtml.php';
+		
 		if (isset($_POST['login']))	
 		{
 			
@@ -34,17 +30,15 @@
 			
 			catch (PDOException $e)
 			{
-				echo 'Не удалось выполнить запрос';
-				echo $e->getMessage();
+				include '../form/errorhtml.php';
 				exit;
-			}		
-			
-			
-			
-			
+			}	
 			header('Location .');
 			exit;
-		}	
+		}
+		include $_SERVER['DOCUMENT_ROOT'].'/form/addschedhtml.php';
+		if($condb!=null) {$condb=NULL;}
 	}
-	else header('Location ../index.php');
+	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
+	exit;
 ?>

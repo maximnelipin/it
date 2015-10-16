@@ -16,11 +16,11 @@
 	    <form action="?"  method="post">
 	    	<div class="field">
 	    		<label for="name" > Название провайдера</label>
-	    		<input type="text" class="text" size="70" name="name">  	
+	    		<input type="text" class="text" size="70" name="name" required>  	
 	    	</div>
 	    	<div class="field">
 	    		<label for="address"> Телефон поддержки</label>
-	    		<input type="text" class="text" size="70"  name="telsup">
+	    		<input type="text" class="text" size="70"  name="telsup" required>
 	    	</div>
 	    	<div class="field">
 	    		<label for="address"> ФИО менеджера</label>

@@ -10,10 +10,6 @@
 		}
 		catch (PDOException $e)
 		{
-			$error= 'Не удалось выполнить запрос'.$e->getMessage();	
-			$urlerr=$_SERVER['PHP_SELF'];
-			//$_SESSION['erroor']=$error;
-			//$_SESSION['urlerr']=$urlerr;
 			include '../form/errorhtml.php';
 			exit;
 		}
@@ -89,8 +85,6 @@
 					catch (PDOException $e)
 					{
 					
-						$error= 'Не удалось выполнить запрос'.$e->getMessage().$login;
-						$urlerr=$_SERVER['PHP_SELF'];
 						include '../form/errorhtml.php';
 						exit;
 					}								
@@ -104,8 +98,6 @@
 					catch (PDOException $e)
 					{
 								
-						$error= 'Не удалось выполнить запрос'.$e->getMessage().$login;
-						$urlerr=$_SERVER['PHP_SELF'];							
 						include '../form/errorhtml.php';
 						exit;
 					}					
@@ -135,8 +127,6 @@
 					catch (PDOException $e)
 					{
 					
-						$error= 'Не удалось выполнить запрос'.$e->getMessage().$login;
-						$urlerr=$_SERVER['PHP_SELF'];
 						include '../form/errorhtml.php';
 						exit;
 					}
@@ -153,11 +143,11 @@
 		}
 		//Если скрипт открыт не через main, то отправляем на главную
 		else header('Location ../php_scripts/main.php');
-		if($conn!=null){
-			ldap_unbind($conn);}
+		if($conn!=null){ldap_unbind($conn);}
 		if($condb!=null) {$condb=NULL;}
 		
 	}
 	//Если без авторизации-на страницу авторизации
-	else header('Location ../index.php');
+	else header('Location: ../index.php');
+	exit;
 ?>

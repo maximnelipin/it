@@ -10,9 +10,6 @@
 		}
 		catch (PDOException $e)
 		{
-			$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';	
-			$error=iconv("cp1251","utf-8",$error);
-			$_SESSION['error']=$error;
 			include '../form/errorhtml.php';
 			exit;
 		}
@@ -55,6 +52,7 @@
 				}
 				else die("Введён неверный логин или пароль или недоступен сервер LDAP. <a href='main.php'> Попробовать ещё раз </a>");
 			}
+			else die ("Нет подключения к LDAP");
 			//Обнуляем переменную цикла
 			$i=0;
 			//Готовим шапку таблицы
@@ -113,9 +111,6 @@
 					catch (PDOException $e)
 					{
 					
-						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';	
-						$error=iconv("cp1251","utf-8",$error);
-						$_SESSION['error']=$error;
 						include '../form/errorhtml.php';
 						exit;
 					}								
@@ -129,9 +124,6 @@
 					catch (PDOException $e)
 					{
 								
-						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';	
-						$error=iconv("cp1251","utf-8",$error);
-						$_SESSION['error']=$error;
 						include '../form/errorhtml.php';
 						exit;
 					}					
@@ -176,9 +168,6 @@
 					catch (PDOException $e)
 					{
 							
-						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';	
-						$error=iconv("cp1251","utf-8",$error);
-						$_SESSION['error']=$error;
 						include '../form/errorhtml.php';
 						exit;
 					}
@@ -192,9 +181,6 @@
 				catch (PDOException $e)
 				{
 				
-					$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';	
-					$error=iconv("cp1251","utf-8",$error);
-					$_SESSION['error']=$error;
 					include '../form/errorhtml.php';
 					exit;
 				}
@@ -224,9 +210,6 @@
 					catch (PDOException $e)
 					{
 					
-						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';	
-						$error=iconv("cp1251","utf-8",$error);
-						$_SESSION['error']=$error;
 						include '../form/errorhtml.php';
 						exit;
 					}
@@ -274,9 +257,6 @@
 				}
 				catch (PDOException $e)
 				{
-					$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';
-					$error=iconv("cp1251","utf-8",$error);
-					$_SESSION['error']=$error;
 					include '../form/errorhtml.php';
 					exit;
 				}
@@ -307,9 +287,6 @@
 				}
 				catch (PDOException $e)
 				{
-					$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';
-					$error=iconv("cp1251","utf-8",$error);
-					$_SESSION['error']=$error;
 					include '../form/errorhtml.php';
 					exit;
 				}
@@ -338,9 +315,6 @@
 					catch (PDOException $e)
 					{
 							
-						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';
-						$error=iconv("cp1251","utf-8",$error);
-						$_SESSION['error']=$error;
 						include '../form/errorhtml.php';
 						exit;
 					}
@@ -369,9 +343,6 @@
 					catch (PDOException $e)
 					{
 							
-						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';
-						$error=iconv("cp1251","utf-8",$error);
-						$_SESSION['error']=$error;
 						include '../form/errorhtml.php';
 						exit;
 					}
@@ -385,9 +356,6 @@
 					catch (PDOException $e)
 					{
 			
-						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';
-						$error=iconv("cp1251","utf-8",$error);
-						$_SESSION['error']=$error;
 						include '../form/errorhtml.php';
 						exit;
 					}
@@ -418,9 +386,6 @@
 					catch (PDOException $e)
 					{
 							
-						$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';
-						$error=iconv("cp1251","utf-8",$error);
-						$_SESSION['error']=$error;
 						include '../form/errorhtml.php';
 						exit;
 					}
@@ -446,5 +411,6 @@
 		
 	}
 	//Если без авторизации-на страницу авторизации
-	else header('Location ../index.php?'.$_SERVER['PHP_SELF']);
+	else header('Location: ../index.php');
+	exit;
 ?>

@@ -17,11 +17,11 @@
 	    <form action="?"  method="post">	    	
 		    	<div class="field">
 		    		<label for="name" > Название объекта</label>
-		    		<input type="text" class="text" size="70" name="name">  	
+		    		<input type="text" class="text" size="70" name="name" required>  	
 		    	</div>
 		    	<div class="field">
 		    		<label for="address"> Адрес объекта</label>
-		    		<input type="text" class="text" size="70"  name="address">
+		    		<input type="text" class="text" size="70"  name="address" required>
 		    	</div>
 		    	<div class="field">
 		    		<label for="floor"> Номера этажей</label>

@@ -16,7 +16,7 @@
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
 	?>
     
-    	<form action="index.php" method="post">
+    	<form action="index.php<?php if(isset ($_GET['link'])) echo '?link='.$_GET['link']; ?>" method="post">
     		<div class="auth"> 
 				<p> Справочная система </p>
     			<p>Имя пользователя </p> <p><input class="text" type="text" size="27" name="login" /> </p>

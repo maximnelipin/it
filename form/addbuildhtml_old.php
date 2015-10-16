@@ -16,7 +16,7 @@
 	    <form action="?"  method="post">
 	    	<div class="field">
 	    		<label for="nameb" > Название объекта</label>
-	    		<input type="text" class="text" size="70" name="nameb">  	
+	    		<input type="text" class="text" size="70" name="nameb" required>  	
 	    	</div>
 	    	<div class="field">
 	    		<label for="address"> Адрес объекта</label>

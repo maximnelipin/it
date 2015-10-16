@@ -1,7 +1,7 @@
 <?php
 	session_start();
 	if(isset($_SESSION['user_id']))
-	{	include $_SERVER['DOCUMENT_ROOT'].'/form/addsprintershtml.php';
+	{	include 'func.php';
 		include 'mysql_conf.php';
 		try {
 			$conbd=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
@@ -10,31 +10,26 @@
 		}
 		catch (PDOException $e)
 		{
-			$error= 'Не удалось выполнить запрос'.$e->getMessage();	
-			$urlerr=$_SERVER['PHP_SELF'];
-			//$_SESSION['erroor']=$error;
-			//$_SESSION['urlerr']=$urlerr;
 			include '../form/errorhtml.php';
 			exit;
 		}
 		if (isset($_POST['nameb']))	
 		{
-			$drivers=$_POST["drivers"];
+			
 			//преобразуем путь к папке для записи в Mysql
-			$drivers=addslashes($drivers); 
+			$_POST["drivers"]=addslashes($_POST["drivers"]); 
 			
 			try {
-				$sql='insert into sprinters set name="'.$_POST["nameb"].'", cart="'.$_POST["cart"].'", drivers="'.$drivers.'"';
-				$conbd->exec($sql);
+				$fields=array("name","cart","drivers");
+				$sql='insert into sprinters set '.pdoSet($fields,$values);
+				$sqlprep=$condb->prepare($sql);
+				$sqlprep->execute($values);			
+				
 			}
 			
 			catch (PDOException $e)
 			{
 				
-				$error= 'Не удалось выполнить запрос'.$e->getMessage();	
-				$urlerr=$_SERVER['PHP_SELF'];
-				//$_SESSION['error']=$error;
-				//$_SESSION['urlerr']=$urlerr;
 				include '../form/errorhtml.php';
 				exit;
 			}
@@ -42,6 +37,9 @@
 			header('Location .');
 			exit;
 		}	
+		include $_SERVER['DOCUMENT_ROOT'].'/form/addsprintershtml.php';
+		if($condb!=null) {$condb=NULL;}
 	}
-	else header('Location ../index.php');
+	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
+	exit;
 ?>

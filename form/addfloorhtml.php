@@ -32,7 +32,7 @@
 		    	</div>
 		    	<div class="field">
 		    		<label for="floor"> Номера этажей</label>
-		    		<input type="text" class="text" size="70"  name="floor">
+		    		<input type="text" class="text" size="70"  name="floor" required>
 		    	</div>
 		    	<div class="field">
 		    		<label for="cabinet"> Кабинеты</label>

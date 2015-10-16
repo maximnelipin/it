@@ -16,7 +16,7 @@
 	    <form action="?"  method="post">
 	    	<div class="field">
 	    		<label for="name" > Имя политики в AD</label>
-	    		<input type="text" class="text" size="70" name="name">   	
+	    		<input type="text" class="text" size="70" name="name" required>   	
 	    	</div>
 	    	<div class="field">
 	    		<label for="container"> Связанные контайнеры, через запятую</label>

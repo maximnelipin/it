@@ -1,7 +1,7 @@
 <?php
 	session_start();
 	if(isset($_SESSION['user_id']))
-	{	include $_SERVER['DOCUMENT_ROOT'].'/form/additinsthtml.php';
+	{	include 'func.php';
 		include 'mysql_conf.php';
 		try {
 			$conbd=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
@@ -10,37 +10,36 @@
 		}
 		catch (PDOException $e)
 		{
-			$error= 'Не удалось выполнить запрос'.$e->getMessage();	
-			$urlerr=$_SERVER['PHP_SELF'];
-			//$_SESSION['erroor']=$error;
-			//$_SESSION['urlerr']=$urlerr;
 			include '../form/errorhtml.php';
 			exit;
 		}
 		if (isset($_POST['name']))	
 		{
 			
-			$url=addslashes($_POST["url"]);
+			$_POST["url"]=addslashes($_POST["url"]);
 			
 			try {
-				$sql='insert into itinst set name="'.$_POST["name"].'", url="'.$url.'"';
-				$conbd->exec($sql);
+				
+				$fields=array("name","url");
+				$sql='insert into itinst set '.pdoSet($fields,$values);
+				$sqlprep=$condb->prepare($sql);
+				$sqlprep->execute($values);
+				
 			}
 			
 			catch (PDOException $e)
 			{
 				
-				$error= 'Не удалось выполнить запрос'.$e->getMessage();	
-				$urlerr=$_SERVER['PHP_SELF'];
-				//$_SESSION['error']=$error;
-				//$_SESSION['urlerr']=$urlerr;
 				include '../form/errorhtml.php';
 				exit;
 			}
 			
 			header('Location .');
 			exit;
-		}	
+		}
+		include $_SERVER['DOCUMENT_ROOT'].'/form/additinsthtml.php';
+		if($condb!=null) {$condb=NULL;}
 	}
-	else header('Location ../index.php');
+	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
+	exit;
 ?>

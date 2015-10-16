@@ -1,7 +1,7 @@
 <?php
 	session_start();
 	if(isset($_SESSION['user_id']))
-	{	
+	{	include 'func.php';
 		include 'mysql_conf.php';
 		try {
 			$conbd=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
@@ -10,40 +10,37 @@
 		}
 		catch (PDOException $e)
 		{
-			$error= 'Не удалось выполнить запрос'.$e->getMessage();	
-			$urlerr=$_SERVER['PHP_SELF'];
-			//$_SESSION['erroor']=$error;
-			//$_SESSION['urlerr']=$urlerr;
 			include '../form/errorhtml.php';
 			exit;
 		}
-		include $_SERVER['DOCUMENT_ROOT'].'/form/addprintershtml.php';
+		
 		if (isset($_POST['netpath']))	
 		{
 			
-			$netpath=$_POST["netpath"];
+			
 			//преобразуем путь к папке для записи в Mysql
-			$netpath=addslashes($netpath);
+			$_POST["netpath"]=addslashes($_POST["netpath"]);
 			try {
-				$sql='insert into printers set netpath="'.$netpath.'", id_address="'.$_POST["id_address"].'", 
-						id_printer="'.$_POST["id_ptinter"].'", note="'.$_POST["note"].'", cabinet="'.$_POST["cabinet"].'"';
-				$conbd->exec($sql);
+				
+				$fields=array("netpath","id_address","id_printer","note");
+				$sql='insert into printers set '.pdoSet($fields,$values);
+				$sqlprep=$condb->prepare($sql);
+				$sqlprep->execute($values);
 			}
 			
 			catch (PDOException $e)
 			{
 				
-				$error= 'Не удалось выполнить запрос'.$e->getMessage();	
-				$urlerr=$_SERVER['PHP_SELF'];
-				//$_SESSION['error']=$error;
-				//$_SESSION['urlerr']=$urlerr;
 				include '../form/errorhtml.php';
 				exit;
 			}
 			
 			header('Location .');
 			exit;
-		}	
+		}
+		include $_SERVER['DOCUMENT_ROOT'].'/form/addprintershtml.php';
+		if($condb!=null) {$condb=NULL;}
 	}
-	else header('Location ../index.php');
+	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
+	exit;
 ?>

@@ -15,16 +15,16 @@
 	    <h2 class="title"> Добавление модели принтера</h2>
 	    <form action="?"  method="post">
 	    	<div class="field">
-	    		<label for="nameb" > Модель принтера</label>
-	    		<input type="text" class="text" size="70" name="nameb">   	
+	    		<label for="name" > Модель принтера</label>
+	    		<input type="text" class="text" size="70" name="name" required>   	
 	    	</div>
 	    	<div class="field">
-	    		<label for="address"> Тип картриджа</label>
-	    		<input type="text" class="text" size="70"  name="cart">
+	    		<label for="cart"> Тип картриджа</label>
+	    		<input type="text" class="text" size="70"  name="cart" required>
 	    	</div>
 	    	<div class="field">
-	    		<label for="address"> Папка с драйверами</label>
-	    		<input type="text" class="text" size="70"  name="drivers">
+	    		<label for="drivers"> Папка с драйверами</label>
+	    		<input type="text" class="text" size="70"  name="drivers" required>
 	    	</div>
 	    	<div>
 	    		<input type="submit" class="button" value="Добавить">

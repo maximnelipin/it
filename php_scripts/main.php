@@ -1,19 +1,22 @@
 <?php
 	session_start();
 	if(isset($_SESSION['user_id']))
-	{try {
-		$condb=new PDO('mysql:host=192.168.0.75;dbname=IT_INFO', 'itinfo', 'Passw0rd');
-		$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$condb->exec('SET NAMES "utf8"');
+	{	include 'mysql_conf.php';
+		try 
+		{
+			$conbd=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
+			$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$condb->exec('SET NAMES "utf8"');
+		}
+		catch (PDOException $e)
+		{
+			include '../form/errorhtml.php';
+			exit;
+		}
+		include $_SERVER['DOCUMENT_ROOT'].'/form/mainhtml.php';
+		if($condb!=null) {$condb=NULL;}
 	}
-	catch (PDOException $e)
-	{
-		echo 'Нет подключения к базе';
-		echo $e->getMessage();
-		exit;
-	}
-	include $_SERVER['DOCUMENT_ROOT'].'/form/mainhtml.php';
-	}
-	else header('Location: ../index.php');
+	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
+	exit;
 
 ?>

@@ -16,12 +16,7 @@
 		}
 		catch (PDOException $e)
 		{
-			$error= 'Не удалось выполнить запрос'.$e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.
-					$_SERVER['PHP_SELF'].'</a>';
-			$error=iconv("cp1251","utf-8",$error);
-			$_SESSION['error']=$error;
-			//$_SESSION['urlerr']=$urlerr;
-			include '../php_scripts/error.php';
+			include '../form/errorhtml.php';
 			exit;
 		}
 		
@@ -159,11 +154,12 @@
 			}
 			
 		}
-		
-		if($condb!=null) {
-			$condb=NULL;}
+		//Закрываем подключения
+		if($condb!=null) {$condb=NULL;}
 		//Выводим жокумент в браузер и отображаем его в просмотрщике
 		$pdf->Output(numToMonth($monyear[0]).' '.$monyear[1],'I');		
 		
 	}
+	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF'].'?monyear='.$_REQUEST["monyear"]);
+	exit;
 ?>

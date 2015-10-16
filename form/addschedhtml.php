@@ -18,7 +18,7 @@
 	     <form action="?"  method="post">
 	     	<div class="fieldcall">
 	    		<label for="dateduty" > Дата дежурства</label>
-	    		<input type="text" class="tcal" name="dateduty"   value="">
+	    		<input type="text" class="tcal" name="dateduty"   value="" required>
 	    	</div>
 	    	
 	    	

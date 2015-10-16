@@ -16,7 +16,7 @@
 	     <form action="?"  method="post">
 	     	<div class="field">
 	    		<label for="netpath"> Сетевой путь</label>
-	    		<input type="text" class="text" size="70"  name="netpath">
+	    		<input type="text" class="text" size="70"  name="netpath" required>
 	    	</div>
 	    	<div class="field">
 	    		<label for="id_ptinter" > Модель принтера</label>	    		
@@ -34,7 +34,7 @@
 	    		</p>  	
 	    	</div>
 	    	<div class="field">
-	    		<label for="id_address" > Этаж расположения</label>	    		
+	    		<label for="id_address" > Кабинет расположения</label>	    		
 	    		<p><select required class="text" size="5" name="id_address">
 	    			<option disabled>Выберите объект</option>
 	    			<?php 
@@ -56,10 +56,6 @@
 	    				?>
 	    		</select> 
 	    		</p>  	
-	    	</div>
-	    	<div class="field">
-	    		<label for="cabinet"> Кабинет</label>
-	    		<input type="text" class="text" size="70" width="3" name="cabinet">
 	    	</div>
 	    	<div class="field">
 	    		<label for="note"> Примечание</label>

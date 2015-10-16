@@ -10,19 +10,10 @@
 	?>
 <title>Добавление сим-карты</title>
 </head>
-
     <body >
-    
-	
 	<?php
-	//include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/error.php';
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
 	?>
-	
-
-
-
-
 	    <h2 class="title"> Добавление сим-карты</h2>
 	     <form action="?"  method="post">
 	     	<div class="field">

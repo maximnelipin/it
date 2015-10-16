@@ -16,7 +16,7 @@
 	     <form action="?"  method="post">
 	     	<div class="field">
 	    		<label for="name"> Сетевое имя или ip-адрес серера</label>
-	    		<input type="text" class="text" size="70"  name="name">
+	    		<input type="text" class="text" size="70"  name="name" required>
 	    	</div>
 	    	
 	    	
@@ -48,19 +48,19 @@
 	    	</div>
 	    	<div class="field">
 	    		<label for="descrip"> Выполняемая функция</label>
-	    		<input type="text" class="text" size="70" width="3" name="descrip">
+	    		<input type="text" class="text" size="70" width="3" name="descrip" required>
 	    	</div>
 	    	<div class="field">
 	    		<label for="phys"> Модель аппаратуры</label>
-	    		<input type="text" class="text" size="70" width="3" name="phys">
+	    		<input type="text" class="text" size="70" width="3" name="phys" required>
 	    	</div>
 	    	<div class="field">
 	    		<label for="rack"> Номер стойки в серверной</label>
-	    		<input type="text" class="text" size="70" width="3" name="rack">
+	    		<input type="text" class="text" size="70" width="3" name="rack" required>
 	    	</div>
 	    	<div class="field">
 	    		<label for="units"> Номер(а) юнитов в стойке</label>
-	    		<input type="text" class="text" size="70" width="3" name="units">
+	    		<input type="text" class="text" size="70" width="3" name="units" required>
 	    	</div>
 	    	<div class="field">
 	    		<label for="login"> Ответственный</label>

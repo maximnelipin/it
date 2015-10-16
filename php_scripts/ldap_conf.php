@@ -14,8 +14,10 @@
 	$usrd="max".$domain;
 	//Пароль пользоватлея LDAP
 	$pwdd="zuneipod23";
-	
+	//OU с сотрудниками
 	$userou="OU=users,OU=developmentug,OU=DU,OU=Users&Pcs,DC=du,DC=i-net,DC=su";
+	//OU с компами 1
 	$pc1ou="OU=PCs,OU=developmentug,OU=DU,OU=Users&Pcs,DC=du,DC=i-net,DC=su";
+	//OU с компами 2
 	$pc2ou="OU=PCs,DC=du,DC=i-net,DC=su";
 ?>

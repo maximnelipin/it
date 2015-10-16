@@ -16,6 +16,9 @@
 	    <h2 class="title"> Ошибка выполнения скрипта</h2>
 	    <div class="error">
 	    	<?php
+	    	$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';
+	    	$error=iconv("cp1251","utf-8",$error);
+	    	
 			echo $error;
 			?>
 			
