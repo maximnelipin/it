@@ -4,7 +4,7 @@
 function pdoSet($fields, &$values, $source = array()) {
 	$set = '';
 	$values = array();
-	if (!$source) $source = &$_POST;
+	if (!$source) $source = &$_REQUEST;
 	foreach ($fields as $field) {
 		if (isset($source[$field])) {
 			$set.="`".str_replace("`","``",$field)."`". "=:$field, ";
@@ -129,5 +129,20 @@ function numToMonth($num){
 	}
 	
 	return $month;
+}
+
+function html($text)
+{
+	return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+}
+
+function htmlout($text)
+{
+	echo html($text);
+}
+
+function htmloutinput($text)
+{
+	echo '"'.html($text).'"';
 }
 ?>

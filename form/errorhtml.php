@@ -19,7 +19,7 @@
 	    	$error= $e->getMessage().'<a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a>';
 	    	$error=iconv("cp1251","utf-8",$error);
 	    	
-			echo $error;
+			echo $error.'Запрос '.$sql;
 			?>
 			
 	    </div>
