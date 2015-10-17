@@ -142,9 +142,14 @@
 		
 		foreach($result as $res)
 		{
-			$agents[]=array('id'=>$res['id'], 'name'=>$res['name']);
+			$params[]=array('id'=>$res['id'], 'name'=>$res['name']);
 		}
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlagentshtml.php';
+		//Титул управляющей страницы в творительном падеже
+		$ctrltitle="контрагентами";
+		//Название ссылки в родительном падеже
+		$ctrladd="контрагента";
+		
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlonefieldshtml.php';
 		
 		//include $_SERVER['DOCUMENT_ROOT'].'/form/addagentshtml.php';
 		if($condb!=null) {$condb=NULL;}

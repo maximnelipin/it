@@ -17,8 +17,9 @@ ul
 {
 	font-size: 130%;
 	float:left;
-	width:45%;
-	margin-top: 9px;
+	width:50%;
+	margin-top: 3px;
+	padding-bottom:6px;
 	border-bottom: 1px solid red;
 	
 	
@@ -26,7 +27,6 @@ ul
 
 .rightli
 {
-	
 	margin-bottom: 6px;
 	padding-bottom:3px;
 	float:left;

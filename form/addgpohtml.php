@@ -5,33 +5,34 @@
 <link rel="stylesheet" type="text/css" href="../stylesheet/reset.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
-<title>Добавление GPO</title>
+<title><?php htmlout($pageTitle); ?></title>
 </head>
 
     <body>
     <?php
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
 	?>
-	    <h2 class="title"> Добавление GPO</h2>
-	    <form action="?"  method="post">
+	    <h2 class="title"><?php htmlout($pageTitle); ?></h2>
+	    <form action="?<?php htmlout($action);?>"  method="post">
 	    	<div class="field">
 	    		<label for="name" > Имя политики в AD</label>
-	    		<input type="text" class="text" size="70" name="name" required>   	
+	    		<input type="text" class="text" size="70" name="name" value=<?php htmloutinput($name);?> required>   	
 	    	</div>
 	    	<div class="field">
 	    		<label for="container"> Связанные контайнеры, через запятую</label>
-	    		<input type="text" class="text" size="70"  name="container">
+	    		<input type="text" class="text" size="70"  name="container" value=<?php htmloutinput($container);?> >
 	    	</div>
 	    	<div class="field">
 	    		<label for="netpath"> Путь к связанным файлам, через запятую </label>
-	    		<textarea class="text" cols="63" rows="5"  name="netpath"></textarea> 
+	    		<textarea class="text" cols="63" rows="5"  name="netpath" ><?php htmlout($netpath);?></textarea>
 	    	</div>
 	    	<div class="field">
 	    		<label for="descrip"> Описание </label>
-	    		<textarea class="text" cols="63" rows="5"  name="descrip"></textarea> 
+	    		<textarea class="text" cols="63" rows="5"  name="descrip" ><?php htmlout($descrip);?></textarea>
 	    	</div>
 	    	<div>
-	    		<input type="submit" class="button" value="Добавить">
+	    		<input type="submit" class="button" value=<?php htmlout($button);?>>
+	    		<input type="button" class="button" value="Назад" onClick=<?php echo 'location.replace("http://'.$_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"].'");'?>>
 	    	</div>
 	    	    
 	    </form>
