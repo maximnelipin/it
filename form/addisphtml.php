@@ -5,59 +5,59 @@
 <link rel="stylesheet" type="text/css" href="../stylesheet/reset.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
-<title>Добавление провайдера</title>
+<title><?php htmlout($pageTitle); ?></title>
 </head>
 
     <body>
     <?php
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
 	?>
-	    <h2 class="title"> Добавление провайдера</h2>
-	    <form action="?"  method="post">
+	    <h2 class="title"> <?php htmlout($pageTitle); ?></h2>
+	    <form action=?<?php htmlout($action);?>  method="post">
 	    	<div class="field">
 	    		<label for="name" > Название провайдера</label>
-	    		<input type="text" class="text" size="70" name="name" required>  	
+	    		<input type="text" class="text" size="70" name="name" value=<?php htmloutinput($name);?> required>  	
 	    	</div>
 	    	<div class="field">
-	    		<label for="address"> Телефон поддержки</label>
-	    		<input type="text" class="text" size="70"  name="telsup" required>
+	    		<label for="telsup"> Телефон поддержки</label>
+	    		<input type="text" class="text" size="70"  name="telsup" value=<?php htmloutinput($telsup);?> required>
 	    	</div>
 	    	<div class="field">
-	    		<label for="address"> ФИО менеджера</label>
-	    		<input type="text" class="text" size="70"  name="manager">
+	    		<label for="manager"> ФИО менеджера</label>
+	    		<input type="text" class="text" size="70"  name="manager" value=<?php htmloutinput($manager);?>>
 	    	</div>
 	    	<div class="field">
-	    		<label for="address"> Телефон менеджера</label>
-	    		<input type="text" class="text" size="70"  name="telman">
+	    		<label for="telman"> Телефон менеджера</label>
+	    		<input type="text" class="text" size="70"  name="telman" value=<?php htmloutinput($telman);?>>
 	    	</div>
 	    	<div class="field">
-	    		<label for="address"> Электронная почта менеджера</label>
-	    		<input type="text" class="text" size="70"  name="emailman">
+	    		<label for="emailman"> Электронная почта менеджера</label>
+	    		<input type="text" class="text" size="70"  name="emailman" value=<?php htmloutinput($emailman);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="address"> Адрес офиса обслуживания</label>
-	    		<input type="text" class="text" size="70"  name="address">
+	    		<input type="text" class="text" size="70"  name="address" value=<?php htmloutinput($address);?>>
 	    	</div>
 	    	<div class="field">
-	    		<label for="address"> Адрес личного кабинета</label>
-	    		<input type="text" class="text" size="70"  name="urllk">
+	    		<label for="urllk"> Адрес личного кабинета</label>
+	    		<input type="text" class="text" size="70"  name="urllk" value=<?php htmloutinput($urllk);?>>
 	    	</div>
 	    	<div class="field">
-	    		<label for="address"> Папка с документами</label>
-	    		<input type="text" class="text" size="70"  name="netpath"> 
+	    		<label for="netpath"> Папка с документами</label>
+	    		<input type="text" class="text" size="70"  name="netpath" value=<?php htmloutinput($netpath);?>> 
 	    	</div>
 	    	<div class="field">
-	    		<label for="address"> Примечание</label>
-	    		<input type="text" class="text" size="70"  name="note">
+	    		<label for="note"> Примечание</label>
+	    		<input type="text" class="text" size="70"  name="note" value=<?php htmloutinput($note);?>>
 	    	</div>
 	    	<div>
-	    		<input type="submit" class="button" value="Добавить">
+	    		<input type="hidden" name="id" value=<?php htmlout($id);?>>
+	    		<input type="submit" class="button" value=<?php htmlout($button);?>>
+	    		<input type="button" class="button" value="Назад" onClick=<?php echo 'location.replace("http://'.$_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"].'");'?>>
 	    	</div>
 	    
 	    </form>
-	    <?php
-	
-		?>
+	    
     </body>
     
 </html>
