@@ -19,6 +19,7 @@
 		    <div>
 		    	<a href="?add">Добавить <?php echo $ctrladd;?></a>	    
 		    </div>
+		    <?php if(isset($params)):{?>
 		    <ul>
 		    	<?php foreach ($params as $param): ?>
 		    	<li>
@@ -34,7 +35,8 @@
 		    		</form>
 		    	</li>
 		    	<?php endforeach;?>    
-		    </ul>	    
+		    </ul>
+		    <?php }endif;?> 	    
 	    </div>
 	    
     </body>

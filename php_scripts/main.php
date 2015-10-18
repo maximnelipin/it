@@ -4,7 +4,7 @@
 	{	include 'mysql_conf.php';
 		try 
 		{
-			$conbd=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
+			$condb=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
 			$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$condb->exec('SET NAMES "utf8"');
 		}

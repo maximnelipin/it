@@ -16,7 +16,7 @@
 	    <form action="?<?php htmlout($action);?>"  method="post">
 	    	<div class="field">
 	    		<label for="name" > Имя политики в AD</label>
-	    		<input type="text" class="text" size="70" name="name" value=<?php htmloutinput($name);?> required>   	
+	    		<input type="text" class="text" size="70" name="name" value=<?php htmloutinput($name);?> required <?php htmlout($dis);?>>   	
 	    	</div>
 	    	<div class="field">
 	    		<label for="container"> Связанные контайнеры, через запятую</label>

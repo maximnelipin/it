@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	if(1)
+	if(isset($_SESSION['user_id']))
 	{	include 'func.php';
 		include 'mysql_conf.php';
 		try {
@@ -24,6 +24,7 @@
 			$netpath='';
 			$descrip='';			
 			$id='';
+			$dis='';
 			$button="Добавить";
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addgpohtml.php';
 			exit;
@@ -77,6 +78,7 @@
 			$container=$res['container'];
 			$netpath=$res['netpath'];
 			$descrip=$res['descrip'];
+			$dis='disabled';
 			$button="Обновить";
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addgpohtml.php';
 			exit;
