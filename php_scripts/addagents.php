@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	if(1)
+	if(isset($_SESSION['user_id']))
 	{	include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
 		include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
 		//Подключаемся к БД
@@ -132,7 +132,7 @@
 		//Вывод списка контрагентов
 		try
 		{
-			$result=$condb->query('SELECT id, name FROM agents');
+			$result=$condb->query('SELECT id, name FROM agents order by name');
 		}
 		catch (PDOExeption $e)
 		{

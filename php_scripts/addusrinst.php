@@ -126,7 +126,7 @@
 		//Вывод списка 
 		try
 		{
-			$result=$condb->query('SELECT id,name FROM usrinst');
+			$result=$condb->query('SELECT id,name FROM usrinst order by name');
 		}
 		catch (PDOExeption $e)
 		{

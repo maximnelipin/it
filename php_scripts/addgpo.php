@@ -129,7 +129,7 @@
 		//Вывод списка контрагентов
 		try
 		{
-			$result=$condb->query('SELECT name FROM gpo');
+			$result=$condb->query('SELECT name FROM gpo order by name');
 		}
 		catch (PDOExeption $e)
 		{

@@ -17,7 +17,7 @@ ul
 {
 	font-size: 130%;
 	float:left;
-	width:50%;
+	width:60%;
 	margin-top: 3px;
 	padding-bottom:6px;
 	border-bottom: 1px solid red;
@@ -38,5 +38,12 @@ ul
 {
 	padding: 1px 1px 1px 1px;
 	
+}
+
+.field {
+	margin-bottom: 1%;
+	padding-left: 1%;
+	margin-right: 40%;
+	margin-left: 3%;
 }
 

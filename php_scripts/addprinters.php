@@ -14,6 +14,9 @@
 			exit;
 		}
 		
+		
+		
+		
 		if (isset($_POST['netpath']))	
 		{
 			
