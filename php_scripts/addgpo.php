@@ -78,7 +78,7 @@
 			$container=$res['container'];
 			$netpath=$res['netpath'];
 			$descrip=$res['descrip'];
-			$dis='disabled';
+			$dis='readonly';
 			$button="Обновить";
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addgpohtml.php';
 			exit;

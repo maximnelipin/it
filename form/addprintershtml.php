@@ -5,29 +5,41 @@
 <link rel="stylesheet" type="text/css" href="../stylesheet/reset.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
-<title>Добавление принтера</title>
-</head>
+<title><?php htmlout($pageTitle); ?></title>
 
+</head>
+<script type="text/javascript">
+var n=0;
+</script>
     <body>
     <?php
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
 	?>
-	    <h2 class="title"> Добавление принтера</h2>
-	     <form action="?"  method="post">
+	    <h2 class="title"> <?php htmlout($pageTitle); ?></h2>
+	     <form action=?<?php htmlout($action);?>  method="post">
 	     	<div class="field">
 	    		<label for="netpath"> Сетевой путь</label>
-	    		<input type="text" class="text" size="70"  name="netpath" required>
+	    		<input type="text" class="text" size="70"  name="netpath" value=<?php htmloutinput($netpath);?> required <?php htmlout($dis);?>>
 	    	</div>
 	    	<div class="field">
-	    		<label for="id_ptinter" > Модель принтера</label>	    		
-	    		<p><select required class="text" size="5" name="id_ptinter">
+	    		<label for="id_printer" > Модель принтера</label>	    		
+	    		<p><select required class="text" size="5" name="id_printer" >
 	    			<option disabled>Выберите принтер</option>
 	    			<?php 
-	    				$selsql='select id, name from sprinters';
-						$ressql=$conbd->query($selsql);
+	    				$selsql='select id, name from sprinters order by name';
+						$ressql=$condb->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
-	    					echo '<option value='.$res['id'].'>'.$res['name'].' </option>';
+	    					if($res['id']==$id_printer)
+	    					{
+	    						//$select='selected="true"  onBlur="if(n==0) {this.selected=false; n=1}"';
+	    						$select='selected';
+	    					}
+	    					else
+	    					{
+	    						$select='';
+	    					}
+	    					echo '<option '.$select.'  value='.$res['id'].'>'.$res['name'].' </option>';
 	    				}
 	    				?>
 	    		</select> 
@@ -40,15 +52,25 @@
 	    			<?php 
 	    				$selsql='SELECT build.name as build, floor.id as id_floor, floor.floor as floor FROM build
 								RIGHT JOIN floor ON build.id = floor.id_build ORDER BY name, floor';
-						$ressql=$conbd->query($selsql);
+						$ressql=$condb->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
 	    					$selsql='SELECT id, cabinet FROM cabinet WHERE id_floor='.$res['id_floor'].' ORDER BY cabinet';
-	    					$rescabsql=$conbd->query($selsql);
+	    					$rescabsql=$condb->query($selsql);
 	    					while ($rescab=$rescabsql->fetch(PDO::FETCH_ASSOC))
 	    					{
-	    						echo '<option value='.$rescab['id'].'>'.$res['build']. " ".$res['floor'].' этаж Кабинет "'.$rescab['cabinet'].'"</option>';
+	    						if($rescab['id']==$id_address)
+	    						{
+	    							//$select='selected';
+	    							$select='selected';
+	    						}
 	    						
+	    						else 
+	    						{
+	    							$select='';
+	    						}
+	    						
+	    						echo '<option '.$select.' value='.$rescab['id'].'>'.$res['build']. " ".$res['floor'].' этаж Кабинет "'.$rescab['cabinet'].'"</option>';
 	    					}
 	    					
 	    					
@@ -59,10 +81,11 @@
 	    	</div>
 	    	<div class="field">
 	    		<label for="note"> Примечание</label>
-	    		<input type="text" class="text" size="70" width="3" name="note">
+	    		<input type="text" class="text" size="70" width="3" name="note" value=<?php htmloutinput($note);?>>
 	    	</div>
 	    	<div>
-	    		<input type="submit" class="button" value="Добавить">
+	    		<input type="submit" class="button" value=<?php htmlout($button);?>>
+	    		<input type="button" class="button" value="Назад" onClick=<?php echo 'location.replace("http://'.$_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"].'");'?>>
 	    	</div>
 	    
 	    </form>
