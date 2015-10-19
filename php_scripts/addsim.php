@@ -22,7 +22,7 @@
 		//Выводим форму на добавление
 		if(isset($_REQUEST['add']))
 		{
-			$pageTitle='Добавление принтера';
+			$pageTitle='Добавление сим-карт';
 			$action='addform';
 			$number='';
 			$account='';
@@ -40,7 +40,7 @@
 			exit;
 		}
 		//Добавляем 
-		if (isset($_REQUEST['netpath']) && isset($_REQUEST['addform']))
+		if (isset($_REQUEST['number']) && isset($_REQUEST['addform']))
 		{
 		
 			//преобразуем путь к папке для записи в Mysql
@@ -82,7 +82,7 @@
 			}
 		
 			$res=$sqlprep->fetch();
-			$pageTitle='Редактирование принтеров';
+			$pageTitle='Редактирование сим-карт';
 			$action='editform';
 			$number=$res['number'];
 			$account=$res['account'];

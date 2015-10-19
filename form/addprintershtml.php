@@ -8,9 +8,7 @@
 <title><?php htmlout($pageTitle); ?></title>
 
 </head>
-<script type="text/javascript">
-var n=0;
-</script>
+
     <body>
     <?php
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';

@@ -19,8 +19,8 @@
 	    		<input type="text" class="text" size="70" name="name" value=<?php htmloutinput($name);?> required>  	
 	    	</div>
 	    	<div class="field">
-	    		<label for="telsup"> Телефон поддержки</label>
-	    		<input type="text" class="text" size="70"  name="telsup" value=<?php htmloutinput($telsup);?> required>
+	    		<label for="telsup"> Телефон поддержки, 11 цифр</label>
+	    		<input type="text" class="text" size="70"  name="telsup" value=<?php htmloutinput($telsup);?> pattern="[0-9]{11}" required>
 	    	</div>
 	    	<div class="field">
 	    		<label for="manager"> ФИО менеджера</label>

@@ -5,9 +5,8 @@
 <link rel="stylesheet" type="text/css" href="../stylesheet/reset.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
-<?php	
 
-	?>
+
 <title><?php htmlout($pageTitle); ?></title>
 </head>
     <body >
@@ -17,8 +16,9 @@
 	    <h2 class="title"> <?php htmlout($pageTitle); ?></h2>
 	     <form action=?<?php htmlout($action);?>  method="post">
 	     	<div class="field">
-	    		<label for="number"> Номер</label>
-	    		<input type="text" class="text" size="70"  name="number" value=<?php htmloutinput($number);?> required <?php htmlout($dis);?> >
+	    		<label for="number"> Номер, 10 цифр, без 8</label>
+	    		<input type="text" class="text" size="70"  name="number" value=<?php htmloutinput($number);?> 
+	    		required <?php htmlout($dis);?> pattern="[0-9]{10}" >
 	    	</div>
 	    	<div class="field">
 	    		<label for="account" > Лицевой счёт</label>	    		
@@ -87,7 +87,7 @@
 	    				{
 	    					if($res['login']==$login)
 	    					{
-	    							
+	    						
 	    						$select='selected';
 	    					}
 	    					else

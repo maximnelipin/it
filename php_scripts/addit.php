@@ -68,7 +68,7 @@
 				if(isset($res[$i]['title'][0]))
 					{$title=$res[$i]['title'][0]." ";}					
 				//Заполняем временную таблицу записями из AD
-				$sql='insert into tempit set  login="'.$login.'", fio="'.$name.'", func="'.$title.'"';
+				$sql='insert into tempit set  login="'.trim($login).'", fio="'.$name.'", func="'.$title.'"';
 				$condb->exec($sql);
 				//Делаем запрос на выборку записи из таблицы itusers с логином $login
 				$sql='select login from itusers where login="'.$login.'"';
@@ -79,7 +79,7 @@
 					//Добавляем его в таблицу
 					try {
 						
-						$sql='insert into itusers set login="'.$login.'", fio="'.$name.'", func="'.$title.'"';
+						$sql='insert into itusers set login="'.trim($login).'", fio="'.$name.'", func="'.$title.'"';
 						$condb->exec($sql);
 					}					
 					catch (PDOException $e)
@@ -92,7 +92,7 @@
 				else
 				{	//если есть такой логин в таблице, обновляем связанную запись
 					try {
-						$sql='update itusers set fio="'.$name.'", func="'.$title.'" where login="'.$login.'"';
+						$sql='update itusers set fio="'.$name.'", func="'.$title.'" where login="'.trim($login).'"';
 						$condb->exec($sql);
 					}
 					catch (PDOException $e)
