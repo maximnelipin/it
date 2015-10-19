@@ -27,7 +27,7 @@
 	    	</div>	    	
 	    	<div class="field">
 	    		<label for="id_address" > Кабинет, куда подходит кабель</label>	    		
-	    		<select required class="text" size="5" name="id_address">
+	    		<select required class="text" size="5" name="id_cabinet">
 	    			<option disabled>Выберите объект</option>
 	    			<?php 
 	    				$selsql='SELECT build.name as build, floor.id as id_floor, floor.floor as floor FROM build
@@ -273,7 +273,10 @@
 	    		<input type="text" class="text" size="70" width="3" name="note" value=<?php htmloutinput($note);?>>
 	    	</div>
 	    	<div>
-	    		<input type="submit" class="button" value="Добавить">
+	    		<input type="hidden" name="id" value=<?php htmlout($id);?>>
+	    		<input type="submit" class="button" value=<?php htmlout($button);?>>
+	    		<input type="button" class="button" value="Назад" onClick=<?php echo 'location.replace("http://'.$_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"].'");'?>>
+	    	
 	    	</div>   
 	    
 	    

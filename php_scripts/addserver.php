@@ -67,10 +67,9 @@
 		{
 			try
 			{
-				$sql='SELECT * FROM servers WHERE name=:name AND id_cabinet=:id_cabinet';
+				$sql='SELECT * FROM servers WHERE id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':name',$_REQUEST['id']);
-				$sqlprep->bindValue(':id_cabinet',$_REQUEST['id2']);
+				$sqlprep->bindValue(':id',$_REQUEST['id']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -91,6 +90,7 @@
 			$units=$res['units'];
 			$login=$res['login'];
 			$note=$res['note'];
+			$id=$res['id'];
 			$dis='readonly';
 			$button="Обновить";
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addserverhtml.php';
@@ -107,9 +107,9 @@
 			try
 			{
 				$fields=array("id_cabinet","type","descrip","phys","rack","units","login","note");
-				$sql='update servers set '.pdoSet($fields,$values).' where name=:name';
+				$sql='update servers set '.pdoSet($fields,$values).' where id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$values["name"]=$_POST['name'];
+				$values["id"]=$_POST['id'];
 				$sqlprep->execute($values);
 			}
 			catch (PDOException $e)
@@ -127,10 +127,9 @@
 		{
 			try
 			{
-				$sql='DELETE FROM servers WHERE name=:name AND id_cabinet=:id_cabinet';
+				$sql='DELETE FROM servers WHERE id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':name',$_REQUEST['id']);
-				$sqlprep->bindValue(':id_cabinet',$_REQUEST['id2']);
+				$sqlprep->bindValue(':id',$_REQUEST['id']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -144,7 +143,7 @@
 		try
 		{
 			$result=$condb->query('SELECT servers.name AS servername, build.name as buildname, floor.floor, cabinet.id as id_cabinet,
-									cabinet.cabinet
+									cabinet.cabinet, servers.id as id_servers
 								FROM servers
 								LEFT JOIN cabinet ON cabinet.id = servers.id_cabinet
 								LEFT JOIN floor ON cabinet.id_floor = floor.id
@@ -159,7 +158,7 @@
 		foreach($result as $res)
 		{
 			//id-первичный ключ для поиска в таблице. Может принимать нужные значения
-			$params[]=array('id'=>$res['servername'], 'id2'=>$res['id_cabinet'], 'name'=>$res['servername'].' '.$res['buildname'].' '.$res['floor'].' эт. '.$res['cabinet']);
+			$params[]=array('id'=>$res['id_servers'], 'name'=>$res['servername'].' '.$res['buildname'].' '.$res['floor'].' эт. '.$res['cabinet']);
 		}
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="серверами";
