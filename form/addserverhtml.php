@@ -5,18 +5,18 @@
 <link rel="stylesheet" type="text/css" href="../stylesheet/reset.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
-<title>Добавление сервера</title>
+<title><?php htmlout($pageTitle); ?></title>
 </head>
 
     <body>
     <?php
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
 	?>
-	    <h2 class="title"> Добавление сервера</h2>
-	     <form action="?"  method="post">
+	    <h2 class="title"><?php htmlout($pageTitle); ?></h2>
+	     <form action=?<?php htmlout($action);?>  method="post">
 	     	<div class="field">
 	    		<label for="name"> Сетевое имя или ip-адрес серера</label>
-	    		<input type="text" class="text" size="70"  name="name" required>
+	    		<input type="text" class="text" size="70"  name="name" value=<?php htmloutinput($name);?> required <?php htmlout($dis);?>>
 	    	</div>
 	    	
 	    	
@@ -34,9 +34,20 @@
 	    					$rescabsql=$condb->query($selsql);
 	    					while ($rescab=$rescabsql->fetch(PDO::FETCH_ASSOC))
 	    					{
-	    						echo '<option value='.$rescab['id'].'>'.$res['build']. " ".$res['floor'].' этаж Кабинет "'.$rescab['cabinet'].'"</option>';
+	    						if($rescab['id']==$id_cabinet)
+	    						{
+	    							//$select='selected';
+	    							$select='selected';
+	    						}
 	    						
-	    					} 					
+	    						else 
+	    						{
+	    							$select='';
+	    						}
+	    						
+	    						echo '<option '.$select.' value='.$rescab['id'].'>'.$res['build']. " ".$res['floor'].' этаж Кабинет "'.$rescab['cabinet'].'"</option>';
+	    					}
+	    					
 	    					
 	    				}
 	    				?>
@@ -44,34 +55,44 @@
 	    	</div>
 	    	<div class="field">
 	    		<label for="type"> Тип: физический, виртуальный и т.д.</label>
-	    		<input type="text" class="text" size="70" width="3" name="type">
+	    		<input type="text" class="text" size="70" width="3" name="type" value=<?php htmloutinput($type);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="descrip"> Выполняемая функция</label>
-	    		<input type="text" class="text" size="70" width="3" name="descrip" required>
+	    		<input type="text" class="text" size="70" width="3" name="descrip" required value=<?php htmloutinput($descrip);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="phys"> Модель аппаратуры</label>
-	    		<input type="text" class="text" size="70" width="3" name="phys" required>
+	    		<input type="text" class="text" size="70" width="3" name="phys" required value=<?php htmloutinput($phys);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="rack"> Номер стойки в серверной</label>
-	    		<input type="text" class="text" size="70" width="3" name="rack" required>
+	    		<input type="text" class="text" size="70" width="3" name="rack" required value=<?php htmloutinput($rack);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="units"> Номер(а) юнитов в стойке</label>
-	    		<input type="text" class="text" size="70" width="3" name="units" required>
+	    		<input type="text" class="text" size="70" width="3" name="units" required value=<?php htmloutinput($units);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="login"> Ответственный</label>
-	    		<select required class="text" size="5" name="login">
+	    		<select required class="text" size="5" name="login" >
 	    			<option disabled>Выберите объект</option>
 	    			<?php 
-	    				$selsql='SELECT login, fio FROM itusers';
+	    				$selsql='SELECT login, fio FROM itusers order by fio';
 						$ressql=$condb->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{    					
-	    						echo '<option value='.$res['login'].'>'.$res['fio'].'</option>';
+	    					if(strcasecmp($res['login'],$login)==0)
+	    					{
+	    						
+	    						$select='selected';
+	    					}
+	    					else
+	    					{
+	    						$select='';
+	    					}	
+	    					
+	    					echo '<option '.$select.' value='.$res['login'].'>'.$res['fio'].'</option>';
 	    						
 	    				}
 	    				?>
@@ -79,10 +100,12 @@
 	    	</div>
 	    	<div class="field">
 	    		<label for="note"> Примечание</label>
-	    		<input type="text" class="text" size="70" width="3" name="note">
+	    		<input type="text" class="text" size="70" width="3" name="note" value=<?php htmloutinput($note);?>>
 	    	</div>
 	    	<div>
-	    		<input type="submit" class="button" value="Добавить">
+	    		<input type="submit" class="button" value=<?php htmlout($button);?>>
+	    		<input type="button" class="button" value="Назад" onClick=<?php echo 'location.replace("http://'.$_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"].'");'?>>
+	    	
 	    	</div>
 	    
 	    </form>
