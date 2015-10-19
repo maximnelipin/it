@@ -6,64 +6,11 @@
 <link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-<script type="text/javascript">
-function selextnet(){
-	
-	document.getElementById("selextnet").className="divon";
-	document.getElementById("id_extnet").required=true;
-	document.getElementById("addextnet").className="divoff";
-	document.getElementById("extip").required=false;
-	return 0;
-	
-}
+<script src="../js_scripts/app.js"></script>
 
-function addextnet(){
-	
-	document.getElementById("addextnet").className="divon";
-	document.getElementById("selextnet").className="divoff";
-	document.getElementById("id_extnet").required=false;
-	document.getElementById("extip").required=true;
-	return 0;
-}
-
-function selppp(){
-	
-	document.getElementById("selppp").className="divon";
-	document.getElementById("addppp").className="divoff";
-	document.getElementById("srv").required=false;
-	return 0;
-	
-}
-
-function addppp(){
-	
-	document.getElementById("addppp").className="divon";
-	document.getElementById("selppp").className="divoff";
-	document.getElementById("srv").required=true;
-	return 0;
-}
-
-function selcomp(){
-	
-	document.getElementById("selcomp").className="divon";
-	document.getElementById("id_company").required=true;
-	document.getElementById("addcomp").className="divoff";
-	document.getElementById("name").required=false;
-	return 0;
-	
-}
-
-function addcomp(){
-	
-	document.getElementById("addcomp").className="divon";
-	document.getElementById("id_company").required=false;
-	document.getElementById("selcomp").className="divoff";
-	document.getElementById("name").required=true;
-	return 0;
-}
 
 </script>
-<title>Добавление подключения</title>
+<title><?php htmlout($pageTitle); ?></title>
 
 </head>
 
@@ -72,17 +19,17 @@ function addcomp(){
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
 	?>
 	    
-	    <h2 class="title"> Добавление соединения с ЛВС</h2>
-	     <form action="?"  method="post">
+	    <h2 class="title"> <?php htmlout($pageTitle); ?></h2>
+	     <form action=?<?php htmlout($action);?>  method="post">
 	     	<div class="field">
 	    		<label for="gateway"> Шлюз ЛВС</label>
-	    		<input type="text" class="text" size="70"  name="gateway" required>
+	    		<input type="text" class="text" size="70"  name="gateway"  <?php htmlout($dis);?> required value=<?php htmloutinput($gateway);?>>
 	    	</div>	    	
 	    	<div class="field">
 	    		<label for="id_address" > Кабинет, куда подходит кабель</label>	    		
 	    		<select required class="text" size="5" name="id_address">
 	    			<option disabled>Выберите объект</option>
-	    			<?php
+	    			<?php 
 	    				$selsql='SELECT build.name as build, floor.id as id_floor, floor.floor as floor FROM build
 								RIGHT JOIN floor ON build.id = floor.id_build ORDER BY name, floor';
 						$ressql=$condb->query($selsql);
@@ -92,9 +39,20 @@ function addcomp(){
 	    					$rescabsql=$condb->query($selsql);
 	    					while ($rescab=$rescabsql->fetch(PDO::FETCH_ASSOC))
 	    					{
-	    						echo '<option value='.$rescab['id'].'>'.$res['build']. " ".$res['floor'].' этаж Кабинет "'.$rescab['cabinet'].'"</option>';
+	    						if($rescab['id']==$id_cabinet)
+	    						{
+	    							//$select='selected';
+	    							$select='selected';
+	    						}
 	    						
-	    					} 					
+	    						else 
+	    						{
+	    							$select='';
+	    						}
+	    						
+	    						echo '<option '.$select.' value='.$rescab['id'].'>'.$res['build']. " ".$res['floor'].' этаж Кабинет "'.$rescab['cabinet'].'"</option>';
+	    					}
+	    					
 	    					
 	    				}
 	    				?>
@@ -109,7 +67,18 @@ function addcomp(){
 						$ressql=$condb->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{    					
-	    						echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+	    						
+	    					if($res['id']==$id_operator)
+	    					{
+	    						//$select='selected';
+	    						$select='selected';
+	    					}
+	    						
+	    					else
+	    					{
+	    						$select='';
+	    					}
+	    					echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
 	    						
 	    				}
 	    				?>
@@ -129,7 +98,18 @@ function addcomp(){
 							$ressql=$condb->query($selsql);
 		    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 		    				{    					
-		    						echo '<option value='.$res['id'].'>'.$res['extip'].'</option>';
+		    						
+		    					if($res['id']==$id_extnet)
+		    					{
+		    						
+		    						$select='selected';
+		    					}
+		    						
+		    					else
+		    					{
+		    						$select='';
+		    					}
+		    					echo '<option '.$select.' value='.$res['id'].'>'.$res['extip'].'</option>';
 		    						
 		    				}
 		    				?>
@@ -138,7 +118,7 @@ function addcomp(){
 	    		<div id="addextnet"  class="divoff">
 	    			<div class="field">
 			    		<label for="extip"> Внешний IP-адрес</label>
-			    		<input type="text" class="text" size="70" width="3" name="extip"  id="extip">
+			    		<input type="text" class="text" size="70" width="3" name="extip"  id="extip" >
 	    			</div>
 	    			<div class="field">
 			    		<label for="extmask"> Внешняя маска</label>
@@ -161,23 +141,23 @@ function addcomp(){
 	    	</div>
 	    	<div class="field">
 	    		<label for="typecon"> Тип подключения:DSL/IP/оптика и т.д.</label>
-	    		<input type="text" class="text" size="70" width="3" name="typecon">
+	    		<input type="text" class="text" size="70" width="3" name="typecon" value=<?php htmloutinput($typecon);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="mask"> Маска подсети ЛВС</label>
-	    		<input type="text" class="text" size="70" width="3" name="mask">
+	    		<input type="text" class="text" size="70" width="3" name="mask" value=<?php htmloutinput($mask);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="dhcp"> DHCP-сервер ЛВС</label>
-	    		<input type="text" class="text" size="70" width="3" name="dhcp">
+	    		<input type="text" class="text" size="70" width="3" name="dhcp" value=<?php htmloutinput($dhcp);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="dns1"> Первый DNS-сервер ЛВС</label>
-	    		<input type="text" class="text" size="70" width="3" name="dns1">
+	    		<input type="text" class="text" size="70" width="3" name="dns1" value=<?php htmloutinput($dns1);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="dns2"> Второй DNS-сервер ЛВС</label>
-	    		<input type="text" class="text" size="70" width="3" name="dns2">
+	    		<input type="text" class="text" size="70" width="3" name="dns2" value=<?php htmloutinput($dns2);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="id_ppp" > Параметры протокола PPP</label>
@@ -193,7 +173,18 @@ function addcomp(){
 							$ressql=$condb->query($selsql);
 		    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 		    				{    					
-		    						echo '<option value='.$res['id'].'>'.$res['srv'].' '.$res['typeppp'].'</option>';
+		    						
+		    					if($res['id']==$id_ppp)
+		    					{
+		    						//$select='selected';
+		    						$select='selected';
+		    					}
+		    						
+		    					else
+		    					{
+		    						$select='';
+		    					}
+		    					'<option '.$select.' value='.$res['id'].'>'.$res['srv'].' '.$res['typeppp'].'</option>';
 		    						
 		    				}
 		    				?>
@@ -223,11 +214,11 @@ function addcomp(){
 	    	</div>
 	    	<div class="field">
 	    		<label for="loginlk"> Логин личного кабинета</label>
-	    		<input type="text" class="text" size="70" width="3" name="loginlk">
+	    		<input type="text" class="text" size="70" width="3" name="loginlk" value=<?php htmloutinput($loginlk);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="pwdlk"> Пароль личного кабинета</label>
-	    		<input type="text" class="text" size="70" width="3" name="pwdlk">
+	    		<input type="text" class="text" size="70" width="3" name="pwdlk" value=<?php htmloutinput($pwdlk);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="id_company" > Компания</label>
@@ -243,7 +234,17 @@ function addcomp(){
 							$ressql=$condb->query($selsql);
 		    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 		    				{    					
-		    						echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+		    					if($res['id']==$id_company)
+		    					{
+		    						//$select='selected';
+		    						$select='selected';
+		    					}
+		    						
+		    					else
+		    					{
+		    						$select='';
+		    					}	
+		    					echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
 		    						
 		    				}
 		    				?>
@@ -265,11 +266,11 @@ function addcomp(){
 	    	</div>
 	    	<div class="field">
 	    		<label for="contract"> Номер договора</label>
-	    		<input type="text" class="text" size="70" width="3" name="contract">
+	    		<input type="text" class="text" size="70" width="3" name="contract" value=<?php htmloutinput($contract);?>>
 	    	</div>	    	
 	    	<div class="field">
 	    		<label for="note"> Примечание</label>
-	    		<input type="text" class="text" size="70" width="3" name="note">
+	    		<input type="text" class="text" size="70" width="3" name="note" value=<?php htmloutinput($note);?>>
 	    	</div>
 	    	<div>
 	    		<input type="submit" class="button" value="Добавить">

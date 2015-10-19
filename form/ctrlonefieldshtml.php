@@ -31,6 +31,9 @@
 		    				<?php if(isset($param['id2'])):?>
 		    				<input type="hidden"; name="id2" value=<?php echo $param['id2'];?>>
 		    				 <?php endif;?> 
+		    				 <?php if(isset($param['id3'])):?>
+		    				<input type="hidden"; name="id3" value=<?php echo $param['id3'];?>>
+		    				 <?php endif;?> 
 		    			<div class="rightli">
 			    			<input type="submit" class="button" name="action" value="Редактировать">
 			    			<input type="submit" class="button" name="action" onClick="return confirm('Вы подтверждаете удаление?');" value="Удалить">
