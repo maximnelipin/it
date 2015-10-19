@@ -8,21 +8,21 @@
 <?php	
 
 	?>
-<title>Добавление сим-карты</title>
+<title><?php htmlout($pageTitle); ?></title>
 </head>
     <body >
 	<?php
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
 	?>
-	    <h2 class="title"> Добавление сим-карты</h2>
-	     <form action="?"  method="post">
+	    <h2 class="title"> <?php htmlout($pageTitle); ?></h2>
+	     <form action=?<?php htmlout($action);?>  method="post">
 	     	<div class="field">
 	    		<label for="number"> Номер</label>
-	    		<input type="text" class="text" size="70"  name="number" required>
+	    		<input type="text" class="text" size="70"  name="number" value=<?php htmloutinput($number);?> required <?php htmlout($dis);?> >
 	    	</div>
 	    	<div class="field">
 	    		<label for="account" > Лицевой счёт</label>	    		
-	    		<input type="text" class="text" size="70"  name="account">	
+	    		<input type="text" class="text" size="70"  name="account" value=<?php htmloutinput($account);?>>	
 	    	</div>
 	    	<div class="field">
 	    		<label for="id_address" > Адрес расположения</label>	    		
@@ -33,7 +33,17 @@
 						$ressql=$condb->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
-	    					echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+	    					if($res['id']==$id_address)
+	    					{
+	    						
+	    						$select='selected';
+	    					}
+	    					else
+	    					{
+	    						$select='';
+	    					}	    					
+	    					
+	    					echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
 	    				}
 	    				?>
 	    		</select> 
@@ -48,7 +58,18 @@
 						$ressql=$condb->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
-	    					echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+	    					if($res['id']==$id_operator)
+	    					{
+	    						
+	    						$select='selected';
+	    					}
+	    					else
+	    					{
+	    						$select='';
+	    					}
+	    					
+	    					
+	    					echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
 	    				}
 	    				?>
 	    		</select> 
@@ -64,7 +85,18 @@
 						$ressql=$condb->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
-	    					echo '<option value='.$res['login'].'>'.$res['fio'].'</option>';
+	    					if($res['login']==$login)
+	    					{
+	    							
+	    						$select='selected';
+	    					}
+	    					else
+	    					{
+	    						$select='';
+	    					}	    					
+	    					
+	    					
+	    					echo '<option '.$select.' value='.$res['login'].'>'.$res['fio'].'</option>';
 	    				}
 	    				?>
 	    		</select> 
@@ -72,23 +104,26 @@
 	    	</div>
 	    	<div class="field">
 	    		<label for="balance"> Баланс</label>
-	    		<input type="text" class="text" size="70" width="3" name="balance">
+	    		<input type="text" class="text" size="70" width="3" name="balance" value=<?php htmloutinput($balance);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="pay"> Ежемесячная плата</label>
-	    		<input type="text" class="text" size="70" width="3" name="pay">
+	    		<input type="text" class="text" size="70" width="3" name="pay" value=<?php htmloutinput($pay);?>>
 	    	</div>
 	    	
 	    	<div class="field">
 	    		<label for="pwdlk"> Пароль личного кабинета</label>
-	    		<input type="text" class="text" size="70" width="3" name="pwdlk">
+	    		<input type="text" class="text" size="70" width="3" name="pwdlk" value=<?php htmloutinput($pwdlk);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="note"> Примечание</label>
-	    		<input type="text" class="text" size="70" width="3" name="note">
+	    		<input type="text" class="text" size="70" width="3" name="note" value=<?php htmloutinput($note);?>>
 	    	</div>
 	    	<div>
-	    		<input type="submit" class="button" value="Добавить" >
+	    		
+	    		<input type="submit" class="button" value=<?php htmlout($button);?>>
+	    		<input type="button" class="button" value="Назад" onClick=<?php echo 'location.replace("http://'.$_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"].'");'?>>
+	    	
 	    	</div>
 	    
 	    </form>
