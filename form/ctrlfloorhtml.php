@@ -29,7 +29,7 @@
 						    	<li>					    		
 						    		<form action="" method="post">
 						    			<div class="fleftli">
-						    			<?php htmlout($paramf['name']);?>
+						    			<?php htmlout($paramf['name']);?> этаж
 						    			</div> 
 						    			<input type="hidden"; name="id" value=<?php echo $paramf['id'];?>>
 										<div class="rightli">

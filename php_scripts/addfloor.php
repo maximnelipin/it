@@ -1,6 +1,7 @@
 <?php	
 	session_start();
-	if(isset($_SESSION['user_id']))
+	//if(isset($_SESSION['user_id']))
+	if(1)
 	{	include 'mysql_conf.php';
 		include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
 		try {
@@ -122,7 +123,7 @@
 			exit;
 		}
 		
-			$sqlf='SELECT id, floor, id_build FROM floor WHERE id_build=:id_build';
+			$sqlf='SELECT id, floor, id_build FROM floor WHERE id_build=:id_build order by floor';
 			$sqlprepf=$condb->prepare($sqlf);
 		
 		foreach($result as $res)

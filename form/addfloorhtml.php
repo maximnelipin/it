@@ -25,7 +25,7 @@
 						$ressql=$condb->query($selsql);
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
-	    					if($res['id']==$id_buid)
+	    					if($res['id']==$id_build)
 	    					{
 	    						//$select='selected';
 	    						$select='selected';
@@ -48,6 +48,10 @@
 		    	<div class="field">
 		    		<label for="cabinet"> Кабинеты</label>
 		    		<input type="text" class="text" size="70"  name="cabinet" <?php htmlout($dis);?>>
+		    	</div>
+		    	<div class="field">
+		    		<label for="note"> Примечание</label>
+		    		<input type="text" class="text" size="70"  name="note" >
 		    	</div>		    		    	
 		    	<div>
 		    		<input type="hidden" name="id" value=<?php htmlout($id);?>>

@@ -3,7 +3,7 @@
 ul
 {
 	
-	margin-top: 3%;
+	margin-top: 1.5%;
 	margin-bottom: 3%;
 }
 
@@ -15,9 +15,9 @@ ul
 
 .leftli
 {
-	font-size: 130%;
+	font-size: 120%;
 	float:left;
-	width:60%;
+	width:50%;
 	margin-top: 3px;
 	padding-bottom:6px;
 	border-bottom: 1px solid red;
@@ -25,9 +25,9 @@ ul
 	
 }
 .fleftli{
-	font-size: 130%;
+	font-size: 115%;
 	float:left;
-	width:60%;
+	width:50%;
 	margin-top: 3px;
 	padding-bottom:6px;
 	border-bottom: 1px solid red;
@@ -36,9 +36,9 @@ ul
 
 .gbuild
 {
-	font-size: 130%;
+	font-size: 120%;
 	float:left;
-	width:60%;
+	width:50%;
 	margin-top: 3px;
 	padding-bottom:6px;
 	border-bottom: 1px solid blue;
@@ -46,10 +46,10 @@ ul
 
 .rightli
 {
-	margin-top: px;
+	margin-top: 4px;
 	padding-bottom:3px;
 	float:left;
-	border-bottom: 1px solid red;
+	
 	
 	
 }
