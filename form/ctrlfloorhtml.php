@@ -28,7 +28,7 @@
 				    		<?php if($paramf['id_build']==$param['id']):?>
 						    	<li>					    		
 						    		<form action="" method="post">
-						    			<div class="leftli">
+						    			<div class="fleftli">
 						    			<?php htmlout($paramf['name']);?>
 						    			</div> 
 						    			<input type="hidden"; name="id" value=<?php echo $paramf['id'];?>>

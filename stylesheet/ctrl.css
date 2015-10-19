@@ -24,6 +24,15 @@ ul
 	
 	
 }
+.fleftli{
+	font-size: 130%;
+	float:left;
+	width:60%;
+	margin-top: 3px;
+	padding-bottom:6px;
+	border-bottom: 1px solid red;
+	margin-left:1%;
+}
 
 .gbuild
 {
@@ -32,15 +41,16 @@ ul
 	width:60%;
 	margin-top: 3px;
 	padding-bottom:6px;
-	
+	border-bottom: 1px solid blue;
 }
 
 .rightli
 {
-	margin-bottom: 6px;
+	margin-top: px;
 	padding-bottom:3px;
 	float:left;
 	border-bottom: 1px solid red;
+	
 	
 }
 
@@ -53,7 +63,8 @@ ul
 .field {
 	margin-bottom: 1%;
 	padding-left: 1%;
-	margin-right: 4%;
+	margin-right: 3%;
 	margin-left: 3%;
+	
 }
 
