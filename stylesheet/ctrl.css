@@ -43,6 +43,16 @@ ul
 	padding-bottom:6px;
 	border-bottom: 1px solid blue;
 }
+.cleftli{
+	font-size: 120%;
+	float:left;
+	width:50%;
+	margin-top: 3px;
+	padding-bottom:6px;
+	border-bottom: 1px solid green;
+	margin-left:2%;
+	
+}
 
 .rightli
 {

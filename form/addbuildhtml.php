@@ -25,11 +25,11 @@
 		    	</div>
 		    	<div class="field">
 		    		<label for="floor"> Номера этажей</label>
-		    		<input type="text" class="text" size="70"  name="floor" <?php htmlout($dis);?>> 
+		    		<input type="text" class="text" size="70"  name="floor" <?php htmlout($dis);?> <?php htmlout($req);?>> 
 		    	</div>
 		    	<div class="field">
 		    		<label for="cabinet"> Кабинеты</label>
-		    		<input type="text" class="text" size="70"  name="cabinet" <?php htmlout($dis);?>>
+		    		<input type="text" class="text" size="70"  name="cabinet" <?php htmlout($dis);?> <?php htmlout($req);?>>
 		    	</div>		    	
 		    	<div>
 		    		<input type="hidden" name="id" value=<?php htmlout($id);?>>

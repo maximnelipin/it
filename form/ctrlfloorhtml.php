@@ -26,22 +26,25 @@
 				    <?php if(isset($paramsf)):?>
 				    	<?php foreach ($paramsf as $paramf): ?>
 				    		<?php if($paramf['id_build']==$param['id']):?>
-						    	<li>					    		
-						    		<form action="" method="post">
-						    			<div class="fleftli">
-						    			<?php htmlout($paramf['name']);?> этаж
-						    			</div> 
-						    			<input type="hidden"; name="id" value=<?php echo $paramf['id'];?>>
-										<div class="rightli">
-							    			<input type="submit" class="button" name="action" value="Редактировать">
-							    			<input type="submit" class="button" name="action" onClick="return confirm('Вы подтверждаете удаление?');" value="Удалить">
-						    			</div>	    		
-						    		</form>
-						    	</li>
+						    	<li class="fleftli"> <?php htmlout($paramf['name']);?> </li>
+						    	
+							    	<li>					    		
+							    		<form action="" method="post">
+							    			<div class="fleftli">
+							    			<?php htmlout($paramf['name']);?> этаж
+							    			</div> 
+							    			<input type="hidden"; name="id" value=<?php echo $paramf['id'];?>>
+											<div class="rightli">
+								    			<input type="submit" class="button" name="action" value="Редактировать">
+								    			<input type="submit" class="button" name="action" onClick="return confirm('Вы подтверждаете удаление?');" value="Удалить">
+							    			</div>	    		
+							    		</form>
+							    	</li>							    
+							    	
 					   		<?php endif;?>	
 				    	<?php endforeach;?>  
 				    <?php endif;?>
-			    <?php endforeach;?>   
+			<?php endforeach;?>   
 		    </ul>
 		    <?php }endif;?> 	    
 	    </div>

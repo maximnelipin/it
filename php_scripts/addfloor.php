@@ -31,7 +31,7 @@
 			exit;
 		}
 		//Добавляем Контрагента
-		if (isset($_REQUEST['name']) && isset($_REQUEST['addform']))
+		if (isset($_REQUEST['floor']) && isset($_REQUEST['addform']))
 		{				
 		
 			//Получаем список этажей
@@ -79,7 +79,7 @@
 		{
 			try
 			{
-				$fields=array("id_build","floor");
+				$fields=array("id_build","floor","note");
 				$sql='update floor set '.pdoSet($fields,$values).' where id=:id';
 				$sqlprep=$condb->prepare($sql);
 				$values["id"]=$_REQUEST['id'];

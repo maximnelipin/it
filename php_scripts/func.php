@@ -72,6 +72,7 @@ function addFloor($id_build, $Dfloor, $Dcab,$condb){
 			$sqlprep->execute($valf);
 			//Получаем id введённого этажа
 			$id_floor=$condb->lastInsertId();
+			
 			addCab($id_floor, $Dcab,$condb,$i);
 			//В след.итерации берём следующий набор этажей из парсенного массива
 			$i++;
