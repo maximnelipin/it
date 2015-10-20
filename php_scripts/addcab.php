@@ -319,7 +319,7 @@
 			{
 				$sql='DELETE FROM cabinet WHERE id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':id',$_POST['id_с']);
+				$sqlprep->bindValue(':id',$_REQUEST['id_c']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -365,7 +365,7 @@
 				
 		}
 		//Титул управляющей страницы в творительном падеже
-		$ctrltitle="кабинетами";
+		$ctrltitle="зданиями";
 		//Название ссылки в родительном падеже
 		$ctrladd=" кабинет";
 		
