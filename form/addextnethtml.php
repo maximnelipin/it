@@ -34,8 +34,8 @@
 			    		<label for="extdns2"> Внешний второй DNS</label>
 			    		<input type="text" class="text" size="70" width="3" name="extdns2" value=<?php htmloutinput($extdns2);?>>
 	    			</div>
-	    	</div>
-	    	<div>
+	    	
+	    	<div class="field" >
 	    		<input type="hidden" name="id" value=<?php htmlout($id);?>>
 	    		<input type="submit" class="button" value=<?php htmlout($button);?>>
 	    		<input type="button" class="button" value="Назад" onClick=<?php echo 'location.replace("http://'.$_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"].'");'?>>

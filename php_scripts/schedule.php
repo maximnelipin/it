@@ -130,7 +130,13 @@
 	    }
 	    echo "</table>";
 	    
-		echo ' <div class="field"> <a href=schedpdf.php?monyear='.$_REQUEST["monyear"].' target="_blank"> В PDF </a> </div>';
+		echo '<div class="field"> 
+				<form action=schedpdf.php?monyear='.$_REQUEST["monyear"].' target="_blank" method=get>
+				<input type="submit" class="button" size="70" name="schedpdf" value="В PDF">
+				<input type="hidden"  name="monyear"  value="'.$_REQUEST["monyear"].'">
+				<form>
+				</div>';	
+			
 		if($condb!=null) {$condb=NULL;}
  }		
 	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF'].'?monyear='.$_REQUEST["monyear"]);

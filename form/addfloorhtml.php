@@ -51,7 +51,7 @@
 		    	</div>
 		    	<div class="field">
 		    		<label for="note"> Примечание</label>
-		    		<input type="text" class="text" size="70"  name="note" >
+		    		<input type="text" class="text" size="70"  name="note" value=<?php htmloutinput($note);?>>
 		    	</div>		    		    	
 		    	<div>
 		    		<input type="hidden" name="id" value=<?php htmlout($id);?>>

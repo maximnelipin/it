@@ -14,13 +14,79 @@ a {
 }
 header .leftcolumn {
 	float: left;
-	margin-left: 41%	
+	padding-top: 1%;
+	width:41.5%;
+
+}
+header .centrcolumn {
+	float: left;
 }
 header .rightcolumn {
 	float: right;	
 	padding-top: 1%;
 }
 
+
+
+
+ h3 {
+	font-size: 150%;
+	color:brown;
+	margin-bottom: 2%;
+	width:50%;
+	
+	
+}
+.ctrl{
+	border-top: 1px solid red;
+	padding-bottom:6px;
+	margin-top:1%;
+	padding-top:6px
+	
+}
+.ctrl{
+	margin-bottom: 1%;
+	padding-left: 1%;
+	width: 90%;
+	margin-left: 3%;
+	
+}
+
+
+.ctrl_btn {
+	margin-left:0%;
+		-webkit-column-width: 140px;
+    -moz-column-width: 140px;
+    column-width: 140px;
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+    -webkit-column-gap: 20px;
+    -moz-column-gap: 20px;
+    column-gap: 20px;
+    -webkit-column-rule: 1px solid #ccc;
+    -moz-column-rule: 1px solid #ccc;
+    column-rule: 1px solid #ccc;
+	}
+.ctrl_col a{
+	margin:1%;
+}
+.ctrl_col{
+	margin-bottom:1%;
+	-webkit-column-width: 140px;
+    -moz-column-width: 140px;
+    column-width: 140px;
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+    -webkit-column-gap: 20px;
+    -moz-column-gap: 20px;
+    column-gap: 20px;
+    -webkit-column-rule: 1px solid #ccc;
+    -moz-column-rule: 1px solid #ccc;
+    column-rule: 1px solid #ccc;
+	
+}
 
 
 label  {
@@ -36,9 +102,9 @@ label  {
 	font-size: 160%;
 	color:brown;
 	margin-bottom: 1.5%;
-	position:  relative;
+	margin-left:4%;
 	width:50%;
-	left:4%;
+	
 }
 
 
@@ -70,7 +136,8 @@ th{
 	color:azure;
 	background-color:coral;
 	cursor: pointer;
-	font-size: 100%;
+	font-size: 100%; 
+	
 }
 
 .text{	

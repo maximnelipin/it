@@ -13,6 +13,24 @@
 			include '../form/errorhtml.php';
 			exit;
 		}
+		try
+		{
+			$result=$condb->query('SELECT url, name FROM ctrllink order by name');
+		}
+		catch (PDOExeption $e)
+		{
+			include '../form/errorhtml.php';
+			exit;
+		}
+		
+		
+		foreach($result as $res)
+		{
+			$ctrls[]=array('url'=>$res['url'], 'name'=>$res['name']);			
+		}
+		
+		
+		
 		include $_SERVER['DOCUMENT_ROOT'].'/form/mainhtml.php';
 		if($condb!=null) {$condb=NULL;}
 	}
