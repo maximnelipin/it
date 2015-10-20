@@ -1,8 +1,8 @@
 eclipse.preferences.version=1
-encoding//form/addbuildhtml_old.php=UTF-8
 encoding//form/addsprintershtml.php=UTF-8
 encoding//html/header.html=UTF-8
-encoding//php_scripts/addbuild_old.php=UTF-8
+encoding//old/addbuild_old.php=UTF-8
+encoding//old/addbuildhtml_old.php=UTF-8
 encoding//php_scripts/auth.php=UTF-8
 encoding//php_scripts/main.php=UTF-8
 encoding//php_scripts/schedpdf.php=CP1251

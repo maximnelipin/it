@@ -369,7 +369,7 @@
 		//Название ссылки в родительном падеже
 		$ctrladd=" кабинет";
 		
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlcabinethtml.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlbfchtml.php';
 		
 		
 		if($condb!=null) {$condb=NULL;}
