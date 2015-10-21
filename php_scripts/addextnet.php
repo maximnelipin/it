@@ -46,7 +46,7 @@
 						exit;
 					}
 			
-			header('Location: '.$_SERVER['PHP_SELF']);
+			header('Location: '.$_SERVER['PHP_SELF'].'?add');
 			exit;
 		}
 		//Выводим форму на редактирование

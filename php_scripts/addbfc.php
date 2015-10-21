@@ -64,7 +64,7 @@
 		
 			
 		
-			header('Location: '.$_SERVER['PHP_SELF']);
+			header('Location: '.$_SERVER['PHP_SELF'].'?add_b');
 			exit;
 		}
 		//Выводим форму на редактирование
@@ -163,7 +163,7 @@
 			//----------вставка этажей и кабинетов на них--------------
 			addFloor($_POST["id_build"], $Dfloor, $Dcab, $condb);
 		
-			header('Location: '.$_SERVER['PHP_SELF']);
+			header('Location: '.$_SERVER['PHP_SELF'].'?add_f');
 			exit;
 		}
 		//Выводим форму на редактирование
@@ -258,7 +258,7 @@
 			
 			addCab($_POST['id_floor'], $_POST['cabinet'], $condb);
 			
-			header('Location: '.$_SERVER['PHP_SELF']);
+			header('Location: '.$_SERVER['PHP_SELF'].'?add_c');
 			exit;
 		}
 		//Выводим форму на редактирование

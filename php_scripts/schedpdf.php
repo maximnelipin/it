@@ -82,11 +82,22 @@
 			//≈сли конец мес€ца - выход из цикла
 			if($dayCount>$dayInMon) break;
 		}
-		
 		//¬ыбираем все дни, в которые дежурили в этот мес€ц
-		$sql="select day(dateduty) as daym from schedule where month(dateduty)=".$monyear[0].
-				" AND year(dateduty)=".$monyear[1]." order by day(dateduty)";
-		$resdaysql=$condb->query($sql);
+		$sql="select day(dateduty) as daym from schedule where month(dateduty)=:mon AND year(dateduty)=:year order by day(dateduty)";
+		$resdaysql=$condb->prepare($sql);
+		$resdaysql->bindValue(':mon',$monyear[0]);
+		$resdaysql->bindValue(':year',$monyear[1]);
+		$resdaysql->execute();
+		$sql="select schedule.dateduty as dateduty, itusers.fio as fio from schedule
+									right join itusers on itusers.login=schedule.login where
+									day(schedule.dateduty)=:day
+									 AND	month(schedule.dateduty)=:mon
+									 AND year(schedule.dateduty)=:year";
+		$resdutysql=$condb->prepare($sql);
+		//¬ыбираем все дни, в которые дежурили в этот мес€ц
+		//$sql="select day(dateduty) as daym from schedule where month(dateduty)=".$monyear[0].
+				//" AND year(dateduty)=".$monyear[1]." order by day(dateduty)";
+		//$resdaysql=$condb->query($sql);
 		//получаем массив с результатами
 		$resday=$resdaysql->fetchall();
 		//выводим мес€ц
@@ -108,13 +119,17 @@
 					{	//—равниваем все дни дежурства в выбранный мес€ц с выводимыми дн€ми
 						if($resd['daym']==$month[$i][$j])
 						{//≈сли совпал делаем выборку фамилии дежурившего
-							$sql="select schedule.dateduty as dateduty, itusers.fio as fio from schedule
-							right join itusers on itusers.login=schedule.login where
-							day(schedule.dateduty)=".$month[$i][$j]."
-							 AND	month(schedule.dateduty)=".$monyear[0]."
-							 AND year(schedule.dateduty)=".$monyear[1];
-							$ressql=$condb->query($sql);
-							if($res=$ressql->fetch(PDO::FETCH_ASSOC))
+							//$sql="select schedule.dateduty as dateduty, itusers.fio as fio from schedule
+							//right join itusers on itusers.login=schedule.login where
+							//day(schedule.dateduty)=".$month[$i][$j]."
+							// AND	month(schedule.dateduty)=".$monyear[0]."
+							// AND year(schedule.dateduty)=".$monyear[1];
+							//$ressql=$condb->query($sql);
+							$resdutysql->bindValue(':day',$month[$i][$j]);
+							$resdutysql->bindValue(':mon',$monyear[0]);
+							$resdutysql->bindValue(':year',$monyear[1]);
+							$resdutysql->execute();
+							if($res=$resdutysql->fetch(PDO::FETCH_ASSOC))
 							{
 								$fio=str_getcsv($res["fio"], " ");
 							}
