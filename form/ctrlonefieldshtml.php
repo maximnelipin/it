@@ -35,14 +35,18 @@
 		    				<input type="hidden"; name="id3" value=<?php echo $param['id3'];?>>
 		    				 <?php endif;?> 
 		    			<div class="rightli">
-			    			<input type="submit" class="button" name="action" value="Редактировать">
-			    			<input type="submit" class="button" name="action" onClick="return confirm('Вы подтверждаете удаление?');" value="Удалить">
+			    			<input type="submit" class="but_ctrl" name="action" value="Редактировать">
+			    			<input type="submit" class="but_ctrl" name="action" onClick="return confirm('Вы подтверждаете удаление?');" value="Удалить">
 		    			</div>	    		
 		    		</form>
 		    	</li>
 		    	<?php endforeach;?>    
 		    </ul>
-		    <?php }endif;?> 	    
+		    <?php }endif;?> 	
+		      
+	    <div class="btn_close">
+	    <input type="button" class="button" value="Закрыть окно" onClick=window.close();>  
+	    </div>
 	    </div>
 	    
     </body>

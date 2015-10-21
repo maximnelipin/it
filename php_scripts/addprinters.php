@@ -60,9 +60,9 @@
 		{
 			try
 			{
-				$sql='SELECT * FROM printers where netpath=:netpath';
+				$sql='SELECT * FROM printers where id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':netpath',$_REQUEST['id']);
+				$sqlprep->bindValue(':id',$_REQUEST['id']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -78,6 +78,7 @@
 			$id_address=$res['id_address'];
 			$netpath=$res['netpath'];
 			$note=$res['note'];
+			$id=$res['id'];;
 			$dis='readonly';
 			$button="Обновить";
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addprintershtml.php';
@@ -93,10 +94,10 @@
 				
 			try
 			{
-				$fields=array("id_address","id_printer","note");
-				$sql='update printers set '.pdoSet($fields,$values).' where netpath=:netpath';
+				$fields=array("netpath","id_address","id_printer","note");
+				$sql='update printers set '.pdoSet($fields,$values).' where id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$values["netpath"]=$_POST['netpath'];
+				$values["id"]=$_POST['id'];
 				$sqlprep->execute($values);
 			}
 			catch (PDOException $e)
@@ -114,9 +115,9 @@
 		{
 			try
 			{
-				$sql='DELETE FROM printers WHERE netpath=:netpath';
+				$sql='DELETE FROM printers WHERE id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':netpath',$_REQUEST['id']);
+				$sqlprep->bindValue(':id',$_REQUEST['id']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -130,7 +131,7 @@
 		try
 		{
 			$result=$condb->query('SELECT sprinters.name AS model, sprinters.id AS model_id , build.name as buildname, floor.floor, cabinet.id as id_cabinet, 
-									cabinet.cabinet, printers.netpath
+									cabinet.cabinet, printers.netpath, printers.id as printerid
 								FROM printers
 								LEFT JOIN sprinters ON printers.id_printer = sprinters.id
 								LEFT JOIN cabinet ON cabinet.id = printers.id_address
@@ -146,7 +147,7 @@
 		foreach($result as $res)
 		{
 			//id-первичный ключ для поиска в таблице. Может принимать нужные значения
-			$params[]=array('id'=>$res['netpath'], 'name'=>$res['model'].' '.$res['buildname'].' '.$res['floor'].' эт. '.$res['cabinet']);
+			$params[]=array('id'=>$res['printerid'], 'name'=>$res['model'].' '.$res['buildname'].' '.$res['floor'].' эт. '.$res['cabinet']);
 		}
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="принтерами";
