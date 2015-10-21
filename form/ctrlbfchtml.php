@@ -28,8 +28,8 @@
 			    <form action="" method="post">
 			    <input type="hidden"; name="id_b" value=<?php echo $param['id'];?>>
 				<div class="rightli">
-					<input type="submit" class="button" name="action" value="Редактировать здание">
-					<input type="submit" class="button" name="action" onClick="return confirm('Вы подтверждаете удаление?');" value="Удалить здание">
+					<input type="submit" class="but_ctrl" name="action" value="Редактировать здание">
+					<input type="submit" class="but_ctrl" name="action" onClick="return confirm('Вы подтверждаете удаление?');" value="Удалить здание">
 				</div>
 				</form>
 				    <?php if(isset($paramsf)):?>
@@ -39,8 +39,8 @@
 						    		<form action="" method="post">
 						    		<input type="hidden"; name="id_f" value=<?php echo $paramf['id'];?>>
 										<div class="rightli">
-								    		<input type="submit" class="button" name="action" value="Редактировать этаж">
-								    		<input type="submit" class="button" name="action" onClick="return confirm('Вы подтверждаете удаление?');" value="Удалить этаж">
+								    		<input type="submit" class="but_ctrl" name="action" value="Редактировать этаж">
+								    		<input type="submit" class="but_ctrl" name="action" onClick="return confirm('Вы подтверждаете удаление?');" value="Удалить этаж">
 							    		</div>
 							    	<form>
 						    		<?php foreach ($paramsc as $paramc): ?>
@@ -52,8 +52,8 @@
 							    			</div> 
 							    			<input type="hidden"; name="id_c" value=<?php echo $paramc['id'];?>>
 											<div class="rightli">
-								    			<input type="submit" class="button" name="action" value="Редактировать кабинет">
-								    			<input type="submit" class="button" name="action" onClick="return confirm('Вы подтверждаете удаление?');" value="Удалить кабинет">
+								    			<input type="submit" class="but_ctrl" name="action" value="Редактировать кабинет">
+								    			<input type="submit" class="but_ctrl" name="action" onClick="return confirm('Вы подтверждаете удаление?');" value="Удалить кабинет">
 							    			</div>	    		
 							    		</form>
 							    	</li>	
@@ -66,6 +66,9 @@
 			<?php endforeach;?>   
 		    </ul>
 		    <?php }endif;?> 	    
+	  	<div class="btn_close">
+	    <input type="button" class="button" value="Закрыть окно" onClick=window.close();>  
+	    </div>
 	    </div>
 	    
     </body>
