@@ -20,7 +20,7 @@
 			$pageTitle='Добавление принтера';
 			$action='addform';
 			$id_printer='';
-			$id_address='';
+			$id_cabinet='';
 			$netpath='';
 			$note='';
 			$id='';
@@ -38,7 +38,7 @@
 			//$_REQUEST["container"]=addslashes($_REQUEST["container"]);
 			try {
 		
-				$fields=array("netpath","id_address","id_printer","note");
+				$fields=array("netpath","id_cabinet","id_printer","note");
 				$sql='insert into printers set '.pdoSet($fields,$values);
 				$sqlprep=$condb->prepare($sql);
 				$sqlprep->execute($values);
@@ -75,7 +75,7 @@
 			$pageTitle='Редактирование принтеров';
 			$action='editform';
 			$id_printer=$res['id_printer'];
-			$id_address=$res['id_address'];
+			$id_cabinet=$res['id_cabinet'];
 			$netpath=$res['netpath'];
 			$note=$res['note'];
 			$id=$res['id'];;
@@ -94,7 +94,7 @@
 				
 			try
 			{
-				$fields=array("netpath","id_address","id_printer","note");
+				$fields=array("netpath","id_cabinet","id_printer","note");
 				$sql='update printers set '.pdoSet($fields,$values).' where id=:id';
 				$sqlprep=$condb->prepare($sql);
 				$values["id"]=$_POST['id'];
@@ -134,7 +134,7 @@
 									cabinet.cabinet, printers.netpath, printers.id as printerid
 								FROM printers
 								LEFT JOIN sprinters ON printers.id_printer = sprinters.id
-								LEFT JOIN cabinet ON cabinet.id = printers.id_address
+								LEFT JOIN cabinet ON cabinet.id = printers.id_cabinet
 								LEFT JOIN floor ON cabinet.id_floor = floor.id
 								LEFT JOIN build ON floor.id_build = build.id');
 		}

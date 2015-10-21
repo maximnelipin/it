@@ -45,7 +45,7 @@
 	    	</div>
 	    	<div class="field">
 	    		<label for="id_address" > Кабинет расположения</label>	    		
-	    		<p><select required class="text" size="5" name="id_address">
+	    		<p><select required class="text" size="5" name="id_cabinet">
 	    			<option disabled>Выберите объект</option>
 	    			<?php 
 	    				$selsql='SELECT build.name as build, floor.id as id_floor, floor.floor as floor FROM build
@@ -57,7 +57,7 @@
 	    					$rescabsql=$condb->query($selsql);
 	    					while ($rescab=$rescabsql->fetch(PDO::FETCH_ASSOC))
 	    					{
-	    						if($rescab['id']==$id_address)
+	    						if($rescab['id']==$id_cabinet)
 	    						{
 	    							//$select='selected';
 	    							$select='selected';
