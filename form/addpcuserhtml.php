@@ -12,12 +12,13 @@
     <?php
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
 	?>
-	    <h2 class="title"> Добавленные пользователи</h2>
-		<div class="field"
+	    <div class="field"
 		     <div class="btn_close">
 		   		 <input type="button" class="button" value="Закрыть окно" onClick=window.close();>  
 		    </div>
 	     <div>
+	    <h2 class="title"> Добавленные пользователи</h2>
+		
 	     <form action="?"  method="post">
 	     	
 	    </form>

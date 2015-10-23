@@ -1,7 +1,7 @@
 <?php
 	//Параметры подключенияк ldap
 	//Сервер ldap
-	$host = "du-dc.du.i-net.su";
+	$host = "vs-00-dc.du.i-net.su";
 	//порт ldap
 	$port = "389";
 	//Группа сотрудников ИТ-отдела
@@ -15,9 +15,9 @@
 	//Пароль пользоватлея LDAP
 	$pwdd="zuneipod23";
 	//OU с сотрудниками
-	$userou="OU=users,OU=developmentug,OU=DU,OU=Users&Pcs,DC=du,DC=i-net,DC=su";
+	$userous[0]="OU=users,OU=developmentug,OU=DU,OU=Users&Pcs,DC=du,DC=i-net,DC=su";
 	//OU с компами 1
-	$pc1ou="OU=PCs,OU=developmentug,OU=DU,OU=Users&Pcs,DC=du,DC=i-net,DC=su";
+	$pcous[0]="OU=PCs,OU=developmentug,OU=DU,OU=Users&Pcs,DC=du,DC=i-net,DC=su";
 	//OU с компами 2
-	$pc2ou="OU=PCs,DC=du,DC=i-net,DC=su";
+	$pcous[1]="OU=PCs,DC=du,DC=i-net,DC=su";
 ?>
