@@ -3,7 +3,10 @@
 	session_start();
 	//Подключаем файл с параметрами подключения
 	if(isset($_SESSION['user_id']))
-	{//подключаем файл работы с pdf.
+	{	if(isset($_REQUEST["monyear"]))
+		{	
+	
+		//подключаем файл работы с pdf.
 		include 'fpdf.php';
 		include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
 		//--------Коннект к базе
@@ -47,9 +50,15 @@
 		$weekCount=0;
 		//Меняем размер шрифта
 		$pdf->SetFont('ArialMT','',12);
-		
+		//Высота строки
+		$hig=20;
+		//Ширина поля для фамилии
+		$widfam=32;
+		//Ширина для числа
+		$widnum=8;
 		//Обрабатываем первую неделю месяца
-		for($i=0;$i<7;$i++){
+		for($i=0;$i<7;$i++)
+		{
 			//Получаем номер дня недели
 			$dayOfWeek=date('w', mktime(0, 0, 0, $monyear[0]  , $dayCount, $monyear[1]));
 			//Переводим американский варинат недели в патриотичный российский
@@ -69,7 +78,7 @@
 		}
 		
 		//Обрабатываем последующие недели месяца
-		while(1)
+		while($dayCount<=$dayInMon)
 		{
 			$weekCount++;
 			for($i=0;$i<7;$i++)
@@ -80,7 +89,7 @@
 				if($dayCount>$dayInMon) break;
 			}
 			//Если конец месяца - выход из цикла
-			if($dayCount>$dayInMon) break;
+			//if() break;
 		}
 		//Выбираем все дни, в которые дежурили в этот месяц
 		$sql="select day(dateduty) as daym from schedule where month(dateduty)=:mon AND year(dateduty)=:year order by day(dateduty)";
@@ -102,12 +111,13 @@
 		$resday=$resdaysql->fetchall();
 		//выводим месяц
 		for($i=0;$i<count($month);$i++)
-		{	//Флаг перехода к новой неделе
-			$ln=0;
+		{	
+			
 			//обрабатываем неделю
 			for($j=0;$j<7;$j++)
 			{	//Если восвресенье, то после него переходим на новую строку
 				if($j==6) $ln=1;
+				else $ln=0;
 				
 				//Если в массиве не пустой элемент
 				if(!empty($month[$i][$j]))
@@ -143,29 +153,25 @@
 						
 					//Если суббота или воскресенье
 					if($j==5 || $j==6)
-					{	//Выводим подцвеченными
-						$pdf->Cell(8,20,$month[$i][$j],1,0,'C',true);
-						//Если есть фамилия дежурившего
-						if(isset($fio[0]))
-						{	//Выводим её
-							$pdf->Cell(32,20,$fio[0],1,$ln,'C',true);
-						}
-						else $pdf->Cell(32,20," ",1,$ln,'C',true);
-						
+					{	
+						$color=true;
 					}	
 					else 
-					{	//Выводим без цыета
-						$pdf->Cell(8,20,$month[$i][$j],1,0,'C',false);
-						//Если есть фамилия дежурившего
-						if(isset($fio[0]))
-						{	//Выводим её
-							$pdf->Cell(32,20,$fio[0],1,$ln,'C',false);
-						}
-						else $pdf->Cell(32,20," ",1,$ln,'C',false);
+					{	
+						$color=false;
 					}
+					
+					//Выводим подцвеченными
+					$pdf->Cell($widnum,$hig,$month[$i][$j],1,0,'C',$color);
+					//Если есть фамилия дежурившего
+					if(isset($fio[0]))
+					{	//Выводим её
+					$pdf->Cell($widfam,$hig,$fio[0],1,$ln,'C',$color);
+					}
+					else $pdf->Cell($widfam,$hig," ",1,$ln,'C',$color);
 				}
 				//Если нет даты на это поле, выводим просто пустое 
-				else $pdf->Cell(40,20," ",1,$ln,'C',false);
+				else $pdf->Cell($widfam+$widnum,$hig," ",1,$ln,'C',false);
 			}
 			
 		}
@@ -173,7 +179,8 @@
 		if($condb!=null) {$condb=NULL;}
 		//Выводим жокумент в браузер и отображаем его в просмотрщике
 		$pdf->Output(numToMonth($monyear[0]).' '.$monyear[1],'I');		
-		
+		}
+	else header('Location: main.php');
 	}
 	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF'].'?monyear='.$_REQUEST["monyear"]);
 	exit;
