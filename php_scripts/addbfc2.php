@@ -354,7 +354,7 @@
 			$resultf=$sqlprepf->fetchall();
 			foreach($resultf as $resf)
 			{	//массив для вложенной группы
-				$paramsf[]=array('id_1'=>$resf['id'], 'name'=>$resf['floor'], 'id'=>$resf['id_build']);
+				$paramsf[]=array('id_1'=>$resf['id'], 'name'=>$resf['floor'].' этаж', 'id'=>$resf['id_build']);
 				$sqlprepc->bindValue(':id_floor',$resf['id']);
 				$sqlprepc->execute();
 				$resultc=$sqlprepc->fetchall();
