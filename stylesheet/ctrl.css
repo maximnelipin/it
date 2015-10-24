@@ -24,26 +24,18 @@ ul
 	
 	
 }
-.fleftli{
+.leftli_1{
 	font-size: 115%;
 	float:left;
 	width:50%;
 	margin-top: 3px;
 	padding-bottom:6px;
-	border-bottom: 1px solid red;
+	border-bottom: 1px solid blue;
 	margin-left:1%;
 }
 
-.gbuild
-{
-	font-size: 120%;
-	float:left;
-	width:50%;
-	margin-top: 3px;
-	padding-bottom:6px;
-	border-bottom: 1px solid blue;
-}
-.cleftli{
+
+.leftli_3{
 	font-size: 120%;
 	float:left;
 	width:50%;
