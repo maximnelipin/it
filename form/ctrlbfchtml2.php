@@ -40,7 +40,8 @@
 								    		<input type="submit" class="but_ctrl" name="action" value="Редактировать<?php if(isset($btn_1)) echo $btn_1;?>">
 								    		<input type="submit" class="but_ctrl" name="action" onClick="return confirm('Вы подтверждаете удаление?');" value="Удалить<?php if(isset($btn_1)) echo $btn_1;?>">
 							    		</div>
-							    	<form>
+							    	</form>	
+							    	
 							    	 <?php if(isset($paramsc)):?>
 						    		<?php foreach ($paramsc as $paramc): ?>
 						    		<?php if($paramc['id_1']==$paramf['id_1']):?>

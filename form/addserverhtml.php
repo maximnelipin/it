@@ -21,33 +21,39 @@
 	    	
 	    	
 	    	<div class="field">
-	    		<label for="id_cabinet" > Кабинет расположения</label>	    		
-	    		<select required class="text" size="5" name="id_cabinet">
+	    		<label for="id_equip" > Оборудование</label>	    		
+	    		<select required multiple class="text" size="5" name="id_equip[]">
 	    			<option disabled>Выберите объект</option>
 	    			<?php 
-	    				$selsql='SELECT build.name as build, floor.id as id_floor, floor.floor as floor FROM build
-								RIGHT JOIN floor ON build.id = floor.id_build ORDER BY name, floor';
-						$ressql=$condb->query($selsql);
+	    				
+		    			$selsql='SELECT equip.id, eqsrv.id AS id_eqsrv, eqsrv.id_srv AS id_srv, equip.phys, equip.ip, build.name, floor.floor, cabinet.cabinet, equip.rack, equip.unit
+		    			FROM eqsrv
+		    			RIGHT JOIN equip ON equip.id = eqsrv.id_equip
+		    			LEFT JOIN cabinet ON cabinet.id = equip.id_cabinet
+		    			LEFT JOIN floor ON cabinet.id_floor = floor.id
+		    			LEFT JOIN build ON floor.id_build = build.id order by build.name, floor.floor, cabinet.cabinet, equip.rack, equip.unit, equip.ip, equip.phys ';
+		    			$ressql=$condb->query($selsql);    				
+	    				
 	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
 	    				{
-	    					$selsql='SELECT id, cabinet FROM cabinet WHERE id_floor='.$res['id_floor'].' ORDER BY cabinet';
-	    					$rescabsql=$condb->query($selsql);
-	    					while ($rescab=$rescabsql->fetch(PDO::FETCH_ASSOC))
-	    					{
-	    						if($rescab['id']==$id_cabinet)
+	    						$select='';
+	    						if($id!=''){
+	    						if($res['id_srv']==$id)
 	    						{
 	    							//$select='selected';
 	    							$select='selected';
+	    							
 	    						}
 	    						
 	    						else 
 	    						{
 	    							$select='';
 	    						}
-	    						
-	    						echo '<option '.$select.' value='.$rescab['id'].'>'.$res['build']. " ".$res['floor'].' этаж Кабинет "'.$rescab['cabinet'].'"</option>';
-	    					}
+	    						//неолбходимо id оборудование, чтобы сделать привязку в таблице eqsrv
+	    						}
+	    						echo '<option '.$select.' value='.$res['id'].'>'.$res['name']. " ".$res['floor'].'-'.$res['cabinet'].'-'.$res['rack'].'-'.$res['unit'].'-'.$res['ip'].'-'.$res['phys'].'</option>';
 	    					
+	    						
 	    					
 	    				}
 	    				?>
@@ -60,18 +66,6 @@
 	    	<div class="field">
 	    		<label for="descrip"> Выполняемая функция</label>
 	    		<input type="text" class="text" size="70" width="3" name="descrip" required value=<?php htmloutinput($descrip);?>>
-	    	</div>
-	    	<div class="field">
-	    		<label for="phys"> Модель аппаратуры</label>
-	    		<input type="text" class="text" size="70" width="3" name="phys" required value=<?php htmloutinput($phys);?>>
-	    	</div>
-	    	<div class="field">
-	    		<label for="rack"> Номер стойки в серверной</label>
-	    		<input type="text" class="text" size="70" width="3" name="rack" required value=<?php htmloutinput($rack);?>>
-	    	</div>
-	    	<div class="field">
-	    		<label for="units"> Номер(а) юнитов в стойке</label>
-	    		<input type="text" class="text" size="70" width="3" name="units" required value=<?php htmloutinput($units);?>>
 	    	</div>
 	    	<div class="field">
 	    		<label for="login"> Ответственный</label>
