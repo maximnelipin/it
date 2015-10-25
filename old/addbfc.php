@@ -2,8 +2,7 @@
 
 	
 	session_start();
-	//if(isset($_SESSION['user_id']))
-	if(1)
+	if(isset($_SESSION['user_id']))
 	{	include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
 		include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
 	try {
@@ -75,7 +74,7 @@
 			{
 				$sql='SELECT * FROM build where id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':id',$_REQUEST['id']);
+				$sqlprep->bindValue(':id',$_REQUEST['id_b']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -125,7 +124,7 @@
 			{
 				$sql='DELETE FROM build WHERE id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':id',$_POST['id']);
+				$sqlprep->bindValue(':id',$_POST['id_b']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -174,7 +173,7 @@
 			{
 				$sql='SELECT * FROM floor where id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':id',$_REQUEST['id_1']);
+				$sqlprep->bindValue(':id',$_REQUEST['id_f']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -226,7 +225,7 @@
 			{
 				$sql='DELETE FROM floor WHERE id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':id',$_POST['id_1']);
+				$sqlprep->bindValue(':id',$_POST['id_f']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -239,7 +238,7 @@
 	
 		
 		//-------------------КАБИНЕТЫ-------------------------------
-		if(isset($_REQUEST['add_c']))
+		if(isset($_REQUEST['add_с']))
 		{
 			$pageTitle='Добавление кабинета';
 			$action='add_cab';
@@ -269,7 +268,7 @@
 			{
 				$sql='SELECT * FROM cabinet where id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':id',$_REQUEST['id_2']);
+				$sqlprep->bindValue(':id',$_REQUEST['id_c']);
 				
 				$sqlprep->execute();
 			}
@@ -320,7 +319,7 @@
 			{
 				$sql='DELETE FROM cabinet WHERE id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':id',$_REQUEST['id_2']);
+				$sqlprep->bindValue(':id',$_REQUEST['id_c']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -354,29 +353,23 @@
 			$resultf=$sqlprepf->fetchall();
 			foreach($resultf as $resf)
 			{	//массив для вложенной группы
-				$paramsf[]=array('id_1'=>$resf['id'], 'name'=>$resf['floor'].' этаж', 'id'=>$resf['id_build']);
+				$paramsf[]=array('id'=>$resf['id'], 'name'=>$resf['floor'], 'id_build'=>$resf['id_build']);
 				$sqlprepc->bindValue(':id_floor',$resf['id']);
 				$sqlprepc->execute();
 				$resultc=$sqlprepc->fetchall();
 				foreach ($resultc as $resc)
 				{
-					$paramsc[]=array('id_2'=>$resc['id'], 'name'=>$resc['cabinet'], 'id_1'=>$resc['id_floor']);
+					$paramsc[]=array('id'=>$resc['id'], 'name'=>$resc['cabinet'], 'id_floor'=>$resc['id_floor']);
 				}
 			}
 				
 		}
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="зданиями";
-		//Cсылки на добавление информации
-		$ctrladd=' <a href="?add_c">Добавить кабинет</a>	
-		    	<a href="?add_f">Добавить этаж</a>	
-		    	<a href="?add_b">Добавить здание</a>';
-		//Добавочные значение к кнопкам
-		$btn=' здание';
-		$btn_1=' этаж';
-		$btn_2=' кабинет';
+		//Название ссылки в родительном падеже
+		$ctrladd=" кабинет";
 		
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlbfchtml2.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlbfchtml.php';
 		
 		
 		if($condb!=null) {$condb=NULL;}

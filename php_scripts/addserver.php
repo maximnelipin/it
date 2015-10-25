@@ -259,7 +259,7 @@
 		//Название ссылки в родительном падеже
 		$ctrladd=' <a href="?add">Добавить сервер</a>';
 		$btn_off='disabled';
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlbfchtml2.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlbfchtml.php';
 		
 		//include $_SERVER['DOCUMENT_ROOT'].'/form/addagentshtml.php';
 		if($condb!=null) {$condb=NULL;}
