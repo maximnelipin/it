@@ -76,12 +76,10 @@
 					<th>Отдел</th>
    					</tr>');
 			foreach ($result as $res)
-			{
-						
-			$params[]=array('str'=>'<tr><td>'.html($res['fio']).'</td><td>'.html($res['login']).'</td>
-					<td>'.html($res['func']).'</td><td>'.html($res['dept']).'</td> </tr>');
-			
-			$ctrltitle=html($res['fio']);
+			{	
+				$params[]=array('str'=>'<tr><td>'.html($res['fio']).'</td><td>'.html($res['login']).'</td>
+						<td>'.html($res['func']).'</td><td>'.html($res['dept']).'</td> </tr>');
+				$ctrltitle=html($res['fio']);
 			
 			}					
 			
@@ -119,9 +117,6 @@
 							'</td><td>'.html($res['pay']).'</td><td><a href='.html($res['urllk']).' target="_blank"> '.html($res['urllk']).
 							'</a></td><td>'.html($res['pwdlk']).'</td><td>'.html($res['note']).
 					'</td> </tr>');
-						
-					
-						
 				}			
 					
 				$paramsf[]=array('str'=>'</table>');
@@ -136,34 +131,35 @@
 			$sqlprep->execute();
 			if($sqlprep->rowCount()>0)
 			{
-			$result=$sqlprep->fetchall();
-			$paramsc[]=array('str'=>'<table>
-   					<caption>Персональные компьютеры</caption>
-  					 <tr>
-					<th>Имя</th>
-					<th>Описание</th>    				
-   					</tr>');
-			if($result)
-			foreach ($result as $res)
-			{
-					
-				$paramsc[]=array('str'=>'<tr><td>'.html($res['name']).'</td><td>'.html($res['descrip']).'</td> </tr>');						
+				$result=$sqlprep->fetchall();
+				$paramsc[]=array('str'=>'<table>
+	   					<caption>Персональные компьютеры</caption>
+	  					 <tr>
+						<th>Имя</th>
+						<th>Описание</th>    				
+	   					</tr>');
+				
+				foreach ($result as $res)
+				{
+					$paramsc[]=array('str'=>'<tr><td>'.html($res['name']).'</td><td>'.html($res['descrip']).'</td> </tr>');						
+				}			
 							
-								
-			}			
-							
-						$paramsc[]=array('str'=>'</table>');
-						$ctrlc='Персональные компьютеры';
-			
+				$paramsc[]=array('str'=>'</table>');
+				$ctrlc='Персональные компьютеры';
+				
 			}
 			
 		}
 			
-			
-			include $_SERVER['DOCUMENT_ROOT'].'/form/rep1html.php';
+		else 
+		{ //Если перешли на страницу без парметров, то открываем главную
+			header('Location: main.php');
 			exit;
-		//}
-		//else header('Location: main.php');
+		}
+			
+		include $_SERVER['DOCUMENT_ROOT'].'/form/rep1html.php';
+		exit;
+		
 		
 		
 		

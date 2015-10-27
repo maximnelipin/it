@@ -83,6 +83,23 @@ function addFloor($id_build, $Dfloor, $Dcab,$condb){
 		exit;			
 	}	
 }
+//----------Функция формирования строки с переносами для таблицы
+function strWRet($strs)
+{	//Функция принимает только массивы
+
+	//Инициализируем результирующую строку
+	$resstr='';
+	if(gettype($strs)=='array')
+	{
+		foreach ($strs as $str)
+		{
+			$resstr.="<p>".html($str)."</p>";
+			
+		}
+	}
+	return $resstr;
+	
+}
 //---------------перевод чисел в названия месяцев
 function numToMonth($num){
 	
