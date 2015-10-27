@@ -32,3 +32,27 @@ select {
 	margin-bottom:1%;
 	
 }
+.mainleft{
+	float:left;
+	width:29%;
+	margin-bottom: 1%;
+	padding-left: 1%;
+	margin-left: 3%;
+	 
+}
+.maincenter{
+	float:left;
+	width:30%;
+	margin-bottom: 1%;
+	padding-left: 1%;
+	
+	
+}
+.mainright{
+	float:left;
+	margin-bottom: 1%;
+	padding-left: 1%;
+	margin-left: 3%;
+	
+	
+	}
