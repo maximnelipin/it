@@ -33,7 +33,14 @@ ul
 	border-bottom: 1px solid blue;
 	margin-left:1%;
 }
-
+.tblusrpc td:nth-child(1){
+	width:20%;
+	
+}
+.tblusrpc td:nth-child(2){
+	width:18%;
+	
+}
 
 .leftli_3{
 	font-size: 120%;
@@ -56,15 +63,12 @@ ul
 	
 }
 
-.button 
-{
-	
-	
-}
+
 .btn_close{
 	float:left;
 	width:50%;
-	margin-top:1%;
+	margin-top:10px;
+	margin-bottom:10px;
 	
 }
 .but_ctrl{

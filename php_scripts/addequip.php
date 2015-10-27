@@ -1,8 +1,8 @@
 <?php
 	session_start();
 	
-	//if(isset($_SESSION['user_id']))
-	if(1)
+	if(isset($_SESSION['user_id']))
+	//if(1)
 	{	
 		include 'func.php';
 		include 'mysql_conf.php';

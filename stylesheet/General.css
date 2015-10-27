@@ -101,7 +101,7 @@ label  {
 .title{	
 	font-size: 160%;
 	color:brown;
-	margin-bottom: 1.5%;
+	margin-bottom: 1%;
 	margin-left:4%;
 	width:50%;
 	
@@ -115,6 +115,9 @@ table, th, td, caption {
 	padding:3px;
 	font-size: 100%;
 	background-color: azure;	
+}
+table a {
+	font-size: 100%;
 }
 
 table {
