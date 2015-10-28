@@ -32,7 +32,7 @@
 		{
 		
 			//преобразуем путь к папке для записи в Mysql
-			$_REQUEST["url"]=addslashes($_REQUEST["url"]);
+			$_REQUEST["url"]='/itinst/'.$_REQUEST["url"];
 			//$_REQUEST["container"]=addslashes($_REQUEST["container"]);
 			try {
 		
