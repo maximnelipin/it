@@ -65,6 +65,31 @@
 			    		</select> 	
 			    	
 				    	<div>
+				    		<input type="submit" class="button" size="70"   value="Отчёт">    	    	   
+				   		</div>
+			    	</div>
+			    </form> 
+			     <form action="build.php"  method="get" target="_blank" >
+			    	<div >
+			    		<label for="build" > Здания</label>
+			    		<select required class="text" size="1" name="build">
+			    			<option disabled selected value="all">Выберите здание</option>
+			    			<?php 
+								
+								$selsql='SELECT id,name FROM build
+										ORDER BY name';
+								$ressql=$condb->query($selsql);
+			    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
+			    				{
+			    					
+			    					
+			    					echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+			    					    					
+			    				}
+			    				?>
+			    		</select> 	
+			    	
+				    	<div>
 				    		<input type="submit" class="button" size="70" name="usrpc"  value="Отчёт">    	    	   
 				   		</div>
 			    	</div>

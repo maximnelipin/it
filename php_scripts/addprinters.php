@@ -136,7 +136,7 @@
 								LEFT JOIN sprinters ON printers.id_printer = sprinters.id
 								LEFT JOIN cabinet ON cabinet.id = printers.id_cabinet
 								LEFT JOIN floor ON cabinet.id_floor = floor.id
-								LEFT JOIN build ON floor.id_build = build.id');
+								LEFT JOIN build ON floor.id_build = build.id order by model,buildname,floor,cabinet');
 		}
 		catch (PDOExeption $e)
 		{

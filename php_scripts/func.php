@@ -100,6 +100,29 @@ function strWRet($strs)
 	return $resstr;
 	
 }
+//----------Функция выборки принтеров по кабинетам
+function printerInCab($id_cabinet,$condb)
+{	
+	
+	$sql='SELECT printers.netpath, sprinters.name, sprinters.cart, sprinters.drivers 
+			FROM printers LEFT JOIN sprinters ON printers.id_printer=sprinters.id 
+			WHERE printers.id_cabinet=:id_cabinet';
+	$sqlprep=$condb->prepare($sql);
+	$sqlprep->bindValue('id_cabinet',$id_cabinet);
+	$sqlprep->execute();
+	//Если есть строки с таким условием
+	if ($sqlprep->rowCount()>0)
+	{	//Получаем массив значений
+		$res=$sqlprep->fetchall();
+	}
+	else 
+	{
+		//иначе
+		$res='';
+	}
+	return $res;
+
+}
 //---------------перевод чисел в названия месяцев
 function numToMonth($num){
 	
