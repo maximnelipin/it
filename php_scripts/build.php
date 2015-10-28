@@ -29,24 +29,27 @@
 			$sqlprep->bindValue(':id', $_GET['build']);
 			$sqlprep->execute();
 			$result=$sqlprep->fetchall();
-			$paramsb[]=array('str'=>'<table >
-   					<caption>Здание</caption>
-  					 <tr>
-					<th>Название</th>
-					<th>Адресс</th>
-   					</tr>');
+			//$paramsb[]=array('str'=>'<table >
+   					//<caption>Здание</caption>
+  					// <tr>
+				//	<th>Название</th>
+					//<th>Адресс</th>
+   				//	</tr>');
 			foreach ($result as $res)
 			{	
-				$paramsb[]=array('str'=>'<tr><td>'.html($res['name']).'</td><td>'.html($res['address']).'</td> </tr>');
-				$ctrltitle=html($res['name']);
+				//$paramsb[]=array('str'=>'<tr><td>'.html($res['name']).'</td><td>'.html($res['address']).'</td> </tr>');
+				$ctrltitle=html($res['name'].' Адрес:'.$res['address']);
 			
 			}					
 			
 			$paramsb[]=array('str'=>'</table>');			
 			
 			//-------------Формируем сим-карты
-			$sql='SELECT  sim.number, sim.account, sim.balance, sim.pay,sim.pwdlk, sim.note, isp.name as isp, isp.urllk 
-					FROM  sim LEFT JOIN build ON sim.id_address=build.id LEFT JOIN isp ON sim.id_operator=isp.id
+			$sql='SELECT  sim.number, sim.account, sim.balance, sim.pay,sim.pwdlk, sim.note, 
+					isp.name as isp, isp.urllk, isp.telsup, listuser.fio 
+					FROM  sim LEFT JOIN build ON sim.id_address=build.id 
+					LEFT JOIN isp ON sim.id_operator=isp.id
+					LEFT JOIN listuser ON sim.login=listuser.login
 					WHERE sim.id_address = :id_address';
 			$sqlprep=$condb->prepare($sql);
 			$sqlprep->bindValue(':id_address', $_GET['build']);
@@ -60,21 +63,29 @@
 	  					 <tr>
 						<th>Номер</th>
 						<th>Л/С</th>
-						<th>Оператор</th>
+						<th>Оператор</th>						
+						<th>Техподдержка</th>
+						<th>Числится за</th>
 						<th>Баланс</th>
-						<th>Оплата</th>
+						<th>Оплата</th>	
 						<th>Личный кабинет</th>
 						<th>Пароль личного кабинета</th>
 						<th>Примечание</th>
 	   					</tr>');
 				foreach ($result as $res)
 				{
-				
-					$params[]=array('str'=>'<tr><td>'.html($res['number']).'</td><td>'.html($res['account']).'</td>
-						<td>'.html($res['isp']).'</td><td>'.html($res['balance']).
-							'</td><td>'.html($res['pay']).'</td><td><a href='.html($res['urllk']).' target="_blank"> '.html($res['urllk']).
-							'</a></td><td>'.html($res['pwdlk']).'</td><td>'.html($res['note']).
-					'</td> </tr>');
+					//Формирем строки таблицы
+					$params[]=array('str'=>'<tr><td>'.
+							html($res['number']).'</td><td>'.
+							html($res['account']).'</td><td>'.
+							html($res['isp']).'</td><td>'.							
+							html($res['telsup']).'</td><td>'.
+							html($res['fio']).'</td><td>'.
+							html($res['balance']).'</td><td>'.
+							html($res['pay']).'</td><td>	
+							<a href='.html($res['urllk']).' target="_blank"> '.html($res['urllk']).'</a></td><td>'.
+							html($res['pwdlk']).'</td><td>'.
+							html($res['note']).'</td> </tr>');
 				}			
 					
 				$params[]=array('str'=>'</table>');

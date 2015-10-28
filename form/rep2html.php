@@ -13,64 +13,76 @@
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
 	?>
 	    <h2 class="title"> <?php echo $ctrltitle;?></h2> 
-	    <?php //Вывод инфы о зданиии
-	    	foreach ($paramsb as $paramb): ?>
-				<?php echo $paramb['str']; ?>				   
-		<?php endforeach;?> 	    
-			    
+	        
+			  <div class="etaj">  
 			<?php //Вывод инфы о сим-картах, если есть
 				if(isset($params)):?>
 				<div>
 			    	<h2 class="title"> <?php echo $ctrls;?></h2>    
-			    </div>		    
+			    </div>
+			   		    
 				<?php  foreach ($params as $param): ?>
 					<?php echo $param['str']; ?>				   
 				<?php endforeach;?> 		    
-			<?php endif;?> 				
-			<?php  foreach ($paramsf as $paramf): ?>					
-				<?php //выводим номер этажа 
-					echo '<div> <h2 class="title">'.$paramf['str'].'</h2></div>'; ?>
+			<?php endif;?>
+			 				
+			<?php  foreach ($paramsf as $paramf): ?>
+									
+				 <div> <h2 class="title"><?php //выводим номер этажа 
+											echo $paramf['str']; ?>
+				</h2></div>
+			<div class="cab">
 			<?php //перебираем кабинеты  
-				foreach ($paramsc as $paramс)
-				{ 
-					if ($paramс['id_floor']==$paramf['id'])
-					{	
-						$printers=array();
+				
+				foreach ($paramsc as $paramс):				 
+					if ($paramс['id_floor']==$paramf['id']):?>
 						
-						//Выводи название кабинета
-						echo '<div> <h2 class="title">'.$paramс['str'].'</h2></div>';
+						
+						
+						
+						 <div> <h2 class="title"><?php echo $paramс['str']?></h2></div>
+						<?php 
+						//вывод принтеров
 						$printers=printerInCab($paramс['id'],$condb);
 						//если есть принтеры						
 						if (gettype($printers)=='array')
-						{ 	//Выводим шапку
-							
-							echo '<table>
-		   					<caption>Принтеры</caption>
-		  					 <tr>
-							<th>Сетевой адрес</th>
-							<th>Модель</th>
-		    				<th>Картриджи</th>
-							<th>Драйвера</th>						
-		   					</tr>';
+						{ 	
 							//Выводим принтеры
 							foreach ($printers as $printer)
 							{
-								echo '<tr><td>'.html($printer['netpath']).'</td><td>'.
-										html($printer['name']).'</td><td>'.
-										html($printer['cart']).'</td><td>'.
-										html($printer['drivers']).'</td></tr>';
+								echo $printer['str'];
 							}
-							echo '</table>';
+							
 						}
+						//Вывод серверов
+						$servers=serverInCab($paramс['id'],$condb);
+						if (gettype($servers)=='array')
+						{ 	
+							foreach ($servers as $server)
+							{
+								echo $server['str'];
+							}
+							
+						}
+						//Вывод подключений
+						$conns=connInCab($paramс['id'],$condb);
+						if (gettype($conns)=='array')
+						{
+							foreach ($conns as $conn)
+							{
+								echo $conn['str'];
+							}
+								
+						}
+						?>
 						
-						
-					}
-				}
-				?>
+					<?php endif;?>
+				<?php endforeach;?> 
+				</div>
 					
 				
 			<?php endforeach;?>  
-			
+			</div>
 				    
 			<div class="field">					    		    
 		  	<div class="btn_close">

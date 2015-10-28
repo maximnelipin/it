@@ -313,7 +313,7 @@
 				exit;
 			}
 		
-			header('Location: '.$_SERVER['PHP_SELF'].'?add');
+			header('Location: '.$_SERVER['PHP_SELF']);
 			exit;
 		
 		}

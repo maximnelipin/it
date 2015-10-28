@@ -113,11 +113,177 @@ function printerInCab($id_cabinet,$condb)
 	//Если есть строки с таким условием
 	if ($sqlprep->rowCount()>0)
 	{	//Получаем массив значений
-		$res=$sqlprep->fetchall();
+		$result=$sqlprep->fetchall();
+		//Формируем массив с таблицей 
+		$res[]=array('str'=> '<table>
+		   					<caption>Принтеры</caption>
+		  					 <tr>
+							<th>Сетевой адрес</th>
+							<th>Модель</th>
+		    				<th>Картриджи</th>
+							<th>Драйвера</th>
+		   					</tr>');
+		//Выводим принтеры
+		foreach ($result as $printer)
+		{
+			$res[]=array('str'=> '<tr><td>'.html($printer['netpath']).'</td><td>'.
+					html($printer['name']).'</td><td>'.
+					html($printer['cart']).'</td><td>'.
+					html($printer['drivers']).'</td></tr>');
+		}
+		$res[]=array('str'=>'</table>');
+		
+		
+		
 	}
 	else 
 	{
-		//иначе
+		//иначе возвращаем пустую строку		
+		$res='';
+	}
+	return $res;
+
+}
+//----------Функция выборки серверов по кабинетам
+function serverInCab($id_cabinet,$condb)
+{
+
+	$sql='SELECT servers.name, servers.type, servers.descrip, itusers.fio, equip.phys, equip.ip, equip.rack, equip.unit, equip.note
+			FROM equip
+			LEFT JOIN eqsrv ON equip.id = eqsrv.id_equip
+			LEFT JOIN servers ON eqsrv.id_srv = servers.id
+			LEFT JOIN itusers ON servers.login = itusers.login
+			WHERE equip.id_cabinet =:id_cabinet order by servers.name, equip.rack, equip.unit ';
+	$sqlprep=$condb->prepare($sql);
+	$sqlprep->bindValue('id_cabinet',$id_cabinet);
+	$sqlprep->execute();
+	//Если есть строки с таким условием
+	if ($sqlprep->rowCount()>0)
+	{	//Получаем массив значений
+		$result=$sqlprep->fetchall();
+		//Формируем массив с таблицей 
+		$res[]=array('str'=> '<table>
+		   					<caption>Сервера</caption>
+		  					 <tr>
+							<th>Сетевое имя</th>
+							<th>Тип</th>
+		    				<th>Описание</th>
+							<th>Оборудование</th>
+							<th>IP-адрес оборудования</th>
+							<th>Стойка</th>
+							<th>Юнит</th>
+							<th>Примечание</th>
+		   					</tr>');
+		//Выводим принтеры
+		foreach ($result as $server)
+		{
+			$res[]=array('str'=> '<tr><td>'.html($server['name']).'</td><td>'.
+					html($server['type']).'</td><td>'.
+					html($server['descrip']).'</td><td>'.
+					html($server['phys']).'</td><td>'.
+					html($server['ip']).'</td><td>'.
+					html($server['rack']).'</td><td>'.
+					html($server['unit']).'</td><td>'.
+					html($server['note']).'</td></tr>');
+		}
+		$res[]=array('str'=>'</table>');
+
+
+
+	}
+	else
+	{
+		//иначе возвращаем пустую строку
+		$res='';
+	}
+	return $res;
+
+}
+
+//----------Функция выборки подключений по кабинетам
+function connInCab($id_cabinet,$condb)
+{
+
+	$sql='SELECT conn.gateway, conn.typecon, conn.mask, conn.dhcp, conn.dns1, conn.dns2, conn.loginlk, conn.pwdlk, 
+			conn.contract, ppp.typeppp, ppp.srv AS srvppp, ppp.login AS loginppp, ppp.pwd AS pwdppp, 
+			extnet.extip,extnet.extmask, extnet.extgw, extnet.extdns1, extnet.extdns2, 
+			company.name AS namecomp, company.innkpp, isp.name AS nameisp, conn.note
+			FROM conn
+			LEFT JOIN isp ON conn.id_operator = isp.id
+			LEFT JOIN ppp ON conn.id_ppp = ppp.id
+			LEFT JOIN extnet ON conn.id_extnet = extnet.id
+			LEFT JOIN company ON conn.id_company = company.id
+			WHERE conn.id_cabinet =:id_cabinet
+			ORDER BY conn.gateway';
+	$sqlprep=$condb->prepare($sql);
+	$sqlprep->bindValue('id_cabinet',$id_cabinet);
+	$sqlprep->execute();
+	//Если есть строки с таким условием
+	if ($sqlprep->rowCount()>0)
+	{	//Получаем массив значений
+		$result=$sqlprep->fetchall();
+		//Формируем массив с таблицей
+		$res[]=array('str'=> '<table>
+		   					<caption>Подключения</caption>
+		  					 <tr>
+							<th>Шлюз</th>
+							<th>Маска</th>
+		    				<th>DHCP</th>
+							<th>DNS1</th>
+							<th>DNS2</th>
+							<th>Провайдер</th>
+							<th>Компания</th>
+							<th>ИНН/КПП</th>
+							<th>Договор</th>
+							<th>Тип подключения</th>
+							<th>Внешний IP</th>
+							<th>Внешняя маска</th>
+							<th>Внешний шлюз</th>
+							<th>Внешний DNS1</th>
+							<th>Внешний DNS2</th>
+							<th>Тип PPP</th>
+							<th>Сервер PPP</th>
+							<th>Логин PPP</th>
+							<th>Пароль PPP</th>
+							<th>Логин ЛК</th>
+							<th>Пароль ЛК</th>
+							<th>Примечание</th>
+		   					</tr>');
+		//Выводим принтеры
+		foreach ($result as $conn)
+		{
+			$res[]=array('str'=> '<tr><td>'.
+					html($conn['gateway']).'</td><td>'.
+					html($conn['mask']).'</td><td>'.
+					html($conn['dhcp']).'</td><td>'.
+					html($conn['dns1']).'</td><td>'.
+					html($conn['dns2']).'</td><td>'.
+					html($conn['nameisp']).'</td><td>'.
+					html($conn['namecomp']).'</td><td>'.
+					html($conn['innkpp']).'</td><td>'.
+					html($conn['contract']).'</td><td>'.
+					html($conn['typecon']).'</td><td>'.
+					html($conn['extip']).'</td><td>'.
+					html($conn['extmask']).'</td><td>'.
+					html($conn['extgw']).'</td><td>'.
+					html($conn['extdns1']).'</td><td>'.
+					html($conn['extdns2']).'</td><td>'.
+					html($conn['typeppp']).'</td><td>'.
+					html($conn['srvppp']).'</td><td>'.
+					html($conn['loginppp']).'</td><td>'.
+					html($conn['pwdppp']).'</td><td>'.
+					html($conn['loginlk']).'</td><td>'.
+					html($conn['pwdlk']).'</td><td>'.
+					html($conn['note']).'</td></tr>');
+		}
+		$res[]=array('str'=>'</table>');
+
+
+
+	}
+	else
+	{
+		//иначе возвращаем пустую строку
 		$res='';
 	}
 	return $res;
