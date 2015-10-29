@@ -89,6 +89,14 @@ header .rightcolumn {
 	
 }
 
+.btn_close{
+	float:left;
+	width:50%;
+	margin-top:10px;
+	margin-bottom:10px;
+	
+}
+
 
 label  {
   float:left; 
@@ -99,26 +107,34 @@ label  {
 }
 
 
-.title{	
+.title {	
 	font-size: 160%;
 	color:brown;
 	margin-bottom: 1%;
 	margin-left:4%;
-	width:50%;
+	width:60%;
 	
 }
-.etaj{	
-	
-	margin-left:15px;
-	
-	
-}
-.cab{	
-	
-	margin-left:20px;
-	
+.title1 {	
+	font-size: 150%;
+	color:brown;
+	margin-bottom: 1%;
+	margin-left:5%;
+	width:60%;
+
 	
 }
+.title2 {	
+	font-size: 150%;
+	color:brown;
+	margin-bottom: 1%;
+	margin-left:6%;
+	width:60%;
+
+	
+}
+
+
 
 
 table, th, td, caption {

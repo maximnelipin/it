@@ -12,35 +12,26 @@
     <?php
 	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
 	?>
-	    
+	    		<div>
+			    	<h2 class="title"> <?php echo $ctrltitle;?></h2>    
+			    </div>
 	    
 	    
 	    
 			    
 			<?php if(isset($params)):?>
-				<div>
-			    	<h2 class="title"> <?php echo $ctrls;?></h2>    
-			    </div>		    
+					    
 				<?php  foreach ($params as $param): ?>
-					<?php echo $param['str']; ?>				   
-				<?php endforeach;?> 		    
+				<div>
+			    	<h2 class="title1"> <?php echo $param['build'];?></h2>    
+			    </div>	
+			    <div class="m_title1">
+					<?php echo $param['res']; ?>	
+				</div>		   
+				<?php endforeach;?> 
+						    
 			<?php endif;?> 			 
-			<?php if(isset($paramsf)):?>
-				<div>
-			    	<h2 class="title"><?php echo $ctrlf;?> </h2>   
-			    </div>	
-				<?php  foreach ($paramsf as $paramf): ?>
-					<?php echo $paramf['str']; ?>	
-				<?php endforeach;?>  
-			<?php endif;?>
-			<?php if(isset($paramsc)):?>
-				<div>
-			    	<h2 class="title"> <?php echo $ctrlc;?></h2>     
-			    </div>	
-				<?php   foreach ($paramsc as $paramc): ?>
-					<?php echo $paramc['str']; ?>	
-				<?php endforeach;?> 			    		
-			<?php endif;?>						    
+						    
 			<div class="field">					    		    
 		  	<div class="btn_close">
 		    <input type="button" class="button" value="Закрыть окно" onClick=window.close();>  

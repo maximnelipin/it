@@ -42,6 +42,32 @@
 					   	</div>
 			    	</div>
 			    </form> 
+			    <form action=""  method="get" target="_blank" id="conn">
+			    	<div >
+			    		<label for="gwlan" > ЛВС</label>
+			    		<select required class="text" size="1" name="gwlan">
+			    			<option  selected value='all'> Все ЛВС</option>
+			    			<?php 
+								
+								$selsql='SELECT id, gateway FROM conn
+										ORDER BY gateway';
+								$ressql=$condb->query($selsql);
+			    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
+			    				{
+			    					
+			    					
+			    					echo '<option value='.$res['id'].'>'.$res['gateway'].'</option>';
+			    					    					
+			    				}
+			    				?>
+			    		</select> 	
+			    	
+				    	<div>
+					    	<input type="submit" class="button" size="70" name="conn" onClick="document.getElementById('conn').action = 'conn.php'" value="Отчёт">
+					    	<input type="submit" class="button" size="70" name="ping" onClick="document.getElementById('conn').action = 'ping.php'" value="Пинг">	    	    	   
+					   	</div>
+			    	</div>
+			    </form> 
 		    </div> 
 		    <div class="maincenter">
 			    <form action="usrpc.php"  method="get" target="_blank" >

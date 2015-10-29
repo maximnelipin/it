@@ -200,14 +200,14 @@ function serverInCab($id_cabinet,$condb)
 
 }
 
-//----------Функция выборки подключений по кабинетам
+//----------Функция выборки подключений и провайдеров по кабинетам
 function connInCab($id_cabinet,$condb)
 {
 
 	$sql='SELECT conn.gateway, conn.typecon, conn.mask, conn.dhcp, conn.dns1, conn.dns2, conn.loginlk, conn.pwdlk, 
 			conn.contract, ppp.typeppp, ppp.srv AS srvppp, ppp.login AS loginppp, ppp.pwd AS pwdppp, 
 			extnet.extip,extnet.extmask, extnet.extgw, extnet.extdns1, extnet.extdns2, 
-			company.name AS namecomp, company.innkpp, isp.name AS nameisp, conn.note
+			company.name AS namecomp, company.innkpp, isp.name AS nameisp, isp.id as idisp, conn.note
 			FROM conn
 			LEFT JOIN isp ON conn.id_operator = isp.id
 			LEFT JOIN ppp ON conn.id_ppp = ppp.id
@@ -218,6 +218,8 @@ function connInCab($id_cabinet,$condb)
 	$sqlprep=$condb->prepare($sql);
 	$sqlprep->bindValue('id_cabinet',$id_cabinet);
 	$sqlprep->execute();
+	$sqlisp='SELECT * FROM isp WHERE id=:id';
+	$sqlprepisp=$condb->prepare($sqlisp);
 	//Если есть строки с таким условием
 	if ($sqlprep->rowCount()>0)
 	{	//Получаем массив значений
@@ -249,7 +251,20 @@ function connInCab($id_cabinet,$condb)
 							<th>Пароль ЛК</th>
 							<th>Примечание</th>
 		   					</tr>');
-		//Выводим принтеры
+		
+		$resp='<table>
+		   					<caption>Провайдер</caption>
+		  					 <tr>
+							<th>Наименование</th>
+							<th>Поддержка</th>
+		    				<th>Менеджер</th>
+							<th>Телефон менеджера</th>
+							<th>Почта менеджера</th>
+							<th>Офис</th>
+							<th>Личный кабинет</th>
+							<th>Папка с документами</th>
+							<th>Примечание</th>';
+		//Выводим 
 		foreach ($result as $conn)
 		{
 			$res[]=array('str'=> '<tr><td>'.
@@ -275,8 +290,23 @@ function connInCab($id_cabinet,$condb)
 					html($conn['loginlk']).'</td><td>'.
 					html($conn['pwdlk']).'</td><td>'.
 					html($conn['note']).'</td></tr>');
+			$sqlprepisp->bindValue('id',$conn['idisp']);
+			$sqlprepisp->execute();
+			$isp=$sqlprepisp->fetch();
+			$resp.='<tr><td>'.
+					html($isp['name']).'</td><td>'.
+					html($isp['telsup']).'</td><td>'.
+					html($isp['manager']).'</td><td>'.
+					html($isp['telman']).'</td><td>'.
+					html($isp['emailman']).'</td><td>'.
+					html($isp['address']).'</td><td>'.
+					html($isp['urllk']).'</td><td>'.
+					html($isp['netpath']).'</td><td>'.			
+					html($conn['note']).'</td></tr>';
 		}
-		$res[]=array('str'=>'</table>');
+		$res[]=array('str'=>'</table> ');
+		$resp.='</table>';
+		$res[]=array('str'=>$resp);
 
 
 
@@ -289,6 +319,24 @@ function connInCab($id_cabinet,$condb)
 	return $res;
 
 }
+//--------Функция пинга-----------------
+function ping ($pinghost){
+	$result=array();
+	//Оперделяем тип ос
+	if(substr(PHP_OS, 0, 3) == "WIN")
+	{
+		//Пингуем c Windows
+		//$result = explode("\n", `ping -n 4 -l 32 `.$pinghost);
+		exec('ping -n 4 -l 32 '.escapeshellcmd($pinghost), $result);
+			
+	}
+	else
+		//Пингуем c Unix
+		//$result=explode("\n",`ping -c 4 -s 32 `.$pinghost);
+		exec('ping -c 4 -s 32 '.escapeshellcmd($pinghost), $result);
+	return $result;
+}
+
 //---------------перевод чисел в названия месяцев
 function numToMonth($num){
 	

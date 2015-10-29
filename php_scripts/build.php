@@ -38,7 +38,8 @@
 			foreach ($result as $res)
 			{	
 				//$paramsb[]=array('str'=>'<tr><td>'.html($res['name']).'</td><td>'.html($res['address']).'</td> </tr>');
-				$ctrltitle=html($res['name'].' Адрес:'.$res['address']);
+				$ctrltitle=html($res['name']);
+				$address=html($res['address']);
 			
 			}					
 			

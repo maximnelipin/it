@@ -1,33 +1,4 @@
 
-table, th, td, caption {
-	border-style:solid;
-	border-width:1px;
-	border-collapse: collapse;
-	padding:3px;
-	font-size: 130%;
-	background-color: azure;	
-}
-td{
-}
-
-
-table {
-	margin-left:4%;
-	margin-top:1%;
-	margin-bottom:1%;
-	
-}
-caption {
-	font-size: 120%
-}
-th{
-	font-size:110%;
-	
-}
-td{
-	font-size:100%;
-	
-}
 .weekend{
 	background-color:  cadetblue;	
 }
@@ -50,5 +21,25 @@ td{
 .error{
 	margin-top:2px;
 	margin-left: 3%;
+	
+}
+
+.m_title1{		
+	margin-left:1%;	
+}
+.m_title2{		
+	margin-left:2%;	
+}
+
+.ping {
+	margin-bottom:10px;
+	font-size:105%;
+	margin-left:4%;
+	
+}
+
+.ping p {
+	margin-bottom:3px;
+	
 	
 }
