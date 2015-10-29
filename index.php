@@ -13,7 +13,7 @@
 </head>
      <body>
      <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
+	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
 	?>
     
     	<form action="index.php<?php if(isset ($_GET['link'])) echo '?link='.$_GET['link']; ?>" method="post">

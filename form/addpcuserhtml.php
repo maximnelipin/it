@@ -10,7 +10,7 @@
 
     <body>
     <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
+	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
 	?>
 	    <div class="field"
 		     <div class="btn_close">

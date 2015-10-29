@@ -10,7 +10,7 @@
 
     <body>
     <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
+	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
 	?>
 	    		<div>
 			    	<h2 class="title"> <?php echo $ctrltitle;?></h2>    

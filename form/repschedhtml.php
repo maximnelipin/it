@@ -17,7 +17,7 @@
 
     <body>
     <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
+	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
 	?>
 	    <h2 class="title"> Дежурства за <?php echo numToMonth($monyear[0]).' '.$monyear[1];?></h2>
 	    

@@ -10,7 +10,7 @@
 
     <body>
     <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
+	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
 	include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
 	?>
 	    <h2 class="title"> Главная страница</h2>
@@ -68,6 +68,60 @@
 					   	</div>
 			    	</div>
 			    </form> 
+			    <form action=""  method="get" target="_blank" id="sim">
+			    	<div >
+			    		<label for="sim" > Сим-карты</label>
+			    		<select required class="text" size="1" name="sim">
+			    			<option  selected value='all'> Все операторы</option>
+			    			<?php 
+								
+								$selsql='SELECT DISTINCT isp.id, isp.name
+										FROM isp
+										RIGHT JOIN sim ON isp.id = sim.id_operator
+										ORDER BY isp.name';
+								$ressql=$condb->query($selsql);
+			    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
+			    				{
+			    					
+			    					
+			    					echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+			    					    					
+			    				}
+			    				?>
+			    		</select> 	
+			    	
+				    	<div>
+					    	<input type="submit" class="button" size="70" name="sim" onClick="document.getElementById('sim').action = 'sim.php'" value="Отчёт">
+					    	<input type="submit" class="button" size="70" name="simpdf" onClick="document.getElementById('sim').action = 'simpdf.php'" value="В PDF">	    	    	   
+					   	</div>
+			    	</div>
+			    </form> 
+			    <form action="isp.php"  method="get" target="_blank" id="isp">
+			    	<div >
+			    		<label for="isp" > Операторы связи</label>
+			    		<select required class="text" size="1" name="isp">
+			    			<option  selected value='all'> Все операторы</option>
+			    			<?php 
+								
+								$selsql='SELECT DISTINCT isp.id, isp.name
+										FROM isp
+										ORDER BY isp.name';
+								$ressql=$condb->query($selsql);
+			    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
+			    				{
+			    					
+			    					
+			    					echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+			    					    					
+			    				}
+			    				?>
+			    		</select> 	
+			    	
+				    	<div>
+					    	<input type="submit" class="button" size="70" name="sim"  value="Отчёт">	    	    	   
+					   	</div>
+			    	</div>
+			    </form> 
 		    </div> 
 		    <div class="maincenter">
 			    <form action="usrpc.php"  method="get" target="_blank" >
@@ -119,7 +173,59 @@
 				    		<input type="submit" class="button" size="70" name="usrpc"  value="Отчёт">    	    	   
 				   		</div>
 			    	</div>
-			    </form> 
+			    </form>
+			    <form action="printers.php"  method="get" target="_blank" id="printers">
+			    	<div >
+			    		<label for="printers" > МФУ/Принтеры</label>
+			    		<select required class="text" size="1" name="printers">
+			    			<option  selected value='all'> Все МФУ/Принтеры</option>
+			    			<?php 
+								
+								$selsql='SELECT id, name
+										FROM sprinters
+										ORDER BY name';
+								$ressql=$condb->query($selsql);
+			    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
+			    				{
+			    					
+			    					
+			    					echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+			    					    					
+			    				}
+			    				?>
+			    		</select> 	
+			    	
+				    	<div>
+					    	<input type="submit" class="button" size="70" name="sim"  value="Отчёт">	    	    	   
+					   	</div>
+			    	</div>
+			    </form>  
+			      <form action="servers.php"  method="get" target="_blank" id="servers">
+			    	<div >
+			    		<label for="servers" > Сервера</label>
+			    		<select required class="text" size="1" name="servers">
+			    			<option  selected value='all'> Все сервера</option>
+			    			<?php 
+								
+								$selsql='SELECT id, name
+										FROM servers
+										ORDER BY name';
+								$ressql=$condb->query($selsql);
+			    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
+			    				{
+			    					
+			    					
+			    					echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+			    					    					
+			    				}
+			    				?>
+			    		</select> 	
+			    	
+				    	<div>
+					    	<input type="submit" class="button" size="70" name="sim"  value="Отчёт">	    	    	   
+					   	</div>
+			    	</div>
+			    </form>  
 		    </div>
 			<div class="mainright">
 				<div>

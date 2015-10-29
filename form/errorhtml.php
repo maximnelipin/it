@@ -11,7 +11,7 @@
 
     <body>
     <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/html/header.html';
+	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
 	?>
 	    <h2 class="title"> Ошибка выполнения скрипта</h2>
 	    <div class="error">
