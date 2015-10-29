@@ -68,10 +68,10 @@
 					   	</div>
 			    	</div>
 			    </form> 
-			    <form action=""  method="get" target="_blank" id="sim">
+			    <form action=""  method="get" target="_blank" id="ispsim">
 			    	<div >
-			    		<label for="sim" > Сим-карты</label>
-			    		<select required class="text" size="1" name="sim">
+			    		<label for="ispsim" > Сим-карты</label>
+			    		<select required class="text" size="1" name="ispsim">
 			    			<option  selected value='all'> Все операторы</option>
 			    			<?php 
 								
@@ -91,8 +91,8 @@
 			    		</select> 	
 			    	
 				    	<div>
-					    	<input type="submit" class="button" size="70" name="sim" onClick="document.getElementById('sim').action = 'sim.php'" value="Отчёт">
-					    	<input type="submit" class="button" size="70" name="simpdf" onClick="document.getElementById('sim').action = 'simpdf.php'" value="В PDF">	    	    	   
+					    	<input type="submit" class="button" size="70" name="simrep" onClick="document.getElementById('ispsim').action = 'sim.php'" value="Отчёт">
+					    	<input type="submit" class="button" size="70" name="simpdf" onClick="document.getElementById('ispsim').action = 'simpdf.php'" value="В PDF">	    	    	   
 					   	</div>
 			    	</div>
 			    </form> 
@@ -264,14 +264,7 @@
 	    		    	    	   
 	    </form>
 	    </div>
-	   </div> 
-	     
-	    
-	    
-	    
-	    <?php
-	
-		?>
+	   </div> 	     
     </body>
     
 </html>
