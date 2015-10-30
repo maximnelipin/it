@@ -19,8 +19,8 @@
     	<form action="index.php<?php if(isset ($_GET['link'])) echo '?link='.$_GET['link']; ?>" method="post">
     		<div class="auth"> 
 				<p> Справочная система </p>
-    			<p>Имя пользователя </p> <p><input class="text" type="text" size="27" name="login" /> </p>
-    			<p> Пароль</p> <p><input class="text" type="password" size="27" name="pwd"/> </p>
+    			<p>Имя пользователя </p> <p><input class="text" required type="text" size="27" name="login" /> </p>
+    			<p> Пароль</p> <p><input class="text" required type="password" size="27" name="pwd"/> </p>
     			 <input class="button" type="submit" value="Вход"/>
     		</div>
     	</form>    	    

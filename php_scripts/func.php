@@ -385,6 +385,11 @@ function numToMonth($num){
 	
 	return $month;
 }
+//---------Перекодировка для PDF---------------
+function iconPDF($str)
+{
+	return iconv("utf-8","cp1251",$str);
+}
 
 function html($text)
 {

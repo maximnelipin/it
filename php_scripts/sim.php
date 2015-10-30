@@ -3,6 +3,8 @@
 	
 	if(isset($_SESSION['user_id']))
 	{	
+		//подключаем файл работы с pdf.
+		include 'fpdf.php';
 		include 'func.php';
 		include 'mysql_conf.php';
 		try {
@@ -48,19 +50,20 @@
 				$ctrls.='-'.html($resisp['name']);
 			}
 			
-			
-			if(isset($_GET['simrep']))
-			{
-				//-------------Формируем сим-карты
-				$sql='SELECT  sim.number, sim.account, sim.balance, sim.pay,sim.pwdlk, sim.note,
+			//-------------Формируем сим-карты
+			$sql='SELECT  sim.number, sim.account, sim.balance, sim.pay,sim.pwdlk, sim.note,
 						isp.name as isp, isp.urllk, isp.telsup, listuser.fio, build.name as build
 						FROM  sim LEFT JOIN build ON sim.id_address=build.id
 						LEFT JOIN isp ON sim.id_operator=isp.id
 						LEFT JOIN listuser ON sim.login=listuser.login
-						WHERE sim.id_operator like :id_operator';
-				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':id_operator', $like);
-				$sqlprep->execute();
+						WHERE sim.id_operator like :id_operator order by isp, listuser.fio';
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->bindValue(':id_operator', $like);
+			$sqlprep->execute();
+			
+			if(isset($_GET['simrep']))
+			{
+				
 				
 				//Если нет сим карт, то и не формируем таблицу
 				if($sqlprep->rowCount()>0)
@@ -105,7 +108,62 @@
 							
 				}
 			
-			}	
+			}
+			if (isset($_GET['simpdf']))
+			{
+				$pdf=new FPDF('L','mm','A4');
+				$pdf->AddPage();
+				$pdf->AddFont('TimesNewRomanPSMT','','times.php');
+				$pdf->AddFont('TimesNewRomanPS-BoldMT','B','timesb.php');
+				$pdf->AddFont('ArialMT','','a2c023acb498ea969bcb0e43b4925663_arial.php');
+				//Устанавливаем шрифт
+				$pdf->SetFont('ArialMT','',14);
+				//Заливка выходных дней
+				$pdf->SetFillColor(171,255,0);
+				//Заголовок
+				$pdf->SetTitle($ctrltitle,true);
+				//Вывод месяца идёт с перекодировкой в cp1251
+				$pdf->Cell(100,20,iconv("utf-8","cp1251",$ctrltitle),1,1,'С',false);
+				$pdf->Ln(20);
+				//Меняем размер шрифта
+				$pdf->SetFont('ArialMT','',12);
+				//Высота строки
+				$hig=7;
+				//Ширина ячейки
+				$width=45;
+				$pdf->Cell(40,$hig,iconPDF('Номер'),1,0,'C',false);
+				$pdf->Cell(30,$hig,iconPDF('Оператор'),1,0,'C',false);
+				$pdf->Cell(60,$hig,iconPDF('Объект'),1,0,'C',false);
+				$pdf->Cell($width,$hig,iconPDF('Числиться за'),1,0,'C',false);
+				$pdf->Cell(25,$hig,iconPDF('Оплата'),1,0,'C',false);
+				$pdf->Cell(70,$hig,iconPDF('Примечание'),1,1,'C',false);
+				if($sqlprep->rowCount()>0)
+				{
+					$result=$sqlprep->fetchall();
+					$i=0;
+					$color=true;
+					foreach ($result as $res)
+					
+					{	$color=!$color;
+						$fio=str_getcsv($res["fio"], " ");
+						$note=wordwrap($res['note'],20,"\n",false);
+						$pdf->Cell(40,$hig,iconPDF($res['number']),1,0,'C',$color);
+						
+						$pdf->Cell(30,$hig,iconPDF($res['isp']),1,0,'C',$color);
+						
+						$pdf->Cell(60,$hig,iconPDF($res['build']),1,0,'C',$color);
+						
+						$pdf->Cell(45,$hig,iconPDF($fio[0]),1,0,'C',$color);						
+						
+						$pdf->Cell(25,$hig,iconPDF($res['pay']),1,0,'C',$color);
+						
+						$pdf->MultiCell(70,$hig,iconPDF($note),1,'C',$color);
+					
+					}
+					$pdf->Output($ctrls,'I');
+					exit;
+				}
+			}
 		}	
 		else 
 		{ //Если перешли на страницу без парметров, то открываем главную

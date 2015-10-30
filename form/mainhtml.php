@@ -92,7 +92,7 @@
 			    	
 				    	<div>
 					    	<input type="submit" class="button" size="70" name="simrep" onClick="document.getElementById('ispsim').action = 'sim.php'" value="Отчёт">
-					    	<input type="submit" class="button" size="70" name="simpdf" onClick="document.getElementById('ispsim').action = 'simpdf.php'" value="В PDF">	    	    	   
+					    	<input type="submit" class="button" size="70" name="simpdf" onClick="document.getElementById('ispsim').action = 'sim.php'" value="В PDF">	    	    	   
 					   	</div>
 			    	</div>
 			    </form> 
