@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/auth.php';
+	include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/authWithoutAD.php';
 ?>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">

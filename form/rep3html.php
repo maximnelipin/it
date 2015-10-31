@@ -29,12 +29,14 @@
 					<?php echo $param['res']; ?>
 					<?php if (isset($paramsf)):?>
 						<?php  foreach ($paramsf as $paramf): ?>
-							<div>
-				    			<h2 class="title2"> <?php echo $paramf['title'];?></h2>    
-				    		</div>	
-				    		 <div class="m_title2">
-				    		<?php echo $paramf['res']; ?>
-				    		</div>
+							<?php if($paramf['id_1']==$param['id']):?>
+								<div>
+					    			<h2 class="title2"> <?php echo $paramf['title'];?></h2>    
+					    		</div>	
+					    		 <div class="m_title2">
+					    		<?php echo $paramf['res']; ?>
+					    		</div>
+					    	<?php endif;?>
 						<?php endforeach;?> 
 					<?php endif;?>
 						
