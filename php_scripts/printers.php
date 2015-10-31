@@ -2,7 +2,6 @@
 	session_start();
 	
 	if(isset($_SESSION['user_id']))
-	if(1)
 	{	
 		include 'func.php';
 		include 'mysql_conf.php';
@@ -43,7 +42,7 @@
 					$sqlprepmodel->execute();
 					
 					//Подготавливаем запрос на выборку 
-					$sqlprinter='SELECT printers.netpath,  build.name as build,  build.address, floor.floor, cabinet.cabinet
+					$sqlprinter='SELECT printers.netpath, printers.note,  build.name as build,  build.address, floor.floor, cabinet.cabinet
 					FROM  printers 
 					LEFT JOIN cabinet ON printers.id_cabinet=cabinet.id
 					LEFT JOIN floor ON cabinet.id_floor=floor.id
@@ -93,6 +92,7 @@
 											<th>Адрес</th>
 											<th>Этаж</th>											
 											<th>Кабинет</th>
+											<th>Примечание</th>
 											
 						   					</tr>';
 								foreach ($resultprinter as $printer)
@@ -103,7 +103,8 @@
 											html($printer['build']).'</td><td>'.
 											html($printer['address']).'</td><td>'.											
 											html($printer['floor']).'</td><td>'.
-											html($printer['cabinet']).'</td> </tr>';
+											html($printer['cabinet']).'</td> <td>'.
+											html($printer['note']).'</td> </tr>';
 									
 								//Дополняем строку массивами с таблицами по подклюяениям	
 								
@@ -111,7 +112,7 @@
 								//Закрываем таблицу с симкамми одного оператора
 								$resprinter.='</table>';
 							
-								$paramsf[]=array('res'=>$resprinter, 'title'=>'Принтеры', 'id_1'=>$model['id']);
+								$paramsf[]=array('res'=>$resprinter, 'title'=>'Местонахождение', 'id_1'=>$model['id']);
 							}
 							
 						}

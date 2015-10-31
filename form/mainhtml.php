@@ -222,7 +222,7 @@
 			    		</select> 	
 			    	
 				    	<div>
-					    	<input type="submit" class="button" size="70" name="sim"  value="Отчёт">	    	    	   
+					    	<input type="submit" class="button" size="70" name="srvrep"  value="Отчёт">	    	    	   
 					   	</div>
 			    	</div>
 			    </form>  
