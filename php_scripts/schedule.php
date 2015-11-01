@@ -151,7 +151,7 @@
 		    $params[]=array('str'=>  "</table>");
 		    //Выводим кнопку с для формирования PDF
 			 $params[]=array('str'=> '<div class="field"> 
-					<form action=schedpdf.php?monyear='.$_REQUEST["monyear"].' target="_blank" method=get>
+					<form action=schedule.php?monyear='.$_REQUEST["monyear"].' target="_blank" method=get>
 					<input type="submit" class="button" size="70" name="schedpdf" value="В PDF">
 					<input type="hidden"  name="monyear"  value="'.$_REQUEST["monyear"].'">
 					<form>
