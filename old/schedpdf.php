@@ -15,7 +15,7 @@
 			$condb=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
 			$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			//Исходная кодировка базы в utf8, cp1251 подключена для формирования pdf
-			$condb->exec('SET NAMES "CP1251"');
+			$condb->exec('SET NAMES "UTF8"');
 		}
 		catch (PDOException $e)
 		{
@@ -40,10 +40,10 @@
 		//Заголовок
 		$pdf->SetTitle(numToMonth($monyear[0]).' '.$monyear[1],true);
 		//Вывод месяца идёт с перекодировкой в cp1251
-		$pdf->Cell(80,20,iconv("utf-8","cp1251",numToMonth($monyear[0]).' '.$monyear[1]),1,1,'С',false);
+		$pdf->Cell(80,20,iconPDF(numToMonth($monyear[0]).' '.$monyear[1]),1,1,'С',false);
 		$pdf->Ln(20);
 		//Получаем количество дней в месяце
-		$dayInMon=date('t');
+		 $dayInMon=cal_days_in_month(CAL_GREGORIAN, $monyear[0], $monyear[1]);
 		//Счётчик дней
 		$dayCount=1;
 		//Счётчик недель
@@ -103,10 +103,6 @@
 									 AND	month(schedule.dateduty)=:mon
 									 AND year(schedule.dateduty)=:year";
 		$resdutysql=$condb->prepare($sql);
-		//Выбираем все дни, в которые дежурили в этот месяц
-		//$sql="select day(dateduty) as daym from schedule where month(dateduty)=".$monyear[0].
-				//" AND year(dateduty)=".$monyear[1]." order by day(dateduty)";
-		//$resdaysql=$condb->query($sql);
 		//получаем массив с результатами
 		$resday=$resdaysql->fetchall();
 		//выводим месяц
@@ -128,13 +124,7 @@
 					foreach ($resday as $resd)
 					{	//Сравниваем все дни дежурства в выбранный месяц с выводимыми днями
 						if($resd['daym']==$month[$i][$j])
-						{//Если совпал делаем выборку фамилии дежурившего
-							//$sql="select schedule.dateduty as dateduty, itusers.fio as fio from schedule
-							//right join itusers on itusers.login=schedule.login where
-							//day(schedule.dateduty)=".$month[$i][$j]."
-							// AND	month(schedule.dateduty)=".$monyear[0]."
-							// AND year(schedule.dateduty)=".$monyear[1];
-							//$ressql=$condb->query($sql);
+						{//Если совпал делаем выборку фамилии дежурившего							
 							$resdutysql->bindValue(':day',$month[$i][$j]);
 							$resdutysql->bindValue(':mon',$monyear[0]);
 							$resdutysql->bindValue(':year',$monyear[1]);
@@ -166,7 +156,7 @@
 					//Если есть фамилия дежурившего
 					if(isset($fio[0]))
 					{	//Выводим её
-					$pdf->Cell($widfam,$hig,$fio[0],1,$ln,'C',$color);
+					$pdf->Cell($widfam,$hig,iconPDF($fio[0]),1,$ln,'C',$color);
 					}
 					else $pdf->Cell($widfam,$hig," ",1,$ln,'C',$color);
 				}

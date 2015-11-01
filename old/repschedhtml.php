@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" href="../stylesheet/tcal.css">
 <script src="../js_scripts/tcal.js"></script>
 <title><?php 
-	include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
+	
 	
 	echo numToMonth($monyear[0]).' '.$monyear[1];
 	?>

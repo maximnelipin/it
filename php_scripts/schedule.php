@@ -4,7 +4,10 @@
  //Подключаем файл с параметрами подключения
  if(isset($_SESSION['user_id']))
  {    
-	    include 'mysql_conf.php';
+ 		//подключаем файл работы с pdf.
+ 		include 'fpdf.php';
+ 		include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
+ 		include 'mysql_conf.php';
 	    try {
 	    	$condb=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
 	    	$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -17,14 +20,16 @@
 	    }
 	    
 	    $monyear=str_getcsv($_REQUEST["monyear"], ",");
-	    include "../form/repschedhtml.php";
+	    
+	    //Формируем заголовок окна 
+	    $ctrltitle=numToMonth($monyear[0]).' '.$monyear[1];
+	    
 	    //Получаем количество дней в месяце
-	    $dayInMon=date('t');
+	    $dayInMon=cal_days_in_month(CAL_GREGORIAN, $monyear[0], $monyear[1]);
 	    //Счётчик дней
 	    $dayCount=1;
 	    //Счётчик недель
-	    $weekCount=0;
-	    
+	    $weekCount=0;	    
 	    //Обрабатываем первую неделю месяца
 	    for($i=0;$i<7;$i++){
 	    	//Получаем номер дня недели
@@ -45,23 +50,20 @@
 	    	}
 	    }
 	    
-	    //Обрабатываем последующие недели месяца
-	    while(1)
-	    {
-	    	$weekCount++;
-	    	for($i=0;$i<7;$i++)
-	    	{
-	    		$month[$weekCount][$i]=$dayCount;
-	    		$dayCount++;
-	    		//Если конец месяца - выход из цикла
-	    		if($dayCount>$dayInMon) break;
-	    	}
-	    	//Если конец месяца - выход из цикла
-	    	if($dayCount>$dayInMon) break;
-	    }
-	    //Подготавливаем таблицу
-	    echo "<table class='duty'> 
-	    		<caption>".numToMonth($monyear[0]).' '.$monyear[1]."</caption>";
+ //Обрабатываем последующие недели месяца
+		while($dayCount<=$dayInMon)
+		{
+			$weekCount++;
+			for($i=0;$i<7;$i++)
+			{	
+				$month[$weekCount][$i]=$dayCount;
+				$dayCount++;
+				//Если конец месяца - выход из цикла
+				if($dayCount>$dayInMon) break;
+			}
+			
+		}
+	   
 	    //Выбираем все дни, в которые дежурили в этот месяц
 	    $sql="select day(dateduty) as daym from schedule where month(dateduty)=:mon AND year(dateduty)=:year order by day(dateduty)";
 	    $resdaysql=$condb->prepare($sql);
@@ -74,87 +76,184 @@
 									 AND	month(schedule.dateduty)=:mon
 									 AND year(schedule.dateduty)=:year";
 	    $resdutysql=$condb->prepare($sql);
-	    
-	    //$sql="select day(dateduty) as daym from schedule where month(dateduty)=".$monyear[0].
-	   // " AND year(dateduty)=".$monyear[1]." order by day(dateduty)";
-	 	 //  $resdaysql=$condb->query($sql);
 	    //получаем массив с результатами
 	    $resday=$resdaysql->fetchall();
-	    //выводим месяц
-	    for($i=0;$i<count($month);$i++)
+	    //Выводим результат в html-страницу
+	    if(isset($_GET['schedrep']))
 	    {
-	    	echo "<tr>";
-	    	for($j=0;$j<7;$j++)
+	    	$ctrls="Дежурства за ".$ctrltitle;
+	    	//Формируем заголовок таблицы с месфцем
+	    	$params[]=array('str'=> "<table class='duty'>
+	    		<caption>".numToMonth($monyear[0]).' '.$monyear[1]."</caption>");
+	    
+		    //выводим месяц
+		    for($i=0;$i<count($month);$i++)
+		    {
+		    	$params[]=array('str'=> "<tr>");
+		    	for($j=0;$j<7;$j++)
+		    	{
+		    		if(!empty($month[$i][$j]))
+		    		{	$fio=array();//обнуляем массив с ФИО сотрудника
+		    			//Переходим в массиве на первый элемент
+		    			reset($resday);
+		    			//Перебираем все элементы
+		    			foreach ($resday as $resd)
+		    			{	//Сравниваем все дни дежурства в выбранный месяц с выводимыми днями
+			    			if($resd['daym']==$month[$i][$j])
+			    			{//Если совпал делаем выборку фамилии дежурившего		    	
+			    			
+			    			$resdutysql->bindValue(':day',$month[$i][$j]);
+			    			$resdutysql->bindValue(':mon',$monyear[0]);
+			    			$resdutysql->bindValue(':year',$monyear[1]);
+			    			$resdutysql->execute();
+			    			
+			    			if($res=$resdutysql->fetch(PDO::FETCH_ASSOC))
+			    			{
+			    				$fio=str_getcsv($res["fio"], " ");
+			    			}
+			    			//удаляем использованное значение из массива
+			    			unset($resday['daym']);
+			    			//Выходим из цикла
+			    			break;
+			    			}
+		    			
+		    			}
+		    			//Если суббота или воскресенье
+		    			if($j==5 || $j==6)
+		    			{//Выводим подсвеченным число
+		    				$params[]=array('str'=>  "<td class='weekend' width=30px>".$month[$i][$j]."</td>");
+		    				//Если есть фамилия дежурившего
+		    				if(isset($fio[0]))
+								{	//Выводим её
+									$params[]=array('str'=>  "<td width=110px; class='weekend'>".$fio[0]."</td>");
+								}
+							else $params[]=array('str'=> "<td width=110px class='weekend'></td>");
+		    			}
+		    			else 
+		    			{
+		    				//Выводим подсвеченным число
+		    				$params[]=array('str'=>  "<td width=30px>".$month[$i][$j]."</td>");
+		    				//Если есть фамилия дежурившего
+		    				if(isset($fio[0]))
+		    				{	//Выводим её
+		    				$params[]=array('str'=>  "<td width=110px>".$fio[0]."</td>");
+		    				}
+		    				else $params[]=array('str'=>  "<td width=110px></td>");    				
+		    			}
+		    			
+		    		}
+		    		else $params[]=array('str'=>  "<td width=140px colspan='2'></td>");
+		    	}
+		    	//Закрываем строку
+		    	$params[]=array('str'=>  "</tr>");
+		    }
+		    //Закрываем таблицу
+		    $params[]=array('str'=>  "</table>");
+		    //Выводим кнопку с для формирования PDF
+			 $params[]=array('str'=> '<div class="field"> 
+					<form action=schedpdf.php?monyear='.$_REQUEST["monyear"].' target="_blank" method=get>
+					<input type="submit" class="button" size="70" name="schedpdf" value="В PDF">
+					<input type="hidden"  name="monyear"  value="'.$_REQUEST["monyear"].'">
+					<form>
+					</div>');	
+			 include "../form/rep1html.php";
+	    }
+	    //Выводим результат в PDF
+	    if(isset($_GET['schedpdf']))
+	    {
+	    	
+	    	
+	    	//Создаём новый объект с параметрами: портретный A4 с делением по милиметрам
+	    	$pdf=new FPDF('L','mm','A4');
+	    	$pdf->AddPage();
+	    	$pdf->AddFont('TimesNewRomanPSMT','','times.php');
+	    	$pdf->AddFont('TimesNewRomanPS-BoldMT','B','timesb.php');
+	    	$pdf->AddFont('ArialMT','','a2c023acb498ea969bcb0e43b4925663_arial.php');
+	    	//Устанавливаем шрифт
+	    	$pdf->SetFont('ArialMT','',16);
+	    	//Заливка выходных дней
+	    	$pdf->SetFillColor(171,255,0);
+	    	//Заголовок
+	    	$pdf->SetTitle($ctrltitle,true);
+	    	//Вывод месяца идёт с перекодировкой в cp1251
+	    	$pdf->Cell(80,20,iconPDF($ctrltitle),1,1,'С',false);
+	    	$pdf->Ln(20);
+	    	//Меняем размер шрифта
+	    	$pdf->SetFont('ArialMT','',12);
+	    	//Высота строки
+	    	$hig=20;
+	    	//Ширина поля для фамилии
+	    	$widfam=32;
+	    	//Ширина для числа
+	    	$widnum=8;
+	    	//выводим месяц
+	    	for($i=0;$i<count($month);$i++)
 	    	{
-	    		if(!empty($month[$i][$j]))
-	    		{	$fio=array();//обнуляем массив с ФИО сотрудника
+	    			
+	    		//обрабатываем неделю
+	    		for($j=0;$j<7;$j++)
+	    		{	//Если восвресенье, то после него переходим на новую строку
+	    			if($j==6) $ln=1;
+	    			else $ln=0;
+	    	
+	    			//Если в массиве не пустой элемент
+	    			if(!empty($month[$i][$j]))
+	    			{	$fio=array();//обнуляем массив с ФИО сотрудника
 	    			//Переходим в массиве на первый элемент
 	    			reset($resday);
 	    			//Перебираем все элементы
 	    			foreach ($resday as $resd)
 	    			{	//Сравниваем все дни дежурства в выбранный месяц с выводимыми днями
-		    			if($resd['daym']==$month[$i][$j])
-		    			{//Если совпал делаем выборку фамилии дежурившего
-		    	//	$sql="select schedule.dateduty as dateduty, itusers.fio as fio from schedule
-						//			right join itusers on itusers.login=schedule.login where
-						//			day(schedule.dateduty)=".$month[$i][$j]."
-						//			 AND	month(schedule.dateduty)=".$monyear[0]."
-						//			 AND year(schedule.dateduty)=".$monyear[1];
-		    			//$ressql=$condb->query($sql);
-		    			$resdutysql->bindValue(':day',$month[$i][$j]);
-		    			$resdutysql->bindValue(':mon',$monyear[0]);
-		    			$resdutysql->bindValue(':year',$monyear[1]);
-		    			$resdutysql->execute();
-		    			
-		    			if($res=$resdutysql->fetch(PDO::FETCH_ASSOC))
-		    			{
-		    				$fio=str_getcsv($res["fio"], " ");
-		    			}
-		    			//удаляем использованное значение из массива
-		    			unset($resday['daym']);
-		    			//Выходим из цикла
-		    			break;
-		    			}
-	    			
+	    				if($resd['daym']==$month[$i][$j])
+	    				{//Если совпал делаем выборку фамилии дежурившего
+	    					$resdutysql->bindValue(':day',$month[$i][$j]);
+	    					$resdutysql->bindValue(':mon',$monyear[0]);
+	    					$resdutysql->bindValue(':year',$monyear[1]);
+	    					$resdutysql->execute();
+	    					if($res=$resdutysql->fetch(PDO::FETCH_ASSOC))
+	    					{
+	    						$fio=str_getcsv($res["fio"], " ");
+	    					}
+	    					//удаляем использованное значение из массива
+	    					unset($resday['daym']);
+	    					//Выходим из цикла
+	    					break;
+	    				}
+	    	
 	    			}
+	    	
 	    			//Если суббота или воскресенье
 	    			if($j==5 || $j==6)
-	    			{//Выводим подсвеченным число
-	    				 echo "<td class='weekend' width=30px>".$month[$i][$j]."</td>";
-	    				//Если есть фамилия дежурившего
-	    				if(isset($fio[0]))
-							{	//Выводим её
-								echo "<td width=110px; class='weekend'>".$fio[0]."</td>";
-							}
-						else echo "<td width=110px class='weekend'></td>";
-	    			}
-	    			else 
 	    			{
-	    				//Выводим подсвеченным число
-	    				echo "<td width=30px>".$month[$i][$j]."</td>";
-	    				//Если есть фамилия дежурившего
-	    				if(isset($fio[0]))
-	    				{	//Выводим её
-	    				echo "<td width=110px>".$fio[0]."</td>";
-	    				}
-	    				else echo "<td width=110px></td>";    				
+	    				$color=true;
 	    			}
-	    			
+	    			else
+	    			{
+	    				$color=false;
+	    			}
+	    				
+	    			//Выводим подцвеченными
+	    			$pdf->Cell($widnum,$hig,$month[$i][$j],1,0,'C',$color);
+	    			//Если есть фамилия дежурившего
+	    			if(isset($fio[0]))
+	    			{	//Выводим её
+	    				$pdf->Cell($widfam,$hig,iconPDF($fio[0]),1,$ln,'C',$color);
+	    			}
+	    			else $pdf->Cell($widfam,$hig," ",1,$ln,'C',$color);
+	    			}
+	    			//Если нет даты на это поле, выводим просто пустое
+	    			else $pdf->Cell($widfam+$widnum,$hig," ",1,$ln,'C',false);
 	    		}
-	    		else echo "<td width=140px colspan='2'></td>";
+	    		
+	    			
 	    	}
-	    	echo "</tr>";
+	    	//Выводим жокумент в браузер и отображаем его в просмотрщике
+	    	$pdf->Output(numToMonth($monyear[0]).' '.$monyear[1],'I');
 	    }
-	    echo "</table>";
 	    
-		echo '<div class="field"> 
-				<form action=schedpdf.php?monyear='.$_REQUEST["monyear"].' target="_blank" method=get>
-				<input type="submit" class="button" size="70" name="schedpdf" value="В PDF">
-				<input type="hidden"  name="monyear"  value="'.$_REQUEST["monyear"].'">
-				<form>
-				</div>';	
-			
-		if($condb!=null) {$condb=NULL;}
+	    
+	    //Закрываем подключение к базе
+		if($condb!=null) {$condb=NULL; exit;}
  }		
 	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF'].'?monyear='.$_REQUEST["monyear"]);
 	exit;
