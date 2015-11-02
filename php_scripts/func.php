@@ -331,10 +331,29 @@ function ping ($pinghost){
 			
 	}
 	else
+	{
 		//Пингуем c Unix
-		//$result=explode("\n",`ping -c 4 -s 32 `.$pinghost);
 		exec('ping -c 4 -s 32 '.escapeshellcmd($pinghost), $result);
-	return $result;
+	}
+	
+	
+	//Формирвем область с результатом пинга
+	$resp='<div class="ping">';
+	
+	foreach ($result as $res)
+	{	//Преодбразуем массив значений в строку с переносами
+		if(substr(PHP_OS, 0, 3) == "WIN")
+		{ //Для windows перекодируем результаты в utf-8
+		$resp.='<p>'.iconv("cp866","utf-8",$res).'</p>';
+		}
+		else
+		{
+			$resp.='<p>'.$res.'</p>';
+		}
+	}
+	$resp.='</div>';
+	
+	return $resp;
 }
 
 //---------------перевод чисел в названия месяцев

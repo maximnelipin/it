@@ -107,16 +107,11 @@
 					set_time_limit($sqlprep->rowCount()*40);
 					$result=$sqlprep->fetchall();
 					foreach ($result as $res)
-					{	//Для каждой точки
-						$resp='<div class="ping">';
+					{	
 						//пингуем
 						$respings=ping($res['gateway']);
-						foreach ($respings as $resping)
-						{	//Преодбразуем массив значений в строку с переносами
-							$resp.='<p>'.iconv("cp866","utf-8",$resping).'</p>';
-						}
-						$resp.='</div>';
-						$params[]=array('res'=>$resp, 'build'=>$res['name']);
+						//Записываем результат пинга
+						$params[]=array('res'=>$respings, 'build'=>$res['name']);
 				
 							
 							
@@ -126,11 +121,7 @@
 				}
 			
 			}
-			//Формируем письмо и отправляем
-			if(isset($_GET['mail']))
-			{
-								
-			}
+			
 			
 			
 			
