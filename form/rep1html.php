@@ -25,20 +25,20 @@
 					<?php echo $param['str']; ?>				   
 				<?php endforeach;?> 		    
 			<?php endif;?> 			 
-			<?php if(isset($paramsf)):?>
+			<?php if(isset($params1)):?>
 				<div>
-			    	<h2 class="title"><?php echo $ctrlf;?> </h2>   
+			    	<h2 class="title"><?php echo $ctrl1;?> </h2>   
 			    </div>	
-				<?php  foreach ($paramsf as $paramf): ?>
-					<?php echo $paramf['str']; ?>	
+				<?php  foreach ($params1 as $param1): ?>
+					<?php echo $param1['str']; ?>	
 				<?php endforeach;?>  
 			<?php endif;?>
-			<?php if(isset($paramsc)):?>
+			<?php if(isset($params2)):?>
 				<div>
-			    	<h2 class="title"> <?php echo $ctrlc;?></h2>     
+			    	<h2 class="title"> <?php echo $ctrl2;?></h2>     
 			    </div>	
-				<?php   foreach ($paramsc as $paramc): ?>
-					<?php echo $paramc['str']; ?>	
+				<?php   foreach ($params2 as $param2): ?>
+					<?php echo $param2['str']; ?>	
 				<?php endforeach;?> 			    		
 			<?php endif;?>						    
 			<div class="field">					    		    

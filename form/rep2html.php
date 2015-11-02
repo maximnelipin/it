@@ -28,62 +28,57 @@
 				<?php endforeach;?> 		    
 			<?php endif;?>
 			 				
-			<?php  foreach ($paramsf as $paramf): ?>
+			<?php  foreach ($params1 as $param1): ?>
 									
 				 <div> <h2 class="title1"><?php //выводим номер этажа 
-											echo $paramf['str']; ?>
+											echo $param1['str']; ?>
 				</h2></div>
 			
 			<?php //перебираем кабинеты  
-				if (isset($paramsc)):							
-					foreach ($paramsc as $paramс):				 
-						if ($paramс['id_floor']==$paramf['id']):?>
-							
-							
-							 <div> <h2 class="title2"><?php echo $paramс['str']?></h2></div>
+				if (isset($params2)):							
+					foreach ($params2 as $param2):				 
+						if ($param2['id_floor']==$param1['id']):?>
+							 <div> <h2 class="title2"><?php echo $param2['str']?></h2></div>
 							<div class="m_title2">
-							<?php 
-							
-							//вывод принтеров
-							$printers=printerInCab($paramс['id'],$condb);
-							//если есть принтеры						
-							if (gettype($printers)=='array')
-							{ 	
-								//Выводим принтеры
-								foreach ($printers as $printer)
-								{
-									echo $printer['str'];
-								}
+								<?php 
 								
-							}
-							//Вывод серверов
-							$servers=serverInCab($paramс['id'],$condb);
-							if (gettype($servers)=='array')
-							{ 	
-								foreach ($servers as $server)
-								{
-									echo $server['str'];
-								}
-								
-							}
-							//Вывод подключений и провайдеров
-							$conns=connInCab($paramс['id'],$condb);
-							if (gettype($conns)=='array')
-							{
-								foreach ($conns as $conn)
-								{
-									echo $conn['str'];
-								}
-									
-							}
-							?>
+									//вывод принтеров
+									$printers=printerInCab($param2['id'],$condb);
+									//если есть принтеры						
+									if (gettype($printers)=='array')
+									{ 	
+										//Выводим принтеры
+										foreach ($printers as $printer)
+										{
+											echo $printer['str'];
+										}
+										
+									}
+									//Вывод серверов
+									$servers=serverInCab($param2['id'],$condb);
+									if (gettype($servers)=='array')
+									{ 	
+										foreach ($servers as $server)
+										{
+											echo $server['str'];
+										}
+										
+									}
+									//Вывод подключений и провайдеров
+									$conns=connInCab($param2['id'],$condb);
+									if (gettype($conns)=='array')
+									{
+										foreach ($conns as $conn)
+										{
+											echo $conn['str'];
+										}
+											
+									}
+								?>
 							</div>
 						<?php endif;?>
 					<?php endforeach;?> 
 				<?php endif;?>
-				
-					
-				
 			<?php endforeach;?>  
 			
 				    

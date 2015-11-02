@@ -1,6 +1,5 @@
 <?php
 	session_start();
-	
 	if(isset($_SESSION['user_id']))
 	{	
 		//Файл с функциями
@@ -9,22 +8,23 @@
 		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
 		if(isset($_GET['isprep']))
 		{	
-			
 			$ctrltitle="Провайдеры";
-			//Выводим форму на добавление
+			//Если пришёл нужный параметр
 			if(isset($_GET['isp']))
 			{	
-				//Вывод всех точек
+				//Вывод всех провайдеров
 				if($_GET['isp']=="all")
 				{
 					$like='%';
 				}
-				//для одной точки
+				//для одной провайдера
 				else
 				{
 					$like=$_GET['isp'];
 				}
 				//Делаем выборку провайдера
+				try 
+				{
 					$sqlisp='SELECT * 
 							FROM isp						
 							WHERE id LIKE :id					
@@ -32,17 +32,24 @@
 					$sqlprepisp=$condb->prepare($sqlisp);
 					$sqlprepisp->bindValue(':id', $like);
 					$sqlprepisp->execute();
+				}
+				catch (PDOExeption $e)
+				{
+					$sql=$sqlisp;
+					include '../form/errorhtml.php';
+					exit;
+				}
 					
-					//Подготавливаем запрос на выборку сим-карт
-					$sqlsim='SELECT  sim.number, sim.account, sim.balance, sim.pay,sim.pwdlk, sim.note,
-					listuser.fio,  build.name as build
-					FROM  sim LEFT JOIN build ON sim.id_address=build.id
-					LEFT JOIN isp ON sim.id_operator=isp.id
-					LEFT JOIN listuser ON sim.login=listuser.login
-					WHERE sim.id_operator = :id_operator';
-					$sqlprepsim=$condb->prepare($sqlsim);
-					//Подготавливаем запрос на выборку подключений
-					$sqlconn='SELECT conn.gateway, conn.typecon, conn.mask, conn.dhcp, conn.dns1, conn.dns2, conn.loginlk, conn.pwdlk, 
+				//Подготавливаем запрос на выборку сим-карт
+				$sqlsim='SELECT  sim.number, sim.account, sim.balance, sim.pay,sim.pwdlk, sim.note,
+				listuser.fio,  build.name as build
+				FROM  sim LEFT JOIN build ON sim.id_address=build.id
+				LEFT JOIN isp ON sim.id_operator=isp.id
+				LEFT JOIN listuser ON sim.login=listuser.login
+				WHERE sim.id_operator = :id_operator';
+				$sqlprepsim=$condb->prepare($sqlsim);
+				//Подготавливаем запрос на выборку подключений
+				$sqlconn='SELECT conn.gateway, conn.typecon, conn.mask, conn.dhcp, conn.dns1, conn.dns2, conn.loginlk, conn.pwdlk, 
 								conn.contract, ppp.typeppp, ppp.srv AS srvppp, ppp.login AS loginppp, ppp.pwd AS pwdppp, 
 								extnet.extip,extnet.extmask, extnet.extgw, extnet.extdns1, extnet.extdns2, 
 								company.name AS namecomp, company.innkpp,  conn.note, build.name AS build
@@ -55,18 +62,17 @@
 								LEFT JOIN build ON floor.id_build = build.id
 								WHERE conn.id_operator =:id_isp
 								ORDER BY conn.gateway';
-					$sqlprepconn=$condb->prepare($sqlconn);
-					//Если есть провайдеры, то выводим информации по ним
-					if($sqlprepisp->rowCount()>0)
-					{
-						$resultisp=$sqlprepisp->fetchall();
-						
-							//Для каждого провайдера делдаем выборкут симкарт и подключений
-						foreach ($resultisp as $isp)
-						{	//Формируем таблицу с инфо от провайдеров
+				$sqlprepconn=$condb->prepare($sqlconn);
+				//Если есть провайдеры, то выводим информации по ним
+				if($sqlprepisp->rowCount()>0)
+				{
+					$resultisp=$sqlprepisp->fetchall();						
+					//Для каждого провайдера делдаем выборкут симкарт и подключений
+					foreach ($resultisp as $isp)
+					{	//Формируем таблицу с инфо от провайдеров
 							
-							//Шапка таблицы для провайдера
-							$resisp='<table>
+						//Шапка таблицы для провайдера
+						$resisp='<table>
 			   					<caption>Провайдер</caption>
 			  					 <tr>
 								<th>Наименование</th>
@@ -78,29 +84,38 @@
 								<th>Личный кабинет</th>
 								<th>Папка с документами</th>
 								<th>Примечание</th> </tr>';
-							$resisp.='<tr><td>'.
+						$resisp.='<tr><td>'.
 									html($isp['name']).'</td><td>'.
 									html($isp['telsup']).'</td><td>'.
 									html($isp['manager']).'</td><td>'.
 									html($isp['telman']).'</td><td>'.
 									html($isp['emailman']).'</td><td>'.
 									html($isp['address']).'</td><td>'.
-									html($isp['urllk']).'</td><td>'.
+									createLink(html($isp['urllk']),html($isp['urllk']),"_blank").'</td><td>'.
 									html($isp['netpath']).'</td><td>'.
 									html($isp['note']).'</td></tr>';
 							
-							$resisp.='</table>';
-							
-							$params[]=array('res'=>$resisp, 'title'=>$isp['name'],  'id'=>$isp['id']);
-							//Выбираем сим-краты
+						$resisp.='</table>';
+						//Заносим в массив для ваводана форму
+						$params[]=array('res'=>$resisp, 'title'=>$isp['name'],  'id'=>$isp['id']);
+						//Выбираем сим-краты
+						try 
+						{
 							$sqlprepsim->bindValue(':id_operator', $isp['id']);
 							$sqlprepsim->execute();
-							//Если есть результаты выборки
-							if($sqlprepsim->rowCount()>0)
-							{
-								$resultsim=$sqlprepsim->fetchall();
-								//шапка таблицы для сим-карт
-								$ressim='<table>
+						}
+						catch (PDOExeption $e)
+						{
+							$sql=$sqlsim;
+							include '../form/errorhtml.php';
+							exit;
+						}
+						//Если есть результаты выборки
+						if($sqlprepsim->rowCount()>0)
+						{
+							$resultsim=$sqlprepsim->fetchall();
+							//шапка таблицы для сим-карт
+							$ressim='<table>
 						   					<caption>Сим-карты</caption>
 						  					 <tr>
 											<th>Номер</th>
@@ -112,10 +127,10 @@
 											<th>Пароль личного кабинета</th>
 											<th>Примечание</th>
 						   					</tr>';
-								foreach ($resultsim as $sim)
-								{
+							foreach ($resultsim as $sim)
+							{
 								
-									$ressim.='<tr><td>'.
+								$ressim.='<tr><td>'.
 											html($sim['number']).'</td><td>'.
 											html($sim['account']).'</td><td>'.
 											html($sim['build']).'</td><td>'.											
@@ -124,23 +139,31 @@
 											html($sim['pay']).'</td><td>'.								
 											html($sim['pwdlk']).'</td><td>'.
 											html($sim['note']).'</td> </tr>';
-									
-								//Дополняем строку массивами с таблицами по подклюяениям	
-								
-								}
-								//Закрываем таблицу с симкамми одного оператора
-								$ressim.='</table>';
-							
-								$paramsf[]=array('res'=>$ressim, 'title'=>'Сим-карты', 'id_1'=>$isp['id']);
 							}
+								//Закрываем таблицу с симкамми одного оператора
+							$ressim.='</table>';
+							//Добавляем в массив для вывода
+							$params1[]=array('res'=>$ressim, 'title'=>'Сим-карты', 'id_1'=>$isp['id']);
+						}
 							
-							//Выбираем сим-краты
+						//Выбираем подключения
+						try 
+						{
 							$sqlprepconn->bindValue(':id_isp', $isp['id']);
 							$sqlprepconn->execute();
-							if($sqlprepconn->rowCount()>0)
-							{
-								$resultconn=$sqlprepconn->fetchall();
-								$resconn='<table>
+						}
+						catch (PDOExeption $e)
+						{
+							$sql=$sqlconn;
+							include '../form/errorhtml.php';
+							exit;
+						}
+						//Если есть результаты выборки по подключениям
+						if($sqlprepconn->rowCount()>0)
+						{
+							$resultconn=$sqlprepconn->fetchall();
+							//Формируем шапку для подключений
+							$resconn='<table>
 			   					<caption>Подключения</caption>
 			  					 <tr>
 								<th>Шлюз</th>
@@ -166,10 +189,11 @@
 								<th>Пароль ЛК</th>
 								<th>Примечание</th>
 			   					</tr>';
-								foreach ($resultconn as $conn)
-								{
+							//Заносим подключения
+							foreach ($resultconn as $conn)
+							{
 										
-									$resconn.='<tr><td>'.
+								$resconn.='<tr><td>'.
 										html($conn['gateway']).'</td><td>'.
 										html($conn['build']).'</td><td>'.
 										html($conn['mask']).'</td><td>'.
@@ -194,22 +218,15 @@
 										html($conn['note']).'</td></tr>';
 										
 									
-								}
-								//Закрываем таблицу с симкамми одного оператора
-								$resconn.='</table>';
-								//Дополняем строку массивами с таблицами по подклюяениям
-								$paramsf[]=array('res'=>$resconn, 'title'=>'Подключения', 'id_1'=>$isp['id']);
 							}
-									
-						}
-							
-					}	
-				}
-				
-				
-				
-				
-				
+								//Закрываем таблицу с подключениями одного оператора
+							$resconn.='</table>';
+								//Дополняем строку массивами с таблицами по подклюяениям
+							$params1[]=array('res'=>$resconn, 'title'=>'Подключения', 'id_1'=>$isp['id']);
+						}		
+					}		
+				}	
+			}
 		}
 		else 
 		{ //Если перешли на страницу без парметров, то открываем главную
@@ -219,10 +236,6 @@
 			
 		include $_SERVER['DOCUMENT_ROOT'].'/form/rep3html.php';
 		exit;
-		
-		
-		
-		
 	}
 	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
 	exit;

@@ -27,14 +27,14 @@
 			    </div>	
 			    <div class="m_title1">
 					<?php echo $param['res']; ?>
-					<?php if (isset($paramsf)):?>
-						<?php  foreach ($paramsf as $paramf): ?>
-							<?php if($paramf['id_1']==$param['id']):?>
+					<?php if (isset($params1)):?>
+						<?php  foreach ($params1 as $param1): ?>
+							<?php if($param1['id_1']==$param['id']):?>
 								<div>
-					    			<h2 class="title2"> <?php echo $paramf['title'];?></h2>    
+					    			<h2 class="title2"> <?php echo $param1['title'];?></h2>    
 					    		</div>	
 					    		 <div class="m_title2">
-					    		<?php echo $paramf['res']; ?>
+					    		<?php echo $param1['res']; ?>
 					    		</div>
 					    	<?php endif;?>
 						<?php endforeach;?> 

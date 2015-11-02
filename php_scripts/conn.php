@@ -1,6 +1,5 @@
 <?php
 	session_start();
-	
 	if(isset($_SESSION['user_id']))
 	{	
 		//Файл с функциями
@@ -8,7 +7,7 @@
 		//Файл подключения к БД
 		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
 		
-		//Выводим форму на добавление
+		//Если поступил id поля с адресом шлюза
 		if(isset($_GET['gwlan']))
 		{	
 			//Вывод всех точек
@@ -24,7 +23,7 @@
 			if(isset($_GET['conn']))
 			{
 				try {
-					//Делаем выборку кабинетов, в которых есть подключения
+					//Делаем выборку кабинетов, в которых есть выбранные подключения
 					$sql='SELECT cabinet.cabinet, floor.floor, build.name, build.address, cabinet.id
 							FROM cabinet
 							LEFT JOIN floor ON cabinet.id_floor = floor.id
@@ -51,31 +50,28 @@
 				if($sqlprep->rowCount()>0)
 				{			
 					$result=$sqlprep->fetchall();	
-						foreach ($result as $res)
-						{	//Для каждой точки
-							$resc='';
-							//получаем подключения и инфо о проваёдере
-							$resconns=connInCab($res['id'],$condb);
-							foreach ($resconns as $resconn)
-							{	//Преодбразуем массив значений в строку
-								$resc.=$resconn['str'];
-							}
-							//Дополняем строку массивами с таблицами по подклюяениям	
-							$params[]=array('res'=>$resc, 'build'=>$res['name'].' '.$res['address'].' '.$res['floor'].' этаж '.$res['cabinet']);
-								
-								
-								
+					foreach ($result as $res)
+					{	//Для каждой точки
+						$resc='';
+						//получаем инфо о подключении и провайдере
+						$resconns=connInCab($res['id'],$condb);
+						foreach ($resconns as $resconn)
+						{	//Преодбразуем массив значений в строку
+							$resc.=$resconn['str'];
 						}
+						//Формируем строку с подключением и связанным провайдером в данном кабинете	
+						$params[]=array('res'=>$resc, 'build'=>$res['name'].' '.$res['address'].' '.$res['floor'].' этаж '.$res['cabinet']);
+					}
 						//Заголовок страницы
-						$ctrltitle="Отчёт по подключениям";
+					$ctrltitle="Отчёт по подключениям";
 				}
-			}
-			
+			}			
 			//Выводим на страницу, если есть ping
 			if(isset($_GET['ping']))
 			{	
-				try {
-					//Делаем выборку
+				try
+				{
+					//Делаем выборку адресов шлюзов
 					$sql='SELECT conn.gateway, build.name FROM conn
 							left JOIN cabinet ON conn.id_cabinet = cabinet.id
 							left JOIN floor ON cabinet.id_floor = floor.id
@@ -94,30 +90,21 @@
 				}
 				if($sqlprep->rowCount()>0)
 				{
-					//Увеличиваем время, чтобы получить результат при недоступности точек
-					//На каждую ЛВС по 40 секунд
+					/*Увеличиваем время выполнения скрипта, 
+					 * чтобы получить результат при недоступности точек
+					На каждую ЛВС по 40 секунд*/
 					set_time_limit($sqlprep->rowCount()*40);
 					$result=$sqlprep->fetchall();
 					foreach ($result as $res)
 					{	
 						//пингуем
 						$respings=ping($res['gateway']);
-						//Записываем результат пинга
+						//Записываем результат пинга в элемент массива
 						$params[]=array('res'=>$respings, 'build'=>$res['name']);
-				
-							
-							
 					}
-						
 					$ctrltitle="Доступность ЛВС (ПИНГ)";
 				}
-			
 			}
-			
-			
-			
-			
-			
 		}	
 		else 
 		{ //Если перешли на страницу без парметров, то открываем главную
@@ -127,10 +114,6 @@
 			
 		include $_SERVER['DOCUMENT_ROOT'].'/form/reppinghtml.php';
 		exit;
-		
-		
-		
-		
 	}
 	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
 	exit;
