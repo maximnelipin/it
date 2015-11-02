@@ -1,0 +1,142 @@
+<?php
+include_once 'SendMailSmtpClass.php';
+
+		include 'func.php';
+		include 'mysql_conf.php';
+		try {
+			$condb=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
+			$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$condb->exec('SET NAMES "utf8"');
+		}
+		catch (PDOException $e)
+		{
+			include '../form/errorhtml.php';
+			exit;
+		}
+		
+		//Вычитаем половину стоимости оплаты за месяц
+		//Вычитание происходит по лицевым счётам
+		try {
+			$sql='UPDATE sim, (SELECT account, balance, SUM( pay ) AS pay, COUNT( * ) AS count_number	FROM sim GROUP BY account) as sim1 
+			SET sim.balance=(sim1.balance-sim1.pay/2) WHERE sim.account=sim1.account';
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute();
+		}
+		catch (PDOException $e)
+		{
+			include '../form/errorhtml.php';
+			exit;
+		}
+		try 
+		{
+				//Делаем выборку сим -карт, где денег осталось меньше, чем на 2 месяца
+			$sql='SELECT sim.number, sim.account, sim.balance, sim.pay, sim.pwdlk, sim.note, isp.name AS isp, isp.urllk, isp.telsup, 
+					listuser.fio, build.name AS build, sim1.balance / sim1.pay as mon
+			FROM sim
+			INNER JOIN (
+							
+			SELECT account, balance, SUM( pay ) AS pay, COUNT( * ) AS count_number
+			FROM sim
+			GROUP BY account
+			) AS sim1 ON ( sim.account = sim1.account AND sim1.balance / sim1.pay <2 )
+			LEFT JOIN build ON sim.id_address = build.id
+			LEFT JOIN isp ON sim.id_operator = isp.id
+			LEFT JOIN listuser ON sim.login = listuser.login
+			ORDER BY isp.name
+			LIMIT 0 , 30';
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute();
+		}
+		catch (PDOException $e)
+		{
+			include '../form/errorhtml.php';
+			exit;
+		}
+		$ctrltitle="Оплата сим-карт";
+				//Формируем начало письма со стилями
+		$body=' <head> <title>'.$ctrltitle.'</title> </head> <body> <style>
+				table, th, td, caption {
+									border-style:solid;
+									border-width:1px;
+									border-collapse: collapse;
+									padding:3px;
+									font-size: 100%;
+									background-color: azure;	
+								}
+								table a {
+									font-size: 100%;
+								}
+								
+								table {
+									margin-left:4%;
+									margin-right:2%;
+									margin-top:1%;
+									margin-bottom:1%;
+								}
+								caption {
+									font-size: 120%
+								}
+								th{
+									font-size:110%;
+									
+								}
+						
+						</style>';
+		if($sqlprep->rowCount()>0)
+		{
+			//Увеличиваем время, чтобы получить результат при недоступности точек
+			//На каждую ЛВС по 40 секунд
+			$body.='<table> <caption>Сим-карты</caption>
+		  					 <tr>
+							<th>Номер</th>
+							<th>Л/С</th>
+							<th>Объект</th>
+							<th>Оператор</th>
+							<th>Техподдержка</th>
+							<th>Числится за</th>
+							<th>Баланс</th>
+							<th>Оплата</th>
+							<th>До выключения, мес</th>
+							<th>Личный кабинет</th>
+							<th>Примечание</th>
+		   					</tr>';
+			$result=$sqlprep->fetchall();
+					foreach ($result as $res)
+					{	
+						
+						
+						//Добавляем к странице сим-карты, которые нужно оплатить
+						$body.='<tr><td>'.
+								html($res['number']).'</td><td>'.
+								html($res['account']).'</td><td>'.
+								html($res['build']).'</td><td>'.
+								html($res['isp']).'</td><td>'.
+								html($res['telsup']).'</td><td>'.
+								html($res['fio']).'</td><td>'.
+								html($res['balance']).'</td><td>'.
+								html($res['pay']).'</td><td>'.
+								html($res['mon']).'</td><td>.
+								<a href='.html($res['urllk']).' target="_blank"> '.html($res['urllk']).'</a></td><td>'.
+								
+								html($res['note']).'</td> </tr>';
+							
+							
+					}
+					//Заканчиваем формирования текста письма
+					$body.='</table></body>';
+				}
+		
+				//Отправка почты через обычные сервера
+				$mailSMTP=new SendMailSmtpClass('nelipin.maxim@yandex.ru','pravoverniy', 'ssl://smtp.yandex.ru','MAX',465);
+				// заголовок письма
+				$headers= "MIME-Version: 1.0\r\n";
+				$headers .= "Content-type: text/html; charset=utf-8\r\n"; // кодировка письма
+				$headers .= "From: Max <nelipin.maxim@yandex.ru>\r\n"; // от кого письмо
+				$result =  $mailSMTP->send('nelmaxim@gmail.com', $ctrltitle, $body, $headers); // отправляем письмо
+				// $result =  $mailSMTP->send('Кому письмо', 'Тема письма', 'Текст письма', 'Заголовки письма');
+				if($result === true){
+					echo "Письмо успешно отправлено";
+				}else{
+					echo "Письмо не отправлено. Ошибка: " . $result;
+				}
+?>

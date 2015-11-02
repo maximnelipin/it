@@ -69,7 +69,7 @@ try {
 						$body.='<div>
 								<h2 class="title1">'. html($res['build']).'</h2>
 							</div>	
-							<div class="m_title1">'.$respings.'</div>';
+							<div class="m_title1">'.html($respings).'</div>';
 							
 							
 					}
