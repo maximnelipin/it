@@ -8,5 +8,17 @@
 	$dbuser= "itinfo";
 	//Пароль пользователя БД
 	$dbpwd= "Passw0rd";
+	try {
+		$condb=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
+		$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$condb->exec('SET NAMES "utf8"');
+			
+	}
+	catch (PDOException $e)
+	{
+		include '../form/errorhtml.php';
+		exit;
+			
+	}
 	
 ?>

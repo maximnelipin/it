@@ -1,8 +1,8 @@
 <?php
 	//открываем сессию
 	session_start();
-	//Подключаем файл с параметрами подключения
-	include_once 'ldap_conf.php';
+	//Файл настроек для подключения к серверу LDAP
+	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/ldap_conf.php';
 	if (isset($_GET['link'])=="logout")
 		{if(isset($_SESSION['user_id']))
 			{

@@ -2,23 +2,10 @@
 	session_start();
 	if(isset($_SESSION['user_id']))
 	{	
-		include 'mysql_conf.php';
-		include 'func.php';
-		try {
-			$condb=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
-			$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$condb->exec('SET NAMES "utf8"');
-			
-		}
-		catch (PDOException $e)
-		{
-			include '../form/errorhtml.php';
-			exit;
-			
-		}
-		
-		
-		
+		//Файл с функциями
+		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
+		//Файл подключения к БД
+		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';	
 		//Выводим форму на добавление
 		if(isset($_REQUEST['add']))
 		{
@@ -103,16 +90,28 @@
 		//Обновление
 		if (isset($_REQUEST['editform']))
 		{
-			//преобразуем путь к папке для записи в Mysql
-			//$_REQUEST["netpath"]=addslashes($_REQUEST["netpath"]);
-			//$_REQUEST["container"]=addslashes($_REQUEST["container"]);
-		
+			
+			//Обновляем поля сим-карты
 			try
 			{
 				$fields=array("account","id_address","id_operator","login","balance","pay","pwdlk","note");
 				$sql='update sim set '.pdoSet($fields,$values).' where number=:number';
 				$sqlprep=$condb->prepare($sql);
-				$values["number"]=$_POST['number'];
+				$values["number"]=$_REQUEST['number'];
+				$sqlprep->execute($values);
+			}
+			catch (PDOException $e)
+			{
+				include '../form/errorhtml.php';
+				exit;
+			}
+			//Обновляем баланс на привязанном лицевом счёте сим-карты
+			try
+			{
+				$fields=array("balance");
+				$sql='update sim set '.pdoSet($fields,$values).' where account=:account';
+				$sqlprep=$condb->prepare($sql);
+				$values["account"]=$_REQUEST['account'];
 				$sqlprep->execute($values);
 			}
 			catch (PDOException $e)
@@ -145,7 +144,7 @@
 		//Вывод списка контрагентов
 		try
 		{
-			$result=$condb->query('SELECT number FROM sim order by number');
+			$result=$condb->query('SELECT number,account FROM sim order by account, number');
 		}
 		catch (PDOExeption $e)
 		{
@@ -156,7 +155,7 @@
 		foreach($result as $res)
 		{
 			//id-первичный ключ для поиска в таблице. Может принимать нужные значения
-			$params[]=array('id'=>$res['number'], 'name'=>$res['number']);
+			$params[]=array('id'=>$res['number'], 'name'=>$res['account'].' '.$res['number']);
 		}
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="сим-картами";

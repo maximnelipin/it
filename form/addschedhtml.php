@@ -49,9 +49,7 @@
 	    		</select>  	
 	    	</div>
 	    	<div class="field" >
-	    		<input type="submit" class="button" value=<?php htmlout($button);?>>
-	    		<input type="button" class="button" value="Назад" onClick=<?php echo 'location.replace("http://'.$_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"].'");'?>>
-	    	
+	    		<?php	include $_SERVER['DOCUMENT_ROOT'].'/html/addbutton.php';?>
 	    	</div>
 	    
 	    </form>

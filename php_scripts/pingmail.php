@@ -1,18 +1,10 @@
 <?php
-include_once 'SendMailSmtpClass.php';
-
-		include 'func.php';
-		include 'mysql_conf.php';
-		try {
-			$condb=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
-			$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$condb->exec('SET NAMES "utf8"');
-		}
-		catch (PDOException $e)
-		{
-			include '../form/errorhtml.php';
-			exit;
-		}
+	//Файл с классом отправки почты через соккеты
+	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/SendMailSmtpClass.php';
+	//Файл с функциями
+	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
+	//Файл подключения к БД
+	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
 		
 try {
 					//Делаем выборку
@@ -33,7 +25,7 @@ try {
 				}
 				$ctrltitle="Доступность ЛВС (ПИНГ)";
 				//Формируем начало письма со стилями
-				$body='<html> <head> <title>'.$ctrltitle.'</title> </head> <body> <style>
+				$body='<html> <head> <title>'.$ctrltitle.'</title>  <style>
 						.ping {
 							margin-bottom:10px;
 							font-size:105%;
@@ -53,7 +45,7 @@ try {
 						.m_title1{		
 							margin-left:1%;	
 						}
-						</style>';
+						</style></head> <body>';
 				if($sqlprep->rowCount()>0)
 				{
 					//Увеличиваем время, чтобы получить результат при недоступности точек
@@ -69,14 +61,17 @@ try {
 						$body.='<div>
 								<h2 class="title1">'. html($res['build']).'</h2>
 							</div>	
-							<div class="m_title1">'.html($respings).'</div>';
+							<div class="m_title1">'.$respings.'</div>';
 							
 							
 					}
 					//Заканчиваем формирования текста письма
-					$body.='</body></html>';
+					
 				}
-		
+				else $body.='<div>
+								<h2 class="title1"> БАЗА ПУСТА</h2>
+							</div>';	
+				$body.='</body></html>';
 				//Отправка почты через обычные сервера
 				$mailSMTP=new SendMailSmtpClass('nelipin.maxim@yandex.ru','pravoverniy', 'ssl://smtp.yandex.ru','MAX',465);
 				// заголовок письма

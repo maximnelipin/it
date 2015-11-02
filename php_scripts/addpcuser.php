@@ -3,18 +3,12 @@
 	if(isset($_SESSION['user_id']))
 	{		
 		if (isset($_POST['addpcuser']))	
-		{	include_once 'ldap_conf.php';
-			include 'mysql_conf.php';
-			try {
-				$condb=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
-				$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				$condb->exec('SET NAMES "utf8"');
-			}
-			catch (PDOException $e)
-			{
-				include '../form/errorhtml.php';
-				exit;
-			}
+		{	//Файл настроек для подключения к серверу LDAP
+			include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/ldap_conf.php';
+			//Файл с функциями
+			include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
+			//Файл подключения к БД
+			include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
 			//Подключаемся к LDAP
 			$conn=ldap_connect($host, $port) or die("LDAP сервер не доступен");
 			//Включаем протокол третьей версии

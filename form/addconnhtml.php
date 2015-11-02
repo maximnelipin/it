@@ -273,11 +273,8 @@
 	    		<input type="text" class="text" size="70" width="3" name="note" value=<?php htmloutinput($note);?>>
 	    	</div>
 	    	<div class="field" >
-	    		<input type="hidden" name="id" value=<?php htmlout($id);?>>
-	    		<input type="submit" class="button" value=<?php htmlout($button);?>>
-	    		<input type="button" class="button" value="Назад" onClick=<?php echo 'location.replace("http://'.$_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"].'");'?>>
-	    	
-	    	</div>   
+	    		<?php	include $_SERVER['DOCUMENT_ROOT'].'/html/addbutton.php';?>
+	    	</div>
 	    
 	    
 	    

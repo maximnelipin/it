@@ -2,20 +2,11 @@
 
 	
 	session_start();
-	//if(isset($_SESSION['user_id']))
-	if(1)
-	{	include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
-		include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
-	try {
-			$condb=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
-			$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$condb->exec('SET NAMES "utf8"');
-		}
-		catch (PDOException $e)		{
-			
-			include '../form/errorhtml.php';
-			exit;
-		}
+	if(isset($_SESSION['user_id']))
+	{	//Файл с функциями
+		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
+		//Файл подключения к БД
+		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
 		
 		//----------------------ЗДАНИЕ----------------------------
 		//Выводим форму на добавление

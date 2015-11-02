@@ -1,18 +1,10 @@
 <?php
-include_once 'SendMailSmtpClass.php';
-
-		include 'func.php';
-		include 'mysql_conf.php';
-		try {
-			$condb=new PDO('mysql:host='.$hostsql.';dbname='.$dbname, $dbuser, $dbpwd);
-			$condb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$condb->exec('SET NAMES "utf8"');
-		}
-		catch (PDOException $e)
-		{
-			include '../form/errorhtml.php';
-			exit;
-		}
+	//Файл с классом отправки почты через соккеты
+	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/SendMailSmtpClass.php';
+	//Файл с функциями
+	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
+	//Файл подключения к БД
+	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
 		
 		//Вычитаем половину стоимости оплаты за месяц
 		//Вычитание происходит по лицевым счётам
@@ -54,7 +46,7 @@ include_once 'SendMailSmtpClass.php';
 		}
 		$ctrltitle="Оплата сим-карт";
 				//Формируем начало письма со стилями
-		$body=' <head> <title>'.$ctrltitle.'</title> </head> <body> <style>
+		$body='<html> <head> <title>'.$ctrltitle.'</title>  <style>
 				table, th, td, caption {
 									border-style:solid;
 									border-width:1px;
@@ -80,8 +72,15 @@ include_once 'SendMailSmtpClass.php';
 									font-size:110%;
 									
 								}
+					.title1 {	
+							font-size: 150%;
+							color:#FF0000;
+							margin-bottom: 1%;
+							margin-left:5%;
+							width:60%;			
+						}
 						
-						</style>';
+						</style> </head> <body>';
 		if($sqlprep->rowCount()>0)
 		{
 			//Увеличиваем время, чтобы получить результат при недоступности точек
@@ -115,16 +114,21 @@ include_once 'SendMailSmtpClass.php';
 								html($res['fio']).'</td><td>'.
 								html($res['balance']).'</td><td>'.
 								html($res['pay']).'</td><td>'.
-								html($res['mon']).'</td><td>.
+								html($res['mon']).'</td><td>
 								<a href='.html($res['urllk']).' target="_blank"> '.html($res['urllk']).'</a></td><td>'.
 								
 								html($res['note']).'</td> </tr>';
 							
 							
 					}
-					//Заканчиваем формирования текста письма
-					$body.='</table></body>';
+					
 				}
+				//Если нет результата выборки
+				else $body.='<div>
+								<h2 class="title1"> Все сим-карты оплачены более, чем на 2 месяца<h2>
+							</div>';
+				//Заканчиваем формирования текста письма
+					$body.='</table></body></html>';
 		
 				//Отправка почты через обычные сервера
 				$mailSMTP=new SendMailSmtpClass('nelipin.maxim@yandex.ru','pravoverniy', 'ssl://smtp.yandex.ru','MAX',465);
