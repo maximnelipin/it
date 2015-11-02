@@ -24,56 +24,65 @@
 	    		<p><select required class="text" size="5" name="id_printer" >
 	    			<option disabled>Выберите принтер</option>
 	    			<?php 
-	    				$selsql='select id, name from sprinters order by name';
-						$ressql=$condb->query($selsql);
-	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-	    				{
-	    					if($res['id']==$id_printer)
-	    					{
-	    						//$select='selected="true"  onBlur="if(n==0) {this.selected=false; n=1}"';
-	    						$select='selected';
-	    					}
-	    					else
-	    					{
-	    						$select='';
-	    					}
-	    					echo '<option '.$select.'  value='.$res['id'].'>'.$res['name'].' </option>';
+	    				$ressql=getModelprints($condb);
+						if((gettype($ressql)=='array'))
+						{
+							foreach($ressql as $res)
+							{
+			    				if($res['id']==$id_printer)
+			    				{
+			    					$select='selected';
+			    				}
+			    				else
+			    				{
+			    					$select='';
+			    				}
+	    						echo '<option '.$select.'  value='.$res['id'].'>'.$res['name'].' </option>';
+							}
 	    				}
-	    				?>
+	    			?>
 	    		</select> 
 	    		</p>  	
 	    	</div>
 	    	<div class="field">
 	    		<label for="id_address" > Кабинет расположения</label>	    		
-	    		<p><select required class="text" size="5" name="id_cabinet">
-	    			<option disabled>Выберите объект</option>
+	    		<p><select required class="text" size="10" name="id_cabinet">
+	    			<option disabled>Выберите Кабинет</option>
 	    			<?php 
-	    				$selsql='SELECT build.name as build, floor.id as id_floor, floor.floor as floor FROM build
-								RIGHT JOIN floor ON build.id = floor.id_build ORDER BY name, floor';
-						$ressql=$condb->query($selsql);
-	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-	    				{
-	    					$selsql='SELECT id, cabinet FROM cabinet WHERE id_floor='.$res['id_floor'].' ORDER BY cabinet';
-	    					$rescabsql=$condb->query($selsql);
-	    					while ($rescab=$rescabsql->fetch(PDO::FETCH_ASSOC))
-	    					{
-	    						if($rescab['id']==$id_cabinet)
+	    				//Получаем списки зданий, этажей, кабинетов
+	    				$builds=getBuilds($condb);
+	    				$floors=getfloors($condb);
+	    				$cabs=getCabs($condb);
+	    				
+	    				foreach ($builds as $build)
+	    				{	echo '<optgroup label="'.html($build['name']).'">';
+	    					foreach($floors as $floor)
+	    					{	if($build['id']==$floor['id_build'])
 	    						{
-	    							//$select='selected';
-	    							$select='selected';
+		    						echo '<optgroup label= "Этаж '.html($floor['floor']).'">';
+		    						foreach ($cabs as $cab)
+		    						{	if($floor['id']==$cab['id_floor'])
+			    						{
+			    							if($cab['id']==$id_cabinet)
+			    							{
+			    								$select='selected';
+			    							}
+			    							else
+			    							{
+			    								$select='';
+			    							}
+			    							
+			    							echo '<option '.$select.' value='.html($cab['id']).'>'.html($cab['cabinet']).'</option>';
+			    						}					
+		    							
+		    						}
+	    							
 	    						}
-	    						
-	    						else 
-	    						{
-	    							$select='';
-	    						}
-	    						
-	    						echo '<option '.$select.' value='.$rescab['id'].'>'.$res['build']. " ".$res['floor'].' этаж Кабинет "'.$rescab['cabinet'].'"</option>';
+	    						echo '</optgroup>';
 	    					}
-	    					
-	    					
+	    					echo '</optgroup>';
 	    				}
-	    				?>
+	    			?>
 	    		</select> 
 	    		</p>  	
 	    	</div>

@@ -27,35 +27,43 @@
 	    	</div>	    	
 	    	<div class="field">
 	    		<label for="id_address" > Кабинет, куда подходит кабель</label>	    		
-	    		<select required class="text" size="5" name="id_cabinet">
+	    		<select required class="text" size="10" name="id_cabinet">
 	    			<option disabled>Выберите объект</option>
 	    			<?php 
-	    				$selsql='SELECT build.name as build, floor.id as id_floor, floor.floor as floor FROM build
-								RIGHT JOIN floor ON build.id = floor.id_build ORDER BY name, floor';
-						$ressql=$condb->query($selsql);
-	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-	    				{
-	    					$selsql='SELECT id, cabinet FROM cabinet WHERE id_floor='.$res['id_floor'].' ORDER BY cabinet';
-	    					$rescabsql=$condb->query($selsql);
-	    					while ($rescab=$rescabsql->fetch(PDO::FETCH_ASSOC))
-	    					{
-	    						if($rescab['id']==$id_cabinet)
+	    				//Получаем списки зданий, этажей, кабинетов
+	    				$builds=getBuilds($condb);
+	    				$floors=getfloors($condb);
+	    				$cabs=getCabs($condb);
+	    				
+	    				foreach ($builds as $build)
+	    				{	echo '<optgroup label="'.html($build['name']).'">';
+	    					foreach($floors as $floor)
+	    					{	if($build['id']==$floor['id_build'])
 	    						{
-	    							//$select='selected';
-	    							$select='selected';
+		    						echo '<optgroup label= "Этаж '.html($floor['floor']).'">';
+		    						foreach ($cabs as $cab)
+		    						{	if($floor['id']==$cab['id_floor'])
+			    						{
+			    							if($cab['id']==$id_cabinet)
+			    							{
+			    								$select='selected';
+			    							}
+			    							else
+			    							{
+			    								$select='';
+			    							}
+			    							
+			    							echo '<option '.$select.' value='.html($cab['id']).'>'.html($cab['cabinet']).'</option>';
+			    						}					
+		    							
+		    						}
+	    							
 	    						}
-	    						
-	    						else 
-	    						{
-	    							$select='';
-	    						}
-	    						
-	    						echo '<option '.$select.' value='.$rescab['id'].'>'.$res['build']. " ".$res['floor'].' этаж Кабинет "'.$rescab['cabinet'].'"</option>';
+	    						echo '</optgroup>';
 	    					}
-	    					
-	    					
+	    					echo '</optgroup>';
 	    				}
-	    				?>
+	    			?>	    				
 	    		</select>  	
 	    	</div>
 	    	<div class="field">
@@ -63,25 +71,23 @@
 	    		<select required class="text" size="5" name="id_operator">
 	    			<option disabled>Выберите оператора</option>
 	    			<?php 
-	    				$selsql='SELECT id, name FROM isp';
-						$ressql=$condb->query($selsql);
-	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-	    				{    					
-	    						
-	    					if($res['id']==$id_operator)
-	    					{
-	    						//$select='selected';
-	    						$select='selected';
-	    					}
-	    						
-	    					else
-	    					{
-	    						$select='';
-	    					}
-	    					echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
-	    						
-	    				}
-	    				?>
+	    				$ressql=getIsps($condb);
+						if((gettype($ressql)=='array'))
+						{
+							foreach($ressql as $res)
+							{
+			    				if($res['id']==$id_operator)
+			    				{
+			    					$select='selected';
+			    				}
+			    				else
+			    				{
+			    					$select='';
+			    				}	
+	    						echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
+							}
+						}
+	    			?>
 	    		</select>  	
 	    	</div>
 	    	<div class="field">
@@ -260,8 +266,6 @@
 			    		<label for="innkpp"> ИНН/КПП Компании</label>
 			    		<input type="text" class="text" size="70" width="3" name="innkpp">
 	    			</div>
-	    			
-	    			
 	    		</div>
 	    	</div>
 	    	<div class="field">

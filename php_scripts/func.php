@@ -100,6 +100,177 @@ function strWRet($strs)
 	return $resstr;
 	
 }
+//---------Функция получения списка Сотрудников отдела ИТ
+function getItusers($condb)
+{	
+	try {
+	$sql='SELECT login, fio FROM itusers ORDER BY fio LIMIT 20';
+	$sqlprep=$condb->prepare($sql);
+	$sqlprep->execute();
+	}
+	catch (PDOException $e)
+	{
+		include '../form/errorhtml.php';
+		exit;
+	}
+	if($sqlprep->rowCount()>0)
+	{
+		$result=$sqlprep->fetchall();
+		foreach ($result as $res)
+		{
+			$itusers[]=array('login'=>$res['login'], 'fio'=>$res['fio']);
+		}
+	}
+	else $itusers='';
+	return $itusers;
+}
+//---------Функция получения списка Пользователей
+function getUsers($condb)
+{
+	try {
+		$sql='SELECT login, fio FROM listuser ORDER BY fio LIMIT 400';
+		$sqlprep=$condb->prepare($sql);
+		$sqlprep->execute();
+	}
+	catch (PDOException $e)
+	{
+		include '../form/errorhtml.php';
+		exit;
+	}
+	if($sqlprep->rowCount()>0)
+	{
+		$result=$sqlprep->fetchall();
+		foreach ($result as $res)
+		{
+			$users[]=array('login'=>$res['login'], 'fio'=>$res['fio']);
+		}
+	}
+	else $users='';
+	return $users;
+}
+//---------Функция получения списка Объектов
+function getBuilds($condb)
+{
+	try {
+		$sql='SELECT name,id FROM build ORDER BY name LIMIT 50';
+		$sqlprep=$condb->prepare($sql);
+		$sqlprep->execute();
+	}
+	catch (PDOException $e)
+	{
+		include '../form/errorhtml.php';
+		exit;
+	}
+	if($sqlprep->rowCount()>0)
+	{
+		$result=$sqlprep->fetchall();
+		foreach ($result as $res)
+		{
+			$builds[]=array('id'=>$res['id'], 'name'=>$res['name']);
+		}
+	}
+	else $builds='';
+	return $builds;
+}
+//---------Функция получения списка этажей
+function getFloors($condb)
+{
+
+	try {
+		$sql='SELECT floor,id,id_build FROM floor ORDER BY floor LIMIT 70';
+		$sqlprep=$condb->prepare($sql);
+		$sqlprep->execute();
+	}
+	catch (PDOException $e)
+	{
+		include '../form/errorhtml.php';
+		exit;
+	}
+	if($sqlprep->rowCount()>0)
+	{
+		$result=$sqlprep->fetchall();
+		foreach ($result as $res)
+		{
+			$floors[]=array('id'=>$res['id'], 'floor'=>$res['floor'], 'id_build'=>$res['id_build']);
+		}
+	}
+	else $floors='';
+	return $floors;
+}
+//---------Функция получения списка Кабинетов
+function getCabs($condb)
+{
+
+	try {
+		$sql='SELECT cabinet,id,id_floor FROM cabinet ORDER BY cabinet LIMIT 200';
+		$sqlprep=$condb->prepare($sql);
+		$sqlprep->execute();
+	}
+	catch (PDOException $e)
+	{
+		include '../form/errorhtml.php';
+		exit;
+	}
+	if($sqlprep->rowCount()>0)
+	{
+		$result=$sqlprep->fetchall();
+		foreach ($result as $res)
+		{
+			$cabinets[]=array('id'=>$res['id'], 'cabinet'=>$res['cabinet'], 'id_floor'=>$res['id_floor']);
+		}
+	}
+	else $cabinets='';
+	return $cabinets;
+}
+//---------Функция получения списка Провайдеров
+function getIsps($condb)
+{
+	try {
+		$sql='SELECT name,id FROM isp ORDER BY name LIMIT 50';
+		$sqlprep=$condb->prepare($sql);
+		$sqlprep->execute();
+	}
+	catch (PDOException $e)
+	{
+		include '../form/errorhtml.php';
+		exit;
+	}
+	if($sqlprep->rowCount()>0)
+	{
+		$result=$sqlprep->fetchall();
+		foreach ($result as $res)
+		{
+			$isps[]=array('id'=>$res['id'], 'name'=>$res['name']);
+		}
+	}
+	else $isps='';
+	return $isps;
+}
+//---------Функция получения списка Моделей принтеров
+function getModelprints($condb)
+{
+	try {
+		$sql='SELECT name,id FROM sprinters ORDER BY name LIMIT 50';
+		$sqlprep=$condb->prepare($sql);
+		$sqlprep->execute();
+	}
+	catch (PDOException $e)
+	{
+		include '../form/errorhtml.php';
+		exit;
+	}
+	if($sqlprep->rowCount()>0)
+	{
+		$result=$sqlprep->fetchall();
+		foreach ($result as $res)
+		{
+			$modelprints[]=array('id'=>$res['id'], 'name'=>$res['name']);
+		}
+	}
+	else $modelprints='';
+	return $modelprints;
+}
+
 //----------Функция выборки принтеров по кабинетам
 function printerInCab($id_cabinet,$condb)
 {	
@@ -356,7 +527,7 @@ function ping ($pinghost){
 	return $resp;
 }
 
-//---------------перевод чисел в названия месяцев
+//---------------перевод номера месяца в название
 function numToMonth($num){
 	
 	switch($num)
@@ -409,17 +580,17 @@ function iconPDF($str)
 {
 	return iconv("utf-8","cp1251",$str);
 }
-
+//Экранирование символов HTML
 function html($text)
 {
 	return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
 }
-
+//Вывод  экранированых символов HTML
 function htmlout($text)
 {
 	echo html($text);
 }
-
+//Вывод  в поля input экранированых символов HTML
 function htmloutinput($text)
 {
 	echo '"'.html($text).'"';

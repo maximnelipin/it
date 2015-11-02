@@ -28,23 +28,23 @@
 	    		<select required class="text" size="5" name="login">
 	    			<option disabled>Выберите дежурного</option>
 	    			<?php 
-	    				$selsql='SELECT login, fio FROM itusers order by fio';
-						$ressql=$condb->query($selsql);
-	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-	    				{    					
-	    					if(strcasecmp($res['login'],$login)==0)
-	    					{
-	    						
-	    						$select='selected';
-	    					}
-	    					else
-	    					{
-	    						$select='';
-	    					}	
-	    					
-	    					echo '<option '.$select.' value='.$res['login'].'>'.$res['fio'].'</option>';
-	    						
-	    				}
+						$ressql=getItusers($condb);
+						if((gettype($ressql)=='array'))
+						{
+		    				foreach($ressql as $res)
+		    				{    					
+		    					if(strcasecmp($res['login'],$login)==0)
+		    					{
+		    						
+		    						$select='selected';
+		    					}
+		    					else
+		    					{
+		    						$select='';
+		    					}			    					
+		    					echo '<option '.$select.' value='.$res['login'].'>'.$res['fio'].'</option>';		    						
+		    				}
+						}
 	    				?>
 	    		</select>  	
 	    	</div>

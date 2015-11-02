@@ -10,8 +10,8 @@
 
     <body>
     <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
-	include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
+	include_once $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
+	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
 	?>
 	    <h2 class="title"> Главная страница</h2>
 	    <div class="repmain">
@@ -103,17 +103,14 @@
 			    			<option  selected value='all'> Все операторы</option>
 			    			<?php 
 								
-								$selsql='SELECT DISTINCT isp.id, isp.name
-										FROM isp
-										ORDER BY isp.name';
-								$ressql=$condb->query($selsql);
-			    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-			    				{
-			    					
-			    					
-			    					echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
-			    					    					
-			    				}
+								$ressql=getIsps($condb);
+								if((gettype($ressql)=='array'))
+								{
+									foreach($ressql as $res)
+									{
+										echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+									}
+								}
 			    				?>
 			    		</select> 	
 			    	
@@ -131,17 +128,15 @@
 			    			<option selected value="all">Все Пользователи - Все ПК</option>
 			    			<?php 
 								
-								$selsql='SELECT login,fio FROM listuser
-										ORDER BY fio';
-								$ressql=$condb->query($selsql);
-			    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-			    				{
-			    					
-			    					
-			    					echo '<option value='.$res['login'].'>'.$res['fio'].'</option>';
-			    					    					
-			    				}
-			    				?>
+								$ressql=getUsers($condb);
+								if((gettype($ressql)=='array'))
+								{
+				    				foreach($ressql as $res)
+				    				{    					
+				    					echo '<option  value='.$res['login'].'>'.$res['fio'].'</option>';		    						
+				    				}
+								}
+			    			?>
 			    		</select> 	
 			    	
 				    	<div>
@@ -154,19 +149,17 @@
 			    		<label for="build" > Здания</label>
 			    		<select required class="text" size="1" name="build">
 			    			<option disabled selected value="all">Выберите здание</option>
-			    			<?php 
-								
-								$selsql='SELECT id,name FROM build
-										ORDER BY name';
-								$ressql=$condb->query($selsql);
-			    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-			    				{
-			    					
-			    					
-			    					echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+			    			<?php 								
+								$ressql=getBuilds($condb);
+								if((gettype($ressql)=='array'))
+								{
+				    				foreach($ressql as $res)
+				    				{  
+			    						echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+				    				}
 			    					    					
 			    				}
-			    				?>
+			    			?>
 			    		</select> 	
 			    	
 				    	<div>
@@ -180,19 +173,15 @@
 			    		<select required class="text" size="1" name="printers">
 			    			<option  selected value='all'> Все МФУ/Принтеры</option>
 			    			<?php 
-								
-								$selsql='SELECT id, name
-										FROM sprinters
-										ORDER BY name';
-								$ressql=$condb->query($selsql);
-			    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-			    				{
-			    					
-			    					
-			    					echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
-			    					    					
-			    				}
-			    				?>
+								$ressql=getModelprints($condb);
+								if((gettype($ressql)=='array'))
+								{
+									foreach($ressql as $res)
+									{
+										echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+									}
+								}
+			    			?>
 			    		</select> 	
 			    	
 				    	<div>

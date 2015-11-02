@@ -29,23 +29,25 @@
 	    		<p><select required class="text" size="5" name="id_address">
 	    			<option disabled>Выберите объект</option>
 	    			<?php 
-	    				$selsql='SELECT name, id FROM build ORDER BY name';
-						$ressql=$condb->query($selsql);
-	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-	    				{
-	    					if($res['id']==$id_address)
-	    					{
-	    						
-	    						$select='selected';
-	    					}
-	    					else
-	    					{
-	    						$select='';
-	    					}	    					
-	    					
-	    					echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
-	    				}
-	    				?>
+		    			$ressql=getBuilds($condb);
+		    			if((gettype($ressql)=='array'))
+		    			{
+		    				foreach($ressql as $res)
+		    				{
+		    					 
+		    					if($res['id']==$id_address)
+		    					{
+		    			
+		    						$select='selected';
+		    					}
+		    					else
+		    					{
+		    						$select='';
+		    					}
+		    					echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
+		    				}
+		    			}
+	    			?>
 	    		</select> 
 	    		</p>  	
 	    	</div>
@@ -54,24 +56,23 @@
 	    		<p><select required class="text" size="5" name="id_operator">
 	    			<option disabled>Выберите оператора</option>
 	    			<?php 
-	    				$selsql='SELECT id, name FROM isp ORDER BY name';
-						$ressql=$condb->query($selsql);
-	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-	    				{
-	    					if($res['id']==$id_operator)
-	    					{
-	    						
-	    						$select='selected';
-	    					}
-	    					else
-	    					{
-	    						$select='';
-	    					}
-	    					
-	    					
-	    					echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
-	    				}
-	    				?>
+	    				$ressql=getIsps($condb);
+						if((gettype($ressql)=='array'))
+						{
+							foreach($ressql as $res)
+							{
+			    				if($res['id']==$id_operator)
+			    				{
+			    					$select='selected';
+			    				}
+			    				else
+			    				{
+			    					$select='';
+			    				}	
+	    						echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
+							}
+						}
+	    			?>
 	    		</select> 
 	    		</p>  	
 	    	</div>
@@ -81,23 +82,23 @@
 	    		<p><select required class="text" size="5" name="login">
 	    			<option disabled>Выберите пользователя</option>
 	    			<?php 
-	    				$selsql='SELECT login, fio FROM listuser ORDER BY fio';
-						$ressql=$condb->query($selsql);
-	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-	    				{
-	    					if($res['login']==$login)
-	    					{
-	    						
-	    						$select='selected';
-	    					}
-	    					else
-	    					{
-	    						$select='';
-	    					}	    					
-	    					
-	    					
-	    					echo '<option '.$select.' value='.$res['login'].'>'.$res['fio'].'</option>';
-	    				}
+						$ressql=getUsers($condb);
+						if((gettype($ressql)=='array'))
+						{
+		    				foreach($ressql as $res)
+		    				{    					
+		    					if(strcasecmp($res['login'],$login)==0)
+		    					{
+		    						
+		    						$select='selected';
+		    					}
+		    					else
+		    					{
+		    						$select='';
+		    					}			    					
+		    					echo '<option '.$select.' value='.$res['login'].'>'.$res['fio'].'</option>';		    						
+		    				}
+						}
 	    				?>
 	    		</select> 
 	    		</p>  	
