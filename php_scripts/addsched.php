@@ -22,21 +22,15 @@
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addschedhtml.php';
 			exit;
 		}
-		//Добавляем Контрагента
+		//Добавляем 
 		if (isset($_REQUEST['login']) && isset($_REQUEST['addform']))
 		{
-				
-			//преобразуем путь к папке для записи в Mysql
-			//$_REQUEST["netpath"]=addslashes($_REQUEST["netpath"]);
-				
 			try {
 		
 				$fields=array("dateduty","login");
 				$sql='insert into schedule set '.pdoSet($fields,$values);
 				$sqlprep=$condb->prepare($sql);
 				$sqlprep->execute($values);
-		
-		
 			}
 				
 			catch (PDOException $e)
@@ -78,7 +72,7 @@
 			exit;
 		
 		}
-		//Обновление контрагента
+		//Обновление
 		if (isset($_REQUEST['editform']))
 		{
 			try
@@ -97,9 +91,8 @@
 		
 			header('Location: '.$_SERVER['PHP_SELF']);
 			exit;
-		
 		}
-		//Удаление контрагента
+		//Удаление 
 		if (isset($_REQUEST['action']) && $_REQUEST['action']=='Удалить')
 		{
 			try
@@ -119,26 +112,30 @@
 		//Вывод списка контрагентов
 		try
 		{
-			$result=$condb->query('SELECT dateduty, login FROM schedule order by dateduty');
+			$sql='SELECT dateduty, login FROM schedule ORDER BY dateduty LIMIT 50';
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute();
 		}
 		catch (PDOExeption $e)
 		{
 			include '../form/errorhtml.php';
 			exit;
 		}
-		
-		foreach($result as $res)
+		if($sqlprep->rowCount()>0)
 		{
-			$params[]=array('id'=>$res['dateduty'], 'name'=>$res['dateduty']);
+			$result=$sqlprep->fetchall();
+			foreach($result as $res)
+			{
+				$params[]=array('id'=>$res['dateduty'], 'name'=>$res['dateduty']);
+			}
 		}
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="дежурствами";
 		//Название ссылки в родительном падеже
-		$ctrladd="дежурства";
+		$ctrladd=createLink("Добавить дежурство","?add" );
 		
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlonefieldshtml.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrl1html.php';
 		
-		//include $_SERVER['DOCUMENT_ROOT'].'/form/addagentshtml.php';
 		if($condb!=null) {$condb=NULL;}		
 		
 		

@@ -21,24 +21,25 @@
 		    		<p><select required class="text" size="5" name="id_build">
 	    			<option disabled>Выберите объект</option>
 	    			<?php 
-	    				$selsql='SELECT name, id FROM build ORDER BY name';
-						$ressql=$condb->query($selsql);
-	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-	    				{
-	    					if($res['id']==$id_build)
-	    					{
-	    						//$select='selected';
-	    						$select='selected';
-	    					}
-	    						
-	    					else
-	    					{
-	    						$select='';
-	    					}
-	    					
-	    					echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
-	    				}
-	    				?>
+		    			$ressql=getBuilds($condb);
+		    			if((gettype($ressql)=='array'))
+		    			{
+		    				foreach($ressql as $res)
+		    				{
+		    					 
+		    					if($res['id']==$id_build)
+		    					{
+		    			
+		    						$select='selected';
+		    					}
+		    					else
+		    					{
+		    						$select='';
+		    					}
+		    					echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
+		    				}
+		    			}
+	    			?>
 	    		</select>
 		    	</div>
 		    	<div class="field">

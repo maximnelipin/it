@@ -17,28 +17,10 @@
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addcompanyhtml.php';
 			exit;
 		}
-		//Добавляем Контрагента
+		//Добавляем 
 		if (isset($_REQUEST['name']) && isset($_REQUEST['addform']))	
 		{
-			
-			//преобразуем путь к папке для записи в Mysql
-			$_REQUEST["netpath"]=addslashes($_REQUEST["netpath"]);
-			
-			try {
-				
-				$fields=array("name","innkpp");
-				$sql='insert into company set '.pdoSet($fields,$values);
-				$sqlprep=$condb->prepare($sql);
-				$sqlprep->execute($values);	
-				
-				
-			}
-			
-			catch (PDOException $e)
-			{				
-				include '../form/errorhtml.php';
-				exit;
-			}
+			addCompany($condb);
 			
 			header('Location: '.$_SERVER['PHP_SELF'].'?add');
 			exit;
@@ -70,7 +52,7 @@
 			exit;
 		
 		}
-		//Обновление контрагента
+		//Обновление 
 		if (isset($_REQUEST['editform']))
 		{
 			try
@@ -91,14 +73,14 @@
 			exit;
 		
 		}
-		//Удаление контрагента
+		//Удаление
 		if (isset($_REQUEST['action']) && $_REQUEST['action']=='Удалить')
 		{
 			try
 			{
 				$sql='DELETE FROM company WHERE id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':id',$_POST['id']);
+				$sqlprep->bindValue(':id',$_REQUEST['id']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -108,29 +90,33 @@
 			}			
 		
 		}
-		//Вывод списка контрагентов
+		//Вывод списка
 		try
 		{
-			$result=$condb->query('SELECT id, name FROM company order by name');
+			
+			$sql='SELECT id, name FROM company ORDER BY name LIMIT 50';
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute();
 		}
 		catch (PDOExeption $e)
 		{
 			include '../form/errorhtml.php';
 			exit;
 		}
-		
-		foreach($result as $res)
+		if($sqlprep->rowCount()>0)
 		{
-			$params[]=array('id'=>$res['id'], 'name'=>$res['name']);
+			$result=$sqlprep->fetchall();
+			foreach($result as $res)
+			{
+				$params[]=array('id'=>$res['id'], 'name'=>$res['name']);
+			}
 		}
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="компаниями";
 		//Название ссылки в родительном падеже
-		$ctrladd="компании";
+		$ctrladd=createLink("Добавить компанию","?add" );
 		
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlonefieldshtml.php';
-		
-		//include $_SERVER['DOCUMENT_ROOT'].'/form/addagentshtml.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrl1html.php';
 		if($condb!=null) {$condb=NULL;}
 	}
 	else header('Location: '.$_SERVER['DOCUMENT_ROOT'].'/index.php?link='.$_SERVER['PHP_SELF']);

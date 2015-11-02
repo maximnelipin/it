@@ -16,13 +16,12 @@
 	    <h2 class="title"> Ошибка выполнения скрипта</h2>
 	    <div class="error">
 	    	<?php
-	    	$error= $e->getMessage().'<p> Проблемная страница> <a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a><p>';
-	    	$error=iconv("cp1251","utf-8",$error);
+	    	$error= iconv("cp1251","utf-8",$e->getMessage()).'<p> ПРОБЛЕМНАЯ СТРАНИЦА: <a href='.$_SERVER['PHP_SELF'].'>'.$_SERVER['PHP_SELF'].'</a></p>';
 	    	echo $error;
 	    	//если проблема возникла с sql-запросом, то выводим и его
 	    	if(isset($sql))
 	    	{
-				echo '<p>Запрос: '.$sql.'<p>';
+				echo '<p>ЗАПРОС: '.$sql.'<p>';
 	    	}
 			?>
 			

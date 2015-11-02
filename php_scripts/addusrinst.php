@@ -22,25 +22,20 @@
 		if (isset($_REQUEST['name']) && isset($_REQUEST['addform']))
 		{
 		
-			//преобразуем путь к папке для записи в Mysql
-			$_REQUEST["url"]=addslashes($_REQUEST["url"]);
+			//преобразуем путь к инструкции для записи в Mysql
+			$_REQUEST["url"]='/usrinst/'.$_REQUEST["url"];
 			//$_REQUEST["container"]=addslashes($_REQUEST["container"]);
 			try {
-		
 				$fields=array("name","url");
 				$sql='insert into usrinst set '.pdoSet($fields,$values);
 				$sqlprep=$condb->prepare($sql);
 				$sqlprep->execute($values);
-		
-		
 			}
-		
 			catch (PDOException $e)
 			{
 				include '../form/errorhtml.php';
 				exit;
 			}
-		
 			header('Location: '.$_SERVER['PHP_SELF'].'?add');
 			exit;
 		}
@@ -75,10 +70,6 @@
 		//Обновление
 		if (isset($_REQUEST['editform']))
 		{
-			//преобразуем путь к папке для записи в Mysql
-			//$_REQUEST["netpath"]=addslashes($_REQUEST["netpath"]);
-			//$_REQUEST["container"]=addslashes($_REQUEST["container"]);
-				
 			try
 			{
 				$fields=array("name","url");
@@ -92,12 +83,10 @@
 				include '../form/errorhtml.php';
 				exit;
 			}
-		
 			header('Location: '.$_SERVER['PHP_SELF']);
 			exit;
-		
 		}
-		//Удаление контрагента
+		//Удаление 
 		if (isset($_REQUEST['action']) && $_REQUEST['action']=='Удалить')
 		{
 			try
@@ -112,32 +101,34 @@
 				include '../form/errorhtml.php';
 				exit;
 			}
-		
 		}
 		//Вывод списка 
 		try
 		{
-			$result=$condb->query('SELECT id,name FROM usrinst order by name');
+			$sql='SELECT id,name FROM usrinst ORDER BY name LIMIT 50';
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute();
 		}
 		catch (PDOExeption $e)
 		{
 			include '../form/errorhtml.php';
 			exit;
 		}
-		
-		foreach($result as $res)
+		if($sqlprep->rowCount()>0)
 		{
-			//id-первичный ключ для поиска в таблице. Может принимать нужные значения
-			$params[]=array('id'=>$res['id'], 'name'=>$res['name']);
+			$result=$sqlprep->fetchall();
+			foreach($result as $res)
+			{
+				//id-первичный ключ для поиска в таблице. Может принимать нужные значения
+				$params[]=array('id'=>$res['id'], 'name'=>$res['name']);
+			}
 		}
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="интрукциями пользователей";
 		//Название ссылки в родительном падеже
-		$ctrladd="инструкцию пользователей";
+		$ctrladd=createLink("Добавить инструкцию пользователей","?add" );
 		
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlonefieldshtml.php';
-		
-		//include $_SERVER['DOCUMENT_ROOT'].'/form/addagentshtml.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrl1html.php';	
 		if($condb!=null) {$condb=NULL;}	
 		
 	}

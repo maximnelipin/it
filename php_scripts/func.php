@@ -490,6 +490,63 @@ function connInCab($id_cabinet,$condb)
 	return $res;
 
 }
+//---------добавление внешних параметров подключения
+function addExtip($condb)
+{
+	try {
+		//Добавляем его в таблицу
+		$fieldsextnet=array('extip', 'extmask', 'extgw', 'extdns1', 'extdns2');
+		$sql='insert into extnet set '.pdoSet($fieldsextnet,$valuesextnet);
+		$sqlprep=$condb->prepare($sql);
+		$sqlprep->execute($valuesextnet);
+		//И получаем его id
+		$_REQUEST['id_extnet']=$condb->lastInsertId();
+			
+			
+	}
+	catch (PDOException $e)
+	{
+		include '../form/errorhtml.php';
+		exit;
+	}
+	
+}
+//---------добавление параметров PPP
+function addPPP($condb)
+{
+	try {
+			$fieldsppp=array('srv', 'login', 'pwd', 'typeppp');
+			$sql='insert into ppp set '.pdoSet($fieldsppp,$valuesppp);
+			echo $sql;
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute($valuesppp);
+			$_REQUEST['id_ppp']=$condb->lastInsertId();
+		}
+		catch (PDOException $e)
+		{
+			include '../form/errorhtml.php';
+			exit;
+		}
+
+}
+//---------добавление Компании
+function addCompany($condb)
+{
+	try 
+	{
+		$fieldscomp=array('name', 'innkpp');						
+		$sql='insert into company set '.pdoSet($fieldscomp,$valuescomp);						
+		$sqlprep=$condb->prepare($sql);						
+		$sqlprep->execute($valuescomp);						
+		$_REQUEST['id_company']=$condb->lastInsertId();		
+	}
+	catch (PDOException $e)					
+	{						
+		include '../form/errorhtml.php';						
+		exit;					
+	}
+
+}
 //--------Функция пинга-----------------
 function ping ($pinghost){
 	$result=array();
@@ -594,5 +651,10 @@ function htmlout($text)
 function htmloutinput($text)
 {
 	echo '"'.html($text).'"';
+}
+//Формирование ссылок
+function createLink($linktext,$link, $target=NULL)
+{					//Текст    Путь   Цель
+	return '<a href="'.$link.'" target="'.$target.'">'.$linktext.'</a>';
 }
 ?>

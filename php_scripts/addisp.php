@@ -24,30 +24,21 @@
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addisphtml.php';
 			exit;
 		}
-		//Добавляем Контрагента
+		//Добавляем 
 		if (isset($_REQUEST['name']) && isset($_REQUEST['addform']))	
-		{
-			
-			//преобразуем путь к папке для записи в Mysql
-			$_REQUEST["netpath"]=addslashes($_REQUEST["netpath"]);
-			$_REQUEST["urllk"]=addslashes($_REQUEST["urllk"]);
-			
+		{			
 			try {
 				
 				$fields=array("name", "telsup","manager","telman","emailman","address","urllk","netpath","note");
 				$sql='insert into isp set '.pdoSet($fields,$values);
 				$sqlprep=$condb->prepare($sql);
 				$sqlprep->execute($values);	
-				
-				
 			}
-			
 			catch (PDOException $e)
 			{				
 				include '../form/errorhtml.php';
 				exit;
 			}
-			
 			header('Location: '.$_SERVER['PHP_SELF'].'?add');
 			exit;
 		}
@@ -83,9 +74,8 @@
 			$button="Обновить";
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addisphtml.php';
 			exit;
-		
 		}
-		//Обновление контрагента
+		//Обновление 
 		if (isset($_REQUEST['editform']))
 		{
 			try
@@ -106,7 +96,7 @@
 			exit;
 		
 		}
-		//Удаление контрагента
+		//Удаление 
 		if (isset($_REQUEST['action']) && $_REQUEST['action']=='Удалить')
 		{
 			try
@@ -123,29 +113,33 @@
 			}			
 		
 		}
-		//Вывод списка контрагентов
+		//Вывод списка 
 		try
-		{
-			$result=$condb->query('SELECT id, name FROM isp order by name');
+		{	
+			$sql='SELECT id, name FROM isp order by name LIMIT 50';
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute();
+			
 		}
 		catch (PDOExeption $e)
 		{
 			include '../form/errorhtml.php';
 			exit;
 		}
-		
-		foreach($result as $res)
+		if($sqlprep->rowCount()>0)
 		{
-			$params[]=array('id'=>$res['id'], 'name'=>$res['name']);
+			$result=$sqlprep->fetchall();
+			foreach($result as $res)
+			{
+				$params[]=array('id'=>$res['id'], 'name'=>$res['name']);
+			}
 		}
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="провайдерами";
 		//Название ссылки в родительном падеже
-		$ctrladd="провайдера";
+		$ctrladd=createLink("Добавить провайдера","?add" );
 		
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlonefieldshtml.php';
-		
-		//include $_SERVER['DOCUMENT_ROOT'].'/form/addisphtml.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrl1html.php';
 		if($condb!=null) {$condb=NULL;}		
 		
 	}

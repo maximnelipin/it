@@ -262,7 +262,7 @@
 				//Если логин есть и в listuser, и в tempuser(AD)
 				if ($restempuser)
 				{	//Выводим его как результат синхронизации
-					echo '<tr><td>'.$res['fio'].'</td><td>'.$res['func'].'</td><td>'.$res['dept'].'</td><td>'.$res['login'].'</td> </tr>';					
+					echo '<tr><td>'.html($res['fio']).'</td><td>'.html($res['func']).'</td><td>'.html($res['dept']).'</td><td>'.html($res['login']).'</td> </tr>';					
 				}
 				else 
 				{	//иначе удаяем запись с таким логином из таблицы listuser
@@ -468,7 +468,7 @@
 				//Если имя есть и в listuser, и в temppc(AD)
 				if ($restemppc)
 				{	//Выводим его как результат синхронизации
-					echo '<tr><td>'.$res['name'].'</td><td>'.$res['login'].'</td><td>'.$res['descrip'].'</td> </tr>';
+					echo '<tr><td>'.html($res['name']).'</td><td>'.html($res['login']).'</td><td>'.html($res['descrip']).'</td> </tr>';
 				}
 				else
 				{	//иначе удаяем запись с таким именем из таблицы listuser

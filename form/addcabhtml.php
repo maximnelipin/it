@@ -17,28 +17,33 @@
 	    <form action=?<?php htmlout($action);?> method="post">	    	
 		    	<div class="field">
 		    		<label for="id_floor" > Номер этажа</label>
-		    		<select required class="text" size="5" name="id_floor">
+		    		<select required class="text" size="10" name="id_floor">
 	    			<option disabled>Выберите этаж</option>
 	    			<?php 
-						$selsql='SELECT build.name as build, floor.id as id_floor, floor.floor as floor FROM build
-								RIGHT JOIN floor ON build.id = floor.id_build ORDER BY name, floor';
-						$ressql=$condb->query($selsql);
-	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-	    				{
-	    					if($res['id_floor']==$id_floor)
-	    					{
-	    						//$select='selected';
-	    						$select='selected';
-	    					}
-	    						
-	    					else
-	    					{
-	    						$select='';
-	    					}
-	    					
-	    					echo '<option '.$select.' value='.$res['id_floor'].'>'.$res['build']. " ".$res['floor'].' этаж </option>';
-	    					    					
-	    				}
+		    			//Получаем списки зданий, этажей, кабинетов
+		    			$builds=getBuilds($condb);
+		    			$floors=getfloors($condb);
+		    			foreach ($builds as $build)
+		    			{	echo '<optgroup label="'.html($build['name']).'">';
+			    			foreach($floors as $floor)
+			    			{	if($build['id']==$floor['id_build'])
+			    				{
+			    					if($floor['id']==$id_floor)
+			    					{
+			    						$select='selected';
+			    					}
+			    						
+			    					else
+			    					{
+			    						$select='';
+			    					}
+			    					
+			    					echo '<option '.$select.' value='.$floor['id'].'>'.$build['build']. " ".$floor['floor'].' этаж </option>';
+			    				}
+			    			}
+		    			}
+	    			
+						
 	    				?>
 	    		</select>
 		    	</div>

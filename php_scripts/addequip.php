@@ -30,18 +30,11 @@
 		//Добавляем Контрагента
 		if (isset($_REQUEST['phys']) && isset($_REQUEST['addform']))
 		{
-		
-			//преобразуем путь к папке для записи в Mysql
-			//$_REQUEST["netpath"]=addslashes($_REQUEST["netpath"]);
-			//$_REQUEST["container"]=addslashes($_REQUEST["container"]);
 			try {
-		
 				$fields=array("id_cabinet","ip","phys","rack","unit","note");
 				$sql='insert into equip set '.pdoSet($fields,$values);
 				$sqlprep=$condb->prepare($sql);
 				$sqlprep->execute($values);
-		
-		
 			}
 		
 			catch (PDOException $e)
@@ -88,16 +81,12 @@
 		//Обновление
 		if (isset($_REQUEST['editform']))
 		{
-			//преобразуем путь к папке для записи в Mysql
-			//$_REQUEST["netpath"]=addslashes($_REQUEST["netpath"]);
-			//$_REQUEST["container"]=addslashes($_REQUEST["container"]);
-		
 			try
 			{
 				$fields=array("id_cabinet","ip","phys","rack","unit","note");
 				$sql='update equip set '.pdoSet($fields,$values).' where id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$values["id"]=$_POST['id'];
+				$values["id"]=$_REQUEST['id'];
 				$sqlprep->execute($values);
 			}
 			catch (PDOException $e)
@@ -129,54 +118,57 @@
 		}
 		//Выбираем все id_cabinet из equip
 		try
-		{
-			$cabs=$condb->query('SELECT DISTINCT id_cabinet FROM equip order by id_cabinet');
+		{	
+			$sql='SELECT DISTINCT id_cabinet FROM equip order by id_cabinet LIMIT 100';
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute();
 		}
 		catch (PDOExeption $e)
 		{
 			include '../form/errorhtml.php';
 			exit;
 		}
-		//Запрос выборки кабинета
-		$sql='SELECT build.name as build, floor.id as id_floor, floor.floor as floor, cabinet.id as id_cab, cabinet.cabinet as cabinet FROM build
+		//Подготовка запроса выборки полного пути к кабинету
+		$sqlcab='SELECT build.name as build, floor.id as id_floor, floor.floor as floor, cabinet.id as id_cab, cabinet.cabinet as cabinet FROM build
 				RIGHT JOIN floor ON build.id = floor.id_build RIGHT JOIN cabinet ON cabinet.id_floor=floor.id WHERE  cabinet.id=:id_cabinet';		
-		$sqlprep=$condb->prepare($sql);
-		$sqlf='SELECT DISTINCT id, id_cabinet, phys,ip FROM equip WHERE id_cabinet=:id_cabinet order by  ip,phys ';
-		$sqlprepf=$condb->prepare($sqlf);
-		foreach ($cabs as $cab)
-		{
-			$sqlprep->bindValue(':id_cabinet',$cab['id_cabinet']);
-			$sqlprep->execute();
-			$result=$sqlprep->fetchall();
-			//Формирование списка зданийб этажей и кабинетов
-			foreach($result as $res)
+		$sqlprepcab=$condb->prepare($sqlcab);
+		//Запрос выборки оборудования в кабинете
+		$sqleq='SELECT DISTINCT id, id_cabinet, phys,ip FROM equip WHERE id_cabinet=:id_cabinet order by  ip,phys ';
+		$sqlprepeq=$condb->prepare($sqleq);
+		if($sqlprep->rowCount()>0)
+		{	$cabs=$sqlprep->fetchall();
+			foreach ($cabs as $cab)
 			{
-				$params[]=array('id'=>$res['id_cab'], 'name'=>$res['build'].' '.$res['floor'].' этаж '.$res['cabinet']);
-				$sqlprepf->bindValue(':id_cabinet',$res['id_cab']);
-				$sqlprepf->execute();
-				$resultf=$sqlprepf->fetchall();
-				foreach($resultf as $resf)
-				{	//массив для вложенной группы
-					$paramsf[]=array('id_1'=>$resf['id'], 'name'=>$resf['ip'].' '.$resf['phys'], 'id'=>$resf['id_cabinet']);
-					
+				$sqlprepcab->bindValue(':id_cabinet',$cab['id_cabinet']);
+				$sqlprepcab->execute();
+				if($sqlprepcab->rowCount()>0)
+				{
+					$result=$sqlprepcab->fetchall();
+					//Формирование списка зданийб этажей и кабинетов
+					foreach($result as $res)
+					{
+						$params[]=array('id'=>$res['id_cab'], 'name'=>$res['build'].' '.$res['floor'].' этаж '.$res['cabinet']);
+						$sqlprepeq->bindValue(':id_cabinet',$res['id_cab']);
+						$sqlprepeq->execute();
+						if($sqlprepeq->rowCount()>0)
+						{
+							$resultf=$sqlprepeq->fetchall();
+							foreach($resultf as $resf)
+							{	//массив для вложенной группы
+								$params1[]=array('id_1'=>$resf['id'], 'name'=>$resf['ip'].' '.$resf['phys'], 'id'=>$resf['id_cabinet']);
+						
+							}
+						}
+					}
 				}
-			
 			}
 		}
-		
-		
-		
-		
-		
-	
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="оборудованием";
 		//Название ссылки в родительном падеже
-		$ctrladd=' <a href="?add">Добавить оборудование</a>';
+		$ctrladd=createLink("Добавить оборудование","?add" );
 		$btn_off='disabled';
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlbfchtml.php';
-		
-		//include $_SERVER['DOCUMENT_ROOT'].'/form/addagentshtml.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrl1html.php';
 		if($condb!=null) {$condb=NULL;}
 		
 		

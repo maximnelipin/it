@@ -23,11 +23,9 @@
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addbuildhtml.php';
 			exit;
 		}
-		//Добавляем Контрагента
+		//Добавляем 
 		if (isset($_GET['add_build']))
 		{
-		
-			
 			try {
 		
 				$fields=array("name","address");
@@ -43,19 +41,12 @@
 				include '../form/errorhtml.php';
 				exit;
 			}
-			//Получаем список этажей
-			
+			//Получаем список этажей			
 			$Dfloor=str_getcsv($_POST["floor"], ",");
 			//Получаем список всех кабинетов на этажах
 			$Dcab=str_getcsv($_POST["cabinet"], ";");
-			//----------вставка этажей и кабинетов на них--------------
-			
-			
-			
-			addFloor($id_build, $Dfloor, $Dcab,$condb);
-		
-			
-		
+			//----------вставка этажей и кабинетов на них--------------			
+			addFloor($id_build, $Dfloor, $Dcab,$condb);		
 			header('Location: '.$_SERVER['PHP_SELF'].'?add_b');
 			exit;
 		}
@@ -88,7 +79,7 @@
 			exit;
 		
 		}
-		//Обновление контрагента
+		//Обновление 
 		if (isset($_REQUEST['edit_b']))
 		{
 			try
@@ -144,7 +135,7 @@
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addfloorhtml.php';
 			exit;
 		}
-		//Добавляем Контрагента
+		//Добавляем 
 		if (isset($_REQUEST['floor']) && isset($_REQUEST['add_floor']))
 		{
 		
@@ -189,7 +180,7 @@
 			exit;
 		
 		}
-		//Обновление контрагента
+		//Обновление 
 		if (isset($_REQUEST['edit_floor']))
 		{
 			try
@@ -227,9 +218,8 @@
 			}
 		
 		}
-	
-		
 		//-------------------КАБИНЕТЫ-------------------------------
+		//Выводим форму на добавление
 		if(isset($_REQUEST['add_c']))
 		{
 			$pageTitle='Добавление кабинета';
@@ -244,7 +234,7 @@
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addcabhtml.php';
 			exit;
 		}
-		//Добавляем Контрагента
+		//Добавляем
 		if (isset($_REQUEST['cabinet']) && isset($_REQUEST['add_cab']))
 		{
 			
@@ -261,7 +251,6 @@
 				$sql='SELECT * FROM cabinet where id=:id';
 				$sqlprep=$condb->prepare($sql);
 				$sqlprep->bindValue(':id',$_REQUEST['id_2']);
-				
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -283,7 +272,7 @@
 			exit;
 		
 		}
-		//Обновление контрагента
+		//Обновление
 		if (isset($_REQUEST['edit_f']))
 		{
 			try
@@ -321,55 +310,84 @@
 			}
 		
 		}
-		//Вывод списка контрагентов
+		//Выборка списка зданий
 		try
 		{
-			$result=$condb->query('SELECT id, name FROM build order by name');
+			$sql='SELECT id, name FROM build order by name LIMIT 50';
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute();
+			
 		}
 		catch (PDOExeption $e)
 		{
 			include '../form/errorhtml.php';
 			exit;
 		}
-		
+		//Подготовка запросов
 		$sqlf='SELECT id, floor, id_build FROM floor WHERE id_build=:id_build order by floor';
 		$sqlprepf=$condb->prepare($sqlf);
 		$sqlc='SELECT id, cabinet, id_floor FROM cabinet WHERE id_floor=:id_floor order by cabinet';
 		$sqlprepc=$condb->prepare($sqlc);
-		//Формирование списка зданийб этажей и кабинетов
-		foreach($result as $res)
+		if($sqlprep->rowCount()>0)
 		{
-			$params[]=array('id'=>$res['id'], 'name'=>$res['name']);
-			$sqlprepf->bindValue(':id_build',$res['id']);			
-			$sqlprepf->execute();
-			$resultf=$sqlprepf->fetchall();
-			foreach($resultf as $resf)
-			{	//массив для вложенной группы
-				$paramsf[]=array('id_1'=>$resf['id'], 'name'=>$resf['floor'].' этаж', 'id'=>$resf['id_build']);
-				$sqlprepc->bindValue(':id_floor',$resf['id']);
-				$sqlprepc->execute();
-				$resultc=$sqlprepc->fetchall();
-				foreach ($resultc as $resc)
+			//Формирование списка зданийб этажей и кабинетов
+			$result=$sqlprep->fetchall();
+			foreach($result as $res)
+			{
+				$params[]=array('id'=>$res['id'], 'name'=>$res['name']);
+				
+				try 
 				{
-					$paramsc[]=array('id_2'=>$resc['id'], 'name'=>$resc['cabinet'], 'id_1'=>$resc['id_floor']);
+					$sqlprepf->bindValue(':id_build',$res['id']);
+					$sqlprepf->execute();
+				}
+				catch (PDOExeption $e)
+				{	
+					$sql=$sqlf;
+					include '../form/errorhtml.php';
+					exit;
+				}
+				if($sqlprepf->rowCount()>0)
+				{
+					$resultf=$sqlprepf->fetchall();
+					foreach($resultf as $resf)
+					{	//Создаём массив с этажами
+						$params1[]=array('id_1'=>$resf['id'], 'name'=>$resf['floor'].' этаж', 'id'=>$resf['id_build']);
+						try
+						{
+							$sqlprepc->bindValue(':id_floor',$resf['id']);
+							$sqlprepc->execute();
+						}
+						catch (PDOExeption $e)
+						{
+							$sql=$sqlc;
+							include '../form/errorhtml.php';
+							exit;
+						}
+						if($sqlprepc->rowCount()>0)
+						{
+							$resultc=$sqlprepc->fetchall();
+							foreach ($resultc as $resc)
+							{
+								$params2[]=array('id_2'=>$resc['id'], 'name'=>$resc['cabinet'], 'id_1'=>$resc['id_floor']);
+							}
+						}					
+					}
 				}
 			}
-				
 		}
+		
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="зданиями";
 		//Cсылки на добавление информации
-		$ctrladd=' <a href="?add_c">Добавить кабинет</a>	
-		    	<a href="?add_f">Добавить этаж</a>	
-		    	<a href="?add_b">Добавить здание</a>';
+		$ctrladd=createLink("Добавить кабинет","?add_c" ).' '.createLink("Добавить этаж","?add_f" ).' '.createLink("Добавить здание","?add_b" );
+		//' <a href="?add_c">Добавить кабинет</a>   	<a href="?add_f">Добавить этаж</a>	    	<a href="?add_b">Добавить здание</a>';
 		//Добавочные значение к кнопкам
 		$btn=' здание';
 		$btn_1=' этаж';
 		$btn_2=' кабинет';
 		
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlbfchtml.php';
-		
-		
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrl1html.php';
 		if($condb!=null) {$condb=NULL;}
 	}
 	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);

@@ -20,22 +20,10 @@
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addextnethtml.php';
 			exit;
 		}
-		//Добавляем Контрагента
+		//Добавляем 
 		if (isset($_REQUEST['extip']) && isset($_REQUEST['addform']))	
 		{
-					try {
-						//Добавляем его в таблицу
-						$fieldsextnet=array('extip', 'extmask', 'extgw', 'extdns1', 'extdns2');
-						$sql='insert into extnet set '.pdoSet($fieldsextnet,$valuesextnet);
-						$sqlprep=$condb->prepare($sql);
-						$sqlprep->execute($valuesextnet);
-						
-					}
-					catch (PDOException $e)
-					{
-						include '../form/errorhtml.php';
-						exit;
-					}
+			addExtnet($condb);
 			
 			header('Location: '.$_SERVER['PHP_SELF'].'?add');
 			exit;
@@ -70,7 +58,7 @@
 			exit;
 		
 		}
-		//Обновление контрагента
+		//Обновление
 		if (isset($_REQUEST['editform']))
 		{
 			try
@@ -92,7 +80,7 @@
 			exit;
 		
 		}
-		//Удаление контрагента
+		//Удаление 
 		if (isset($_REQUEST['action']) && $_REQUEST['action']=='Удалить')
 		{
 			try
@@ -109,29 +97,32 @@
 			}			
 		
 		}
-		//Вывод списка контрагентов
+		//Вывод списка 
 		try
-		{
-			$result=$condb->query('SELECT id, extip FROM extnet order by extip');
+		{	$sql='SELECT id, extip FROM extnet order by extip LIMIT 50';
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute();
+			
 		}
 		catch (PDOExeption $e)
 		{
 			include '../form/errorhtml.php';
 			exit;
 		}
-		
-		foreach($result as $res)
-		{
-			$params[]=array('id'=>$res['id'], 'name'=>$res['extip']);
+		if($sqlprep->rowCount()>0)
+		{	
+			$result=$sqlprep->fetchall();
+			foreach($result as $res)
+			{
+				$params[]=array('id'=>$res['id'], 'name'=>$res['extip']);
+			}
 		}
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="внешними IP";
 		//Название ссылки в родительном падеже
-		$ctrladd="внешний IP";
+		$ctrladd=createLink("Добавить внешний IP","?add" );
 		
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlonefieldshtml.php';
-		
-		//include $_SERVER['DOCUMENT_ROOT'].'/form/addagentshtml.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrl1html.php';
 		if($condb!=null) {$condb=NULL;}
 	}
 	else header('Location: '.$_SERVER['DOCUMENT_ROOT'].'/index.php?link='.$_SERVER['PHP_SELF']);

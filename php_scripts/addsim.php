@@ -29,26 +29,18 @@
 		//Добавляем 
 		if (isset($_REQUEST['number']) && isset($_REQUEST['addform']))
 		{
-		
-			//преобразуем путь к папке для записи в Mysql
-			//$_REQUEST["netpath"]=addslashes($_REQUEST["netpath"]);
-			//$_REQUEST["container"]=addslashes($_REQUEST["container"]);
 			try {
 		
 				$fields=array("number","account","id_address","id_operator","login","balance","pay","pwdlk","note");
 				$sql='insert into sim set '.pdoSet($fields,$values);
 				$sqlprep=$condb->prepare($sql);
 				$sqlprep->execute($values);
-		
-		
 			}
-		
 			catch (PDOException $e)
 			{
 				include '../form/errorhtml.php';
 				exit;
 			}
-		
 			header('Location: '.$_SERVER['PHP_SELF'].'?add');
 			exit;
 		}
@@ -59,7 +51,7 @@
 			{
 				$sql='SELECT * FROM sim where number=:number';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':number',$_REQUEST['id']);
+				$sqlprep->bindValue(':number',$_REQUEST['id_1']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -90,7 +82,6 @@
 		//Обновление
 		if (isset($_REQUEST['editform']))
 		{
-			
 			//Обновляем поля сим-карты
 			try
 			{
@@ -124,14 +115,14 @@
 			exit;
 		
 		}
-		//Удаление контрагента
+		//Удаление
 		if (isset($_REQUEST['action']) && $_REQUEST['action']=='Удалить')
 		{
 			try
 			{
 				$sql='DELETE FROM sim WHERE number=:number';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':number',$_REQUEST['id']);
+				$sqlprep->bindValue(':number',$_REQUEST['id_1']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -141,30 +132,56 @@
 			}
 		
 		}
-		//Вывод списка контрагентов
+		//Вывод списка лицевых счетов
 		try
 		{
-			$result=$condb->query('SELECT number,account FROM sim order by account, number');
+			$sql='SELECT DISTINCT account FROM sim ORDER BY account LIMIT 50';
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute();
 		}
 		catch (PDOExeption $e)
 		{
 			include '../form/errorhtml.php';
 			exit;
 		}
-		
-		foreach($result as $res)
+		//Подготовка выборки сим-карт по лицевому счёту
+		$sqlsim='SELECT number FROM sim WHERE account=:account ORDER BY number LIMIT 50';
+		$sqlprepsim=$condb->prepare($sqlsim);
+		if($sqlprep->rowCount()>0)
 		{
-			//id-первичный ключ для поиска в таблице. Может принимать нужные значения
-			$params[]=array('id'=>$res['number'], 'name'=>$res['account'].' '.$res['number']);
+			$result=$sqlprep->fetchall();
+			foreach($result as $res)
+			{
+				//id-первичный ключ для поиска в таблице. Может принимать нужные значения
+				$params[]=array('id'=>$res['account'], 'name'=>$res['account']);
+				try 
+				{
+					$sqlprepsim->bindValue(':account',$res['account']);
+					$sqlprepsim->execute();
+				}
+				catch (PDOExeption $e)
+				{
+					$sql=$sqlsim;
+					include '../form/errorhtml.php';
+					exit;
+				}
+				if($sqlprepsim->rowCount()>0)
+				{
+					$resultsim=$sqlprepsim->fetchall();
+					foreach($resultsim as $ressim)
+					{
+						$params1[]=array('id'=>$res['account'], 'id_1'=>$ressim['number'], 'name'=>$ressim['number']);
+					}
+					
+				}
+			}
 		}
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="сим-картами";
 		//Название ссылки в родительном падеже
-		$ctrladd="сим-карту";
-		
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlonefieldshtml.php';
-		
-		//include $_SERVER['DOCUMENT_ROOT'].'/form/addagentshtml.php';
+		$ctrladd=createLink("Добавить сим-карту","?add" );
+		$btn_off='disabled';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrl1html.php';
 		if($condb!=null) {$condb=NULL;}
 		
 		

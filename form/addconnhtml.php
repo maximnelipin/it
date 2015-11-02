@@ -190,7 +190,7 @@
 		    					{
 		    						$select='';
 		    					}
-		    					'<option '.$select.' value='.$res['id'].'>'.$res['srv'].' '.$res['typeppp'].'</option>';
+		    					echo '<option '.$select.' value='.$res['id'].'>'.$res['srv'].' '.$res['typeppp'].'</option>';
 		    						
 		    				}
 		    				?>

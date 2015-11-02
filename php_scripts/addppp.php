@@ -19,22 +19,21 @@
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addppphtml.php';
 			exit;
 		}
-		//Добавляем Контрагента
+		//Добавляем 
 		if (isset($_REQUEST['srv']) && isset($_REQUEST['addform']))	
 		{
-					try {
-						//Добавляем его в таблицу
-						$fields=array('typeppp', 'srv', 'login', 'pwd');
-						$sql='insert into ppp set '.pdoSet($fields,$values);
-						$sqlprep=$condb->prepare($sql);
-						$sqlprep->execute($values);
-						
-					}
-					catch (PDOException $e)
-					{
-						include '../form/errorhtml.php';
-						exit;
-					}
+				try 
+				{
+					$fields=array('typeppp', 'srv', 'login', 'pwd');
+					$sql='insert into ppp set '.pdoSet($fields,$values);
+					$sqlprep=$condb->prepare($sql);
+					$sqlprep->execute($values);
+				}
+				catch (PDOException $e)
+				{
+					include '../form/errorhtml.php';
+					exit;
+				}
 			
 			header('Location: '.$_SERVER['PHP_SELF'].'?add');
 			exit;
@@ -68,7 +67,7 @@
 			exit;
 		
 		}
-		//Обновление контрагента
+		//Обновление 
 		if (isset($_REQUEST['editform']))
 		{
 			try
@@ -78,7 +77,6 @@
 				$sqlprep=$condb->prepare($sql);
 				$values["id"]=$_REQUEST['id'];
 				$sqlprep->execute($values);
-				
 			}
 			catch (PDOException $e)
 			{
@@ -90,7 +88,7 @@
 			exit;
 		
 		}
-		//Удаление контрагента
+		//Удаление 
 		if (isset($_REQUEST['action']) && $_REQUEST['action']=='Удалить')
 		{
 			try
@@ -107,29 +105,34 @@
 			}			
 		
 		}
-		//Вывод списка контрагентов
+		//Вывод списка 
 		try
 		{
-			$result=$condb->query('SELECT id, typeppp, srv FROM ppp order by srv, typeppp');
+			$sql='SELECT id, typeppp, srv FROM ppp ORDER BY srv, typeppp LIMIT 50';
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute();
 		}
 		catch (PDOExeption $e)
 		{
 			include '../form/errorhtml.php';
 			exit;
 		}
-		
-		foreach($result as $res)
+		if($sqlprep->rowCount()>0)
 		{
-			$params[]=array('id'=>$res['id'], 'name'=>$res['srv'].' '.$res['typeppp']);
+			$result=$sqlprep->fetchall();
+			foreach($result as $res)
+			{
+				$params[]=array('id'=>$res['id'], 'name'=>$res['srv'].' '.$res['typeppp']);
+			}
 		}
+		
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="PPP-подключениями";
 		//Название ссылки в родительном падеже
-		$ctrladd="PPP-подключения";
+		$ctrladd=createLink("Добавить PPP-подключения","?add" );
 		
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlonefieldshtml.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrl1html.php';
 		
-		//include $_SERVER['DOCUMENT_ROOT'].'/form/addagentshtml.php';
 		if($condb!=null) {$condb=NULL;}
 	}
 	else header('Location: '.$_SERVER['DOCUMENT_ROOT'].'/index.php?link='.$_SERVER['PHP_SELF']);

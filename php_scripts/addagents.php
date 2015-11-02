@@ -27,18 +27,12 @@
 		//Добавляем Контрагента
 		if (isset($_REQUEST['name']) && isset($_REQUEST['addform']))	
 		{
-			
-			//преобразуем путь к папке для записи в Mysql
-			$_REQUEST["netpath"]=addslashes($_REQUEST["netpath"]);
-			
 			try {
 				
 				$fields=array("name","manager","telman","emailman","address","type","netpath","note");
 				$sql='insert into agents set '.pdoSet($fields,$values);
 				$sqlprep=$condb->prepare($sql);
 				$sqlprep->execute($values);	
-				
-				
 			}
 			
 			catch (PDOException $e)
@@ -83,7 +77,7 @@
 			exit;
 		
 		}
-		//Обновление контрагента
+		//Обновление записи
 		if (isset($_REQUEST['editform']))
 		{
 			try
@@ -111,7 +105,7 @@
 			{
 				$sql='DELETE FROM agents WHERE id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':id',$_POST['id']);
+				$sqlprep->bindValue(':id',$_REQUEST['id']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -124,26 +118,30 @@
 		//Вывод списка контрагентов
 		try
 		{
-			$result=$condb->query('SELECT id, name FROM agents order by name');
+			$sql='SELECT id, name FROM agents ORDER BY name LIMIT 50';
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute();			
 		}
 		catch (PDOExeption $e)
 		{
 			include '../form/errorhtml.php';
 			exit;
 		}
-		
-		foreach($result as $res)
+		if($sqlprep->rowCount()>0)
 		{
-			$params[]=array('id'=>$res['id'], 'name'=>$res['name']);
+			$result=$sqlprep->fetchall();
+			foreach($result as $res)
+			{
+				$params[]=array('id'=>$res['id'], 'name'=>$res['name']);
+			}
 		}
+		
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="контрагентами";
 		//Название ссылки в родительном падеже
-		$ctrladd="контрагента";
+		$ctrladd=createLink("Добавить контрагента","?add" );
 		
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlonefieldshtml.php';
-		
-		//include $_SERVER['DOCUMENT_ROOT'].'/form/addagentshtml.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrl1html.php';
 		if($condb!=null) {$condb=NULL;}
 	}
 	else header('Location: '.$_SERVER['DOCUMENT_ROOT'].'/index.php?link='.$_SERVER['PHP_SELF']);

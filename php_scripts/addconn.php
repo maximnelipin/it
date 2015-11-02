@@ -34,36 +34,16 @@
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addconnhtml.php';
 			exit;
 		}
-		//Добавляем Контрагента
+		//Добавляем
 		if (isset($_REQUEST['gateway']) && isset($_REQUEST['addform']))
 		{
-		
-			//Обнуляем перменные для связи с внешними таблицыми extnet,ppp,company
-			$id_extnet='';
-			$id_ppp='';
-			$id_comp='';
-			
 			//Если добавляем
 			if($_POST['radextnet']=="add")
 			{
-				//Если забит внешний ip
+				//Если вносим новый внешний ip
 				if(isset($_POST['extip']))
 				{
-					try {
-						//Добавляем его в таблицу
-						$fieldsextnet=array('extip', 'extmask', 'extgw', 'extdns1', 'extdns2');
-						$sql='insert into extnet set '.pdoSet($fieldsextnet,$valuesextnet);
-						$sqlprep=$condb->prepare($sql);
-						$sqlprep->execute($valuesextnet);
-						//И получаем его id
-						$_REQUEST['id_extnet']=$condb->lastInsertId();
-						
-					}
-					catch (PDOException $e)
-					{
-						include '../form/errorhtml.php';
-						exit;
-					}
+					addExtip($condb);
 			
 				}
 			
@@ -72,9 +52,9 @@
 			//Аналогично добавлению внешнего ip
 				
 			if($_POST['radppp']=="sel")
-			{
+			{	//Если ppp не выбрано, 
 				if($_POST['id_ppp']=='none')
-				{
+				{	//то заносим пустое значение в базу
 					$_POST['id_ppp']='';
 				}
 			
@@ -84,20 +64,7 @@
 					
 				if(isset($_POST['srv']))
 				{
-					try {
-						$fieldsppp=array('srv', 'login', 'pwd', 'typeppp');
-						$sql='insert into ppp set '.pdoSet($fieldsppp,$valuesppp);
-						echo $sql;
-						$sqlprep=$condb->prepare($sql);
-						$sqlprep->execute($valuesppp);
-						$_REQUEST['id_ppp']=$condb->lastInsertId();
-					}
-					catch (PDOException $e)
-					{
-						include '../form/errorhtml.php';
-						exit;
-					}
-						
+					addPPP($condb);						
 				}
 			
 			}
@@ -109,37 +76,17 @@
 					
 				if(isset($_POST['name']))
 				{
-					try {
-						$fieldscomp=array('name', 'innkpp');
-						$sql='insert into company set '.pdoSet($fieldscomp,$valuescomp);
-						$sqlprep=$condb->prepare($sql);
-						$sqlprep->execute($valuescomp);
-						$_REQUEST['id_company']=$condb->lastInsertId();
-					}
-					catch (PDOException $e)
-					{
-						include '../form/errorhtml.php';
-						exit;
-					}
-			
+					addCompany($condb);
 				}
 			
 			}
 			//----------Добавляем подключение-------------
-			
-			
-			
-			
-			
 			try {
-		
 				$fields=array('gateway', 'id_operator', 'typecon','mask','dhcp','dns1','dns2','loginlk',
 					'pwdlk','contract','note','id_company','id_ppp','id_extnet','id_cabinet');
-				$sql='insert into conn set '.pdoSet($fields,$values);
+				$sql='INSERT into conn SET '.pdoSet($fields,$values);
 				$sqlprep=$condb->prepare($sql);
 				$sqlprep->execute($values);
-		
-		
 			}
 		
 			catch (PDOException $e)
@@ -159,7 +106,6 @@
 				$sql='SELECT * FROM conn WHERE id=:id';
 				$sqlprep=$condb->prepare($sql);
 				$sqlprep->bindValue(':id',$_REQUEST['id']);
-				
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -195,38 +141,14 @@
 		}
 		//Обновление
 		if (isset($_REQUEST['editform']))
-		
-		
 		{
-		
-			//Обнуляем перменные для связи с внешними таблицыми extnet,ppp,company
-			$id_extnet='';
-			$id_ppp='';
-			$id_comp='';
-			
 			//Если добавляем
 			if($_POST['radextnet']=="add")
 			{
 				//Если забит внешний ip
 				if(isset($_POST['extip']))
 				{
-					try {
-						//Добавляем его в таблицу
-						$fieldsextnet=array('extip', 'extmask', 'extgw', 'extdns1', 'extdns2');
-						$sql='insert into extnet set '.pdoSet($fieldsextnet,$valuesextnet);
-						$sqlprep=$condb->prepare($sql);
-						$sqlprep->execute($valuesextnet);
-						//И получаем его id
-						$_REQUEST['id_extnet']=$condb->lastInsertId();
-							
-							
-					}
-					catch (PDOException $e)
-					{
-						include '../form/errorhtml.php';
-						exit;
-					}
-			
+					addExtip($condb);
 				}
 			
 			}
@@ -246,20 +168,7 @@
 					
 				if(isset($_REQUEST['srv']))
 				{
-					try {
-						$fieldsppp=array('srv', 'login', 'pwd', 'typeppp');
-						$sql='insert into ppp set '.pdoSet($fieldsppp,$valuesppp);
-						echo $sql;
-						$sqlprep=$condb->prepare($sql);
-						$sqlprep->execute($valuesppp);
-						$_REQUEST['id_ppp']=$condb->lastInsertId();
-					}
-					catch (PDOException $e)
-					{
-						include '../form/errorhtml.php';
-						exit;
-					}
-						
+					addPPP($condb);
 				}
 			
 			}
@@ -271,20 +180,7 @@
 					
 				if(isset($_REQUEST['name']))
 				{
-					try {
-						$fieldscomp=array('name', 'innkpp');
-						$sql='insert into company set '.pdoSet($fieldscomp,$valuescomp);
-						$sqlprep=$condb->prepare($sql);
-						$sqlprep->execute($valuescomp);
-						$_REQUEST['id_company']=$condb->lastInsertId();
-						echo $sql;
-					}
-					catch (PDOException $e)
-					{
-						include '../form/errorhtml.php';
-						exit;
-					}
-			
+					addCompany($condb);			
 				}
 			
 			}
@@ -293,7 +189,7 @@
 			{
 				$fields=array('id_operator', 'typecon','mask','dhcp','dns1','dns2','loginlk',
 					'pwdlk','contract','note','id_company','id_ppp','id_extnet','id_cabinet');
-				$sql='update conn set '.pdoSet($fields,$values).' where id=:id';
+				$sql='UPDATE conn SET '.pdoSet($fields,$values).' WHERE id=:id';
 				$sqlprep=$condb->prepare($sql);
 				$values["id"]=$_REQUEST['id'];
 				
@@ -309,7 +205,7 @@
 			exit;
 		
 		}
-		//Удаление контрагента
+		//Удаление 
 		if (isset($_REQUEST['action']) && $_REQUEST['action']=='Удалить')
 		{
 			try
@@ -330,38 +226,37 @@
 		//Вывод списка полей
 		try
 		{
-			$result=$condb->query('SELECT conn.gateway AS conngw, build.name as buildname, floor.floor, cabinet.id as id_cabinet,
+			$sql='SELECT conn.gateway AS conngw, build.name as buildname, floor.floor, cabinet.id as id_cabinet,
 									cabinet.cabinet, isp.name as ispname, conn.id_extnet as id_extnet, conn.id as id_conn
 								FROM conn
 								LEFT JOIN isp ON conn.id_operator=isp.id
 								LEFT JOIN cabinet ON cabinet.id = conn.id_cabinet
 								LEFT JOIN floor ON cabinet.id_floor = floor.id
-								LEFT JOIN build ON floor.id_build = build.id order by conngw');
+								LEFT JOIN build ON floor.id_build = build.id order by conngw LIMIT 50';
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute();
 		}
 		catch (PDOExeption $e)
 		{
 			include '../form/errorhtml.php';
 			exit;
 		}
-		
-		foreach($result as $res)
+		if($sqlprep->rowCount()>0)
 		{
-			//id-первичный ключ для поиска в таблице. Может принимать нужные значения
-			$params[]=array('id'=>$res['id_conn'], 'name'=>$res['conngw'].' '.$res['ispname'].' '.$res['buildname'].' '.$res['floor'].' эт. '.$res['cabinet']);
+			$result=$sqlprep->fetchall();
+			foreach($result as $res)
+			{
+				//id-первичный ключ для поиска в таблице. Может принимать нужные значения
+				$params[]=array('id'=>$res['id_conn'], 'name'=>$res['conngw'].' '.$res['ispname'].' '.$res['buildname'].' '.$res['floor'].' эт. '.$res['cabinet']);
+			}
 		}
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="подключениями к ЛВС";
 		//Название ссылки в родительном падеже
-		$ctrladd="подключение к ЛВС";
+		$ctrladd=createLink("Добавить подключение к ЛВС","?add" );
 		
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlonefieldshtml.php';
-		
-		//include $_SERVER['DOCUMENT_ROOT'].'/form/addagentshtml.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrl1html.php';
 		if($condb!=null) {$condb=NULL;}
-		
-		
-		
-		
 	}
 	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
 	exit;

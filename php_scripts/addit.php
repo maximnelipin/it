@@ -43,42 +43,100 @@
     				<th>Должность</th>    			
    					</tr>';
 			//создаем временную таблицу для удаления записей, которых нет в AD.
-			$sql='Create table if not exists tempit (login varchar(50) not null primary key, fio tinytext, func tinytext) CHARSET "utf8"';
-			$condb->exec($sql);
+			try
+			{
+				$sql='Create table if not exists tempit (login varchar(50) not null primary key, fio tinytext, func tinytext) CHARSET "utf8"';
+				$sqlprep=$condb->prepare($sql);
+				$sqlprep->execute();
+				
+			}
+			catch (PDOExeption $e)
+			{
+				include '../form/errorhtml.php';
+				exit;
+			}
+			//------------------Подготовка запросов
+			//Вставка во временную таблицу
+			$sqlit='insert into tempit set  login=:login, fio=:fio, func=:func';
+			$sqlprepit=$condb->prepare($sqlit);
+			//Поиск в базе
+			$sqlsi='select login from itusers where login=:login';
+			$sqlprepsi=$condb->prepare($sqlsi);
+			//Вставка в базу
+			$sqlii='insert into itusers set  login=:login, fio=:fio, func=:func';
+			$sqlprepii=$condb->prepare($sqlii);
+			//Обновление в базе
+			$sqlui='update itusers set fio=:fio, func=:func WHERE login=:login';
+			$sqlprepui=$condb->prepare($sqlui);
+			//Выюорка из базы
+			$sqlsi2='SELECT * FROM itusers ORDER BY fio LIMIT 30';
+			$sqlprepsi2=$condb->prepare($sqlsi2);
+			//Поиск во временной таблице
+			$sqlst='select login from tempit where login=:login';
+			$sqlprepst=$condb->prepare($sqlst);
+			//Удаление из базы
+			$sqldi='delete from itusers where login=:login';
+			$sqlprepdi=$condb->prepare($sqldi);
 			//Цикл перебора записей LDAP и внесения их в таблицу
 			while ($i<$res['count'])
 			{
 				//Индексы полей выборки LDAP в НИЖНЕМ РЕГИСТРЕ
 				//Обнуляем перменные в начале итерации
-				$title='';
-				$name='';
+				$func='';
+				$fio='';
 				$login='';
 				
 				//присваиваем переменным значения из очередной строки результата запроса LDAP
-				$name=$res[$i]['name'][0]." ";
-				$login=$res[$i]['userprincipalname'][0]." ";
+				$fio=$res[$i]['name'][0];
+				$login=$res[$i]['userprincipalname'][0];
 				//Если должность есть, то ставим так же занносим её в переменную
-				//иначе без проверки будет ошибка
 				if(isset($res[$i]['title'][0]))
-					{$title=$res[$i]['title'][0]." ";}					
+					{$func=$res[$i]['title'][0];}					
 				//Заполняем временную таблицу записями из AD
-				$sql='insert into tempit set  login="'.trim($login).'", fio="'.$name.'", func="'.$title.'"';
-				$condb->exec($sql);
+				try 
+				{
+					
+					$sqlprepit->bindValue(':login',$login);
+					$sqlprepit->bindValue(':fio',$fio);
+					$sqlprepit->bindValue(':func',$func);
+					$sqlprepit->execute();
+				}
+				catch (PDOExeption $e)
+				{
+					$sql=$sqlit;
+					include '../form/errorhtml.php';
+					exit;
+				}
 				//Делаем запрос на выборку записи из таблицы itusers с логином $login
-				$sql='select login from itusers where login="'.$login.'"';
-				$ressql=$condb->query($sql);
+				try
+				{
+					
+					$sqlprepsi->bindValue(':login',$login);
+					$sqlprepsi->execute();
+					
+				}
+				catch (PDOExeption $e)
+				{
+					$sql=$sqlsi;
+					include '../form/errorhtml.php';
+					exit;
+				}
+				
+				
 				//Если пользователя в таблице itusers нет
-				if (!($ressql->fetch(PDO::FETCH_ASSOC)))
+				if ($sqlprepsi->rowCount()==0)
 				{
 					//Добавляем его в таблицу
-					try {
-						
-						$sql='insert into itusers set login="'.trim($login).'", fio="'.$name.'", func="'.$title.'"';
-						$condb->exec($sql);
+					try 
+					{						
+						$sqlprepii->bindValue(':login',$login);
+						$sqlprepii->bindValue(':fio',$fio);
+						$sqlprepii->bindValue(':func',$func);
+						$sqlprepiit->execute();
 					}					
 					catch (PDOException $e)
 					{
-					
+						$sql=$sqlii;
 						include '../form/errorhtml.php';
 						exit;
 					}								
@@ -86,12 +144,14 @@
 				else
 				{	//если есть такой логин в таблице, обновляем связанную запись
 					try {
-						$sql='update itusers set fio="'.$name.'", func="'.$title.'" where login="'.trim($login).'"';
-						$condb->exec($sql);
+						$sqlprepui->bindValue(':login',$login);
+						$sqlprepui->bindValue(':fio',$fio);
+						$sqlprepui->bindValue(':func',$func);
+						$sqlprepui->execute();
 					}
 					catch (PDOException $e)
 					{
-								
+						$sql=$sqlui;		
 						include '../form/errorhtml.php';
 						exit;
 					}					
@@ -100,43 +160,76 @@
 			 	$i++;			
 			}
 			//делаем выборку из itusers
-			$sql='select * from itusers order by fio';
-			$ressql=$condb->query($sql);
-			//перебираем записи из itusers
-			while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-			{	//Делаем выборку из tempit
-				$sql='select login from tempit where login="'.$res['login'].'"';
-				$restempit=$condb->query($sql);
-				//Если логин есть и в itusers, и в tempit(AD)
-				if ($restempit->fetch(PDO::FETCH_ASSOC))
-				{	//Выводим его как результат синхронизации
-					echo '<tr><td>'.$res['fio'].'</td><td>'.$res['func'].'</td><td>'.$res['login'].'</td> </tr>';					
-				}
-				else 
-				{	//иначе удаяем запись с таким логином из таблицы itusers
-					try {
-						$sql='delete from itusers where login="'.$res['login'].'"';
-						$condb->exec($sql);
+			try 
+			{
+				$sqlprepsi2->execute();
+			}
+			catch (PDOException $e)
+			{
+				$sql=$sqlsi2;
+				include '../form/errorhtml.php';
+				exit;
+			}
+			if($sqlprepsi2->rowCount()>0)
+			{
+				//перебираем записи из itusers
+				$ressi2=$sqlprepsi2->fetchall();
+				foreach ($ressi2 as $res)
+				{	//Делаем выборку из tempit
+					try 
+					{
+						$sqlprepst->bindValue(':login',$res['login']);
+						$sqlprepst->execute();
 					}
 					catch (PDOException $e)
 					{
-					
+						$sql=$sqlst;
 						include '../form/errorhtml.php';
 						exit;
 					}
+					
+					//Если логин есть и в itusers, и в tempit(AD)
+					if ($sqlprepst->rowCount()>0)
+					{	//Выводим его как результат синхронизации
+						echo '<tr><td>'.html($res['fio']).'</td><td>'.html($res['func']).'</td><td>'.html($res['login']).'</td> </tr>';					
+					}
+					else 
+					{	//иначе удаяем запись с таким логином из таблицы itusers
+						try 
+						{
+							$sqlprepdi->bindValue(':login',$res['login']);
+							$sqlprepst->execute();
+						}
+						catch (PDOException $e)
+						{
+							$sql=$sqldi;
+							include '../form/errorhtml.php';
+							exit;
+						}
+					}
 				}
-				
 			}
 			//после окончания цикла заканчиваем вывод таблицы
 			echo '</table>';
 			header('Location .');
 			//Чистим временную таблицу
-			$sql='delete from tempit';
-			$condb->exec($sql);
+			try 
+			{
+				$sql='delete from tempit';
+				$sqlprep->prepare($sql);
+				$sqlprep->execute();
+			}
+			catch (PDOException $e)
+			{
+				include '../form/errorhtml.php';
+				exit;
+			}
+			
 			
 		}
 		//Если скрипт открыт не через main, то отправляем на главную
 		else header('Location ../php_scripts/main.php');
+		//Закрываем соединение с базой
 		if($conn!=null){ldap_unbind($conn);}
 		if($condb!=null) {$condb=NULL;}
 		

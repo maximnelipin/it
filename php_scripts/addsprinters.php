@@ -5,8 +5,6 @@
 		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
 		//Файл подключения к БД
 		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
-		
-		
 		//Выводим форму на добавление
 		if(isset($_REQUEST['add']))
 		{
@@ -20,29 +18,21 @@
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addsprintershtml.php';
 			exit;
 		}
-		//Добавляем Контрагента
+		//Добавляем 
 		if (isset($_REQUEST['name']) && isset($_REQUEST['addform']))
 		{
-				
-			//преобразуем путь к папке для записи в Mysql
-			$_REQUEST["drivers"]=addslashes($_REQUEST["drivers"]);
-				
-			try {
-		
+			try 
+			{
 				$fields=array("name","cart","drivers");
 				$sql='insert into sprinters set '.pdoSet($fields,$values);
 				$sqlprep=$condb->prepare($sql);
 				$sqlprep->execute($values);
-		
-		
 			}
-				
 			catch (PDOException $e)
 			{
 				include '../form/errorhtml.php';
 				exit;
 			}
-				
 			header('Location: '.$_SERVER['PHP_SELF'].'?add');
 			exit;
 		}
@@ -61,7 +51,6 @@
 				include '../form/errorhtml.php';
 				exit;
 			}
-				
 			$res=$sqlprep->fetch();
 			$pageTitle='Редактирование модели принтера';
 			$action='editform';
@@ -72,9 +61,8 @@
 			$button="Обновить";
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addsprintershtml.php';
 			exit;
-		
 		}
-		//Обновление контрагента
+		//Обновление 
 		if (isset($_REQUEST['editform']))
 		{
 			try
@@ -93,9 +81,8 @@
 		
 			header('Location: '.$_SERVER['PHP_SELF']);
 			exit;
-		
 		}
-		//Удаление контрагента
+		//Удаление
 		if (isset($_REQUEST['action']) && $_REQUEST['action']=='Удалить')
 		{
 			try
@@ -112,29 +99,32 @@
 			}
 		
 		}
-		//Вывод списка контрагентов
+		//Вывод списка
 		try
 		{
-			$result=$condb->query('SELECT id, name FROM sprinters ORDER BY name');
+			$sql='SELECT id, name FROM sprinters ORDER BY name LIMIT 50';
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute();
 		}
 		catch (PDOExeption $e)
 		{
 			include '../form/errorhtml.php';
 			exit;
 		}
-		
-		foreach($result as $res)
+		if($sqlprep->rowCount()>0)
 		{
-			$params[]=array('id'=>$res['id'], 'name'=>$res['name']);
+			$result=$sqlprep->fetchall();
+			foreach($result as $res)
+			{
+				$params[]=array('id'=>$res['id'], 'name'=>$res['name']);
+			}
 		}
 		//Титул управляющей страницы в творительном падеже
 		$ctrltitle="моделями принтеров";
 		//Название ссылки в родительном падеже
-		$ctrladd="модели принтера";
+		$ctrladd=createLink("Добавить модель принтера","?add" );
 		
-		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrlonefieldshtml.php';
-		
-		//include $_SERVER['DOCUMENT_ROOT'].'/form/addagentshtml.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrl1html.php';
 		if($condb!=null) {$condb=NULL;}
 		
 		
