@@ -10,9 +10,7 @@
 </head>
 
     <body>
-    <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
-	?>
+     <?php	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';	?>
 	    <h2 class="title"> Ошибка выполнения скрипта</h2>
 	    <div class="error">
 	    	<?php
@@ -23,8 +21,7 @@
 	    	{
 				echo '<p>ЗАПРОС: '.$sql.'<p>';
 	    	}
-			?>
-			
+			?>			
 	    </div>
 	</body>    
 </html>

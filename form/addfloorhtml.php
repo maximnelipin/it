@@ -11,9 +11,7 @@
 </head>
 
     <body>
-    <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
-	?>
+  <?php	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';	?>
 	    <h2 class="title"> <?php htmlout($pageTitle); ?></h2>
 	    <form action=?<?php htmlout($action);?>  method="post">	    	
 		    	<div class="field">
@@ -57,10 +55,6 @@
 		    	<div class="field" >
 	    		<?php	include $_SERVER['DOCUMENT_ROOT'].'/html/addbutton.php';?>
 	    	</div>	 	  
-	    </form>
-	    <?php
-	
-		?>
-    </body>
-    
+	    </form>	    
+    </body>    
 </html>

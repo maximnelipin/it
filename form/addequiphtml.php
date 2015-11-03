@@ -9,12 +9,9 @@
 </head>
 
     <body>
-    <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
-	?>
+    <?php	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';	?>
 	    <h2 class="title"><?php htmlout($pageTitle); ?></h2>
-	     <form action=?<?php htmlout($action);?>  method="post">
-	     	    	
+	     <form action=?<?php htmlout($action);?>  method="post">	     	    	
 	    	<div class="field">
 	    		<label for="id_cabinet" > Кабинет расположения</label>	    		
 	    		<p><select required class="text" size="10" name="id_cabinet">
@@ -78,8 +75,7 @@
 	    	</div>
 	    	<div class="field" >
 	    		<?php	include $_SERVER['DOCUMENT_ROOT'].'/html/addbutton.php';?>
-	    	</div>
-	    
+	    	</div>	    
 	    </form>
 	 </body>    
 </html>

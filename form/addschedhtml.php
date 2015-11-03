@@ -11,9 +11,7 @@
 </head>
 
     <body>
-    <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
-	?>
+    <?php	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';	?>
 	    <h2 class="title"> <?php htmlout($pageTitle); ?></h2>
 	     <form action=?<?php htmlout($action);?>  method="post">
 	     	<div class="fieldcall">
@@ -21,8 +19,6 @@
 	    		<input type="text" class=<?php htmloutinput($cls);?> name="dateduty"  value=<?php htmloutinput($dateduty);?> 
 	    		required <?php htmlout($dis);?>>
 	    	</div>
-	    	
-	    	
 	    	<div class="field">
 	    		<label for="login"> Дежурный</label>
 	    		<select required class="text" size="5" name="login">
@@ -50,8 +46,7 @@
 	    	</div>
 	    	<div class="field" >
 	    		<?php	include $_SERVER['DOCUMENT_ROOT'].'/html/addbutton.php';?>
-	    	</div>
-	    
+	    	</div>	    
 	    </form>
 	 </body>    
 </html>

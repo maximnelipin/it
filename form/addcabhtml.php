@@ -10,9 +10,7 @@
 </head>
 
     <body>
-    <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
-	?>
+   <?php	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';	?>
 	    <h2 class="title"> <?php htmlout($pageTitle); ?></h2>
 	    <form action=?<?php htmlout($action);?> method="post">	    	
 		    	<div class="field">
@@ -20,7 +18,7 @@
 		    		<select required class="text" size="10" name="id_floor">
 	    			<option disabled>Выберите этаж</option>
 	    			<?php 
-		    			//Получаем списки зданий, этажей, кабинетов
+		    			//Получаем списки зданий, этажей
 		    			$builds=getBuilds($condb);
 		    			$floors=getfloors($condb);
 		    			foreach ($builds as $build)
@@ -58,8 +56,6 @@
 		    	<div class="field" >
 	    		<?php	include $_SERVER['DOCUMENT_ROOT'].'/html/addbutton.php';?>
 	    	</div>  
-	    </form>
-	    
-    </body>
-    
+	    </form>	    
+    </body>    
 </html>

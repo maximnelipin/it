@@ -9,18 +9,12 @@
 </head>
 
     <body>
-    <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
-	?>
+    <?php	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';	?>
 	    <div class="field"
 		     <div class="btn_close">
 		   		 <input type="button" class="button" value="Закрыть окно" onClick=window.close();>  
 		    </div>
 	     <div>
 	    <h2 class="title"> Добавленные пользователи</h2>
-		
-	     <form action="?"  method="post">
-	     	
-	    </form>
 	 </body>    
 </html>

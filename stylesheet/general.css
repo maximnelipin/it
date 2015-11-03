@@ -1,0 +1,126 @@
+@CHARSET "UTF-8";
+body {
+	background-image: url(../content/bg.gif);
+	background-repeat: repeat;
+	font-family: 'Times New Roman';
+}
+
+header {
+	overflow: auto;
+	padding: 10px 30px 10px 30px;
+}
+a {
+	font-size: 120%;
+}
+header .leftcolumn {
+	float: left;
+	padding-top: 1%;
+	width:41.5%;
+
+}
+header .centrcolumn {
+	float: left;
+}
+header .rightcolumn {
+	float: right;	
+	padding-top: 1%;
+}
+
+ h3 {
+	font-size: 150%;
+	color:brown;
+	margin-bottom: 2%;
+	width:50%;	
+}
+table {
+	margin-left:4%;
+	margin-right:2%;
+	margin-top:1%;
+	margin-bottom:1%;
+}
+caption {
+	font-size: 120%
+}
+th{
+	font-size:110%;
+	
+}
+table, th, td, caption {
+	border-style:solid;
+	border-width:1px;
+	border-collapse: collapse;
+	padding:3px;
+	font-size: 100%;
+	background-color: azure;	
+}
+table a {
+	font-size: 100%;
+}
+label  {
+  	float:left; 
+	padding-bottom: 1%;
+ 	width: 90%;  
+	font-size: 120%;	
+}
+
+.btn_close{
+	float:left;
+	width:50%;
+	margin-top:10px;
+	margin-bottom:10px;	
+}
+
+.title {	
+	font-size: 160%;
+	color:brown;
+	margin-bottom: 1%;
+	margin-left:4%;
+	width:60%;	
+}
+.title1 {	
+	font-size: 150%;
+	color:brown;
+	margin-bottom: 1%;
+	margin-left:5%;
+	width:60%;	
+}
+.title2 {	
+	font-size: 150%;
+	color:brown;
+	margin-bottom: 1%;
+	margin-left:6%;
+	width:60%;	
+}
+.m_title1{		
+	margin-left:1%;	
+}
+.m_title2{		
+	margin-left:2%;	
+}
+
+.button {	
+	padding: 5px 10px 5px 10px;
+	border-radius: 7px;
+	color:azure;
+	background-color:coral;
+	cursor: pointer;
+	font-size: 100%; 	
+}
+
+.text{	
+	padding: 5px 10px 5px 10px;
+	border-radius: 7px;	
+	background-color: azure;	
+	font-size:100%;	
+}
+.error{
+	margin-top:2px;
+	margin-left: 3%;
+	
+}
+.field {
+	margin-bottom: 1%;
+	padding-left: 1%;
+	margin-right: 45%;
+	margin-left: 3%;
+}

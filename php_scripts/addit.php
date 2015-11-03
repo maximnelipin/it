@@ -11,6 +11,8 @@
 		$conn=ldap_connect($host, $port) or die("LDAP сервер не доступен");
 		//Включаем протокол третьей версии
 		ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
+		$pageTitle='Добавление сотрудников отдела ИТ';
+		$ctrl='Добавленные сотрудники отдела ИТ';
 		include $_SERVER['DOCUMENT_ROOT'].'/form/addithtml.php';
 		if (isset($_POST['addit']))	
 		{

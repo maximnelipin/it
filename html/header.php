@@ -1,6 +1,6 @@
 <header> 
 	<div class=leftcolumn>
-	<?php if(isset($_SESSION['user_id'])): ?>
+	<?php if(isset($_SESSION['user_id']) AND $_SERVER['PHP_SELF']!='/php_scripts/main.php'): ?>
 		<a href='/php_scripts/main.php' > Главная </a>
 	<?php endif; ?>
 	
@@ -11,10 +11,10 @@
 	</div>
 	<div class=rightcolumn>
 		<?php if(isset($_SESSION['user_id'])): ?>
-		<a href="../index.php?link=logout"> Выход </a>
+			<a href="../index.php?link=logout"> Выход </a>
 		<?php endif; ?>
-		<?php if(!isset($_SESSION['user_id'])):  ?>
-		<a href="../index.php"> Вход </a>
+		<?php if(!isset($_SESSION['user_id']) AND $_SERVER['PHP_SELF']!='/index.php'):  ?>
+			<a href="../index.php"> Вход </a>
 		<?php endif; ?>
 	</div>
 </header>

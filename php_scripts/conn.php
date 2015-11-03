@@ -112,7 +112,7 @@
 			exit;
 		}
 			
-		include $_SERVER['DOCUMENT_ROOT'].'/form/reppinghtml.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/rep4html.php';
 		exit;
 	}
 	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);

@@ -2,46 +2,13 @@
 .weekend{
 	background-color:  cadetblue;	
 }
-
-.button {	
-	padding: 5px 10px 5px 10px;
-	border-radius: 7px;
-	color:azure;
-	background-color:coral;
-	cursor: pointer;
-	font-size: 100%;
-}
-
-.text{	
-	padding: 5px 10px 5px 10px;
-	border-radius: 7px;	
-	background-color: azure;	
-	font-size:100%;	
-}
-.error{
-	margin-top:2px;
-	margin-left: 3%;
-	
-}
-
-.m_title1{		
-	margin-left:1%;	
-}
-.m_title2{		
-	margin-left:2%;	
-}
-
 .ping {
 	margin-bottom:10px;
 	font-size:105%;
-	margin-left:4%;
-	
+	margin-left:4%;	
 }
-
 .ping p {
-	margin-bottom:3px;
-	
-	
+	margin-bottom:3px;	
 }
 .duty {
 	font-size:120%;

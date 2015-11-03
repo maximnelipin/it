@@ -1,17 +1,10 @@
 @CHARSET "UTF-8";
 
 ul
-{
-	
+{	
 	margin-top: 1.5%;
 	margin-bottom: 3%;
 }
-
-.field a 
-{
-
-}
-
 
 .leftli
 {
@@ -20,9 +13,7 @@ ul
 	width:50%;
 	margin-top: 3px;
 	padding-bottom:6px;
-	border-bottom: 1px solid red;
-	
-	
+	border-bottom: 1px solid red;	
 }
 .leftli_1{
 	font-size: 115%;
@@ -32,17 +23,6 @@ ul
 	padding-bottom:6px;
 	border-bottom: 1px solid blue;
 	margin-left:1%;
-}
-.tblusrpc td:nth-child(1){
-	width:20%;
-	
-}
-.tblusrpc td:nth-child(2){
-	width:18%;
-	
-}
-.ainst {
-	margin-bottom:7px;
 }
 .leftli_2{
 	font-size: 120%;
@@ -60,12 +40,16 @@ ul
 	margin-top: 4px;
 	padding-bottom:3px;
 	float:left;
-	
-	
-	
 }
-
-
+.tblusrpc td:nth-child(1){
+	width:20%;	
+}
+.tblusrpc td:nth-child(2){
+	width:18%;	
+}
+.ainst {
+	margin-bottom:7px;
+}
 
 .but_ctrl{
 	padding: 1px 1px 1px 1px;
@@ -73,15 +57,13 @@ ul
 	color:azure;
 	background-color:coral;
 	cursor: pointer;
-	font-size: 100%; 
-	
+	font-size: 100%; 	
 }
 
 .field {
 	margin-bottom: 1%;
 	padding-left: 1%;
 	margin-right: 3%;
-	margin-left: 3%;
-	
+	margin-left: 3%;	
 }
 

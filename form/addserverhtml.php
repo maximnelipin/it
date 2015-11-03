@@ -23,37 +23,50 @@
 	    		<select required multiple class="text" size="5" name="id_equip[]">
 	    			<option disabled>Выберите объект</option>
 	    			<?php 
-	    				
-		    			$selsql='SELECT equip.id, eqsrv.id AS id_eqsrv, eqsrv.id_srv AS id_srv, equip.phys, equip.ip, build.name, floor.floor, cabinet.cabinet, equip.rack, equip.unit
-		    			FROM eqsrv
-		    			RIGHT JOIN equip ON equip.id = eqsrv.id_equip
-		    			LEFT JOIN cabinet ON cabinet.id = equip.id_cabinet
-		    			LEFT JOIN floor ON cabinet.id_floor = floor.id
-		    			LEFT JOIN build ON floor.id_build = build.id order by build.name, floor.floor, cabinet.cabinet, equip.rack, equip.unit, equip.ip, equip.phys ';
-		    			$ressql=$condb->query($selsql);    				
-	    				
-	    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-	    				{
-	    						$select='';
-	    						if($id!=''){
-	    						if($res['id_srv']==$id)
-	    						{
-	    							//$select='selected';
-	    							$select='selected';
-	    							
-	    						}
-	    						
-	    						else 
-	    						{
-	    							$select='';
-	    						}
-	    						//неолбходимо id оборудование, чтобы сделать привязку в таблице eqsrv
-	    						}
-	    						echo '<option '.$select.' value='.$res['id'].'>'.$res['name']. " ".$res['floor'].'-'.$res['cabinet'].'-'.$res['rack'].'-'.$res['unit'].'-'.$res['ip'].'-'.$res['phys'].'</option>';
-	    					
-	    						
-	    					
-	    				}
+		    			try
+		    			{
+		    				$sql='SELECT equip.id, eqsrv.id AS id_eqsrv, eqsrv.id_srv AS id_srv, equip.phys, equip.ip, build.name, floor.floor, cabinet.cabinet, equip.rack, equip.unit
+			    				FROM eqsrv
+			    				RIGHT JOIN equip ON equip.id = eqsrv.id_equip
+			    				LEFT JOIN cabinet ON cabinet.id = equip.id_cabinet
+			    				LEFT JOIN floor ON cabinet.id_floor = floor.id
+			    				LEFT JOIN build ON floor.id_build = build.id 
+								ORDER BY build.name, floor.floor, cabinet.cabinet, equip.rack, equip.unit, equip.ip, equip.phys ';
+			    			
+		    				$sqlprep=$condb->prepare($sql);
+		    				$sqlprep->execute();
+		    			}
+		    			catch (PDOExeption $e)
+		    			{
+		    				include '../form/errorhtml.php';
+		    				exit;
+		    			}
+		    			if($sqlprep->rowCount()>0)
+		    			{	
+		    				$result=$sqlprep->fetchall();
+		    				foreach ($result as $res)
+		    				{
+		    						$select='';
+		    						if($id!=''){
+		    						if($res['id_srv']==$id)
+		    						{
+		    							//$select='selected';
+		    							$select='selected';
+		    							
+		    						}
+		    						
+		    						else 
+		    						{
+		    							$select='';
+		    						}
+		    						//неолбходимо id оборудование, чтобы сделать привязку в таблице eqsrv
+		    						}
+		    						echo '<option '.$select.' value='.$res['id'].'>'.$res['name']. " ".$res['floor'].'-'.$res['cabinet'].'-'.$res['rack'].'-'.$res['unit'].'-'.$res['ip'].'-'.$res['phys'].'</option>';
+		    					
+		    						
+		    					
+		    				}
+		    			}
 	    				?>
 	    		</select>  	
 	    	</div>

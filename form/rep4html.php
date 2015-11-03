@@ -9,35 +9,25 @@
 </head>
 
     <body>
-    <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
-	?>
-	    		<div>
-			    	<h2 class="title"> <?php echo $ctrltitle;?></h2>    
-			    </div>
-	    
-	    
-	    
-			    
-			<?php if(isset($params)):?>
-					    
-				<?php  foreach ($params as $param): ?>
+     	<?php	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';	?>
+	   	<div>
+			<h2 class="title"> <?php echo $ctrltitle;?></h2>    
+		</div>
+		<?php if(isset($params)):?>					    
+			<?php  foreach ($params as $param): ?>
 				<div>
 			    	<h2 class="title1"> <?php echo $param['build'];?></h2>    
 			    </div>	
 			    <div class="m_title1">
 					<?php echo $param['res']; ?>	
 				</div>		   
-				<?php endforeach;?> 
+			<?php endforeach;?> 
 						    
-			<?php endif;?> 			 
-						    
-			<div class="field">					    		    
+		<?php endif;?>    
+		<div class="field">					    		    
 		  	<div class="btn_close">
-		    <input type="button" class="button" value="Закрыть окно" onClick=window.close();>  
+		    	<input type="button" class="button" value="Закрыть окно" onClick=window.close();>  
 		    </div>
-	    </div>
-	    
-    </body>
-    
+	    </div>	    
+    </body>    
 </html>

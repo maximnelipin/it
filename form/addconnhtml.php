@@ -1,24 +1,16 @@
 <!doctype html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" type="text/css" href="../stylesheet/reset.css">
-<link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
-<link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
-<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-<script src="../js_scripts/app.js"></script>
-
-
-</script>
-<title><?php htmlout($pageTitle); ?></title>
-
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css" href="../stylesheet/reset.css">
+	<link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
+	<link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
+	<script src="../js_scripts/app.js"></script>
+	<title><?php htmlout($pageTitle); ?></title>
 </head>
 
     <body>
-    <?php
-	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
-	?>
-	    
+   <?php	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';	?>	    
 	    <h2 class="title"> <?php htmlout($pageTitle); ?></h2>
 	     <form action=?<?php htmlout($action);?>  method="post">
 	     	<div class="field">
@@ -100,10 +92,22 @@
 		    		<select  class="text"  size="5" name="id_extnet" id="id_extnet">
 		    		<option disabled>Выберите параметры</option>
 		    		<?php 
-		    				$selsql='SELECT id, extip FROM extnet order by extip';
-							$ressql=$condb->query($selsql);
-		    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-		    				{    					
+			    		try
+			    		{
+			    			$sql='SELECT id, extip FROM extnet order by extip LIMIT 50';
+			    			$sqlprep=$condb->prepare($sql);
+			    			$sqlprep->execute();
+			    		}
+			    		catch (PDOExeption $e)
+			    		{
+			    			include '../form/errorhtml.php';
+			    			exit;
+			    		}	
+		    			if($sqlprep->rowCount()>0)
+		    			{
+		    				$result=$sqlprep->fetchall();
+		    				foreach ($result as $res)
+							{					
 		    						
 		    					if($res['id']==$id_extnet)
 		    					{
@@ -118,8 +122,9 @@
 		    					echo '<option '.$select.' value='.$res['id'].'>'.$res['extip'].'</option>';
 		    						
 		    				}
-		    				?>
-	    				</select> 
+		    			}
+		    		?>
+	    			</select> 
 	    		</div>
 	    		<div id="addextnet"  class="divoff">
 	    			<div class="field">
@@ -175,14 +180,26 @@
 		    		<select class="text" size="5" name="id_ppp" id='id_ppp'>
 		    		<option selected value='none'>PPP Отсутствует</option>
 		    		<?php 
-		    				$selsql='SELECT id, srv,typeppp FROM ppp order by srv';
-							$ressql=$condb->query($selsql);
-		    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-		    				{    					
+			    		try
+			    		{
+			    			$sql='SELECT id, srv,typeppp FROM ppp order by srv LIMIT 50';
+			    			$sqlprep=$condb->prepare($sql);
+			    			$sqlprep->execute();
+			    		}
+			    		catch (PDOExeption $e)
+			    		{
+			    			include '../form/errorhtml.php';
+			    			exit;
+			    		}	
+		    			if($sqlprep->rowCount()>0)
+		    			{
+		    				$result=$sqlprep->fetchall();
+		    				foreach ($result as $res)
+							{					
 		    						
 		    					if($res['id']==$id_ppp)
 		    					{
-		    						//$select='selected';
+		    						
 		    						$select='selected';
 		    					}
 		    						
@@ -193,8 +210,9 @@
 		    					echo '<option '.$select.' value='.$res['id'].'>'.$res['srv'].' '.$res['typeppp'].'</option>';
 		    						
 		    				}
-		    				?>
-	    				</select> 
+		    			}
+		    		?>
+	    			</select> 
 	    		</div>
 	    		<div id="addppp"  class="divoff">
 	    			<div class="field">
@@ -213,9 +231,7 @@
 	    			<div class="field">
 			    		<label for="pwd"> Пароль PPP </label>
 			    		<input type="text" class="text" size="70" width="3" name="pwd">
-	    			</div>
-			    	
-	    			
+	    			</div> 
 	    		</div>
 	    	</div>
 	    	<div class="field">
@@ -236,25 +252,39 @@
 		    		<select  class="text" size="5" name="id_company" id='id_company'>
 		    		<option disabled>Выберите параметры</option>
 		    		<?php 
-		    				$selsql='SELECT id, name FROM company order by name';
-							$ressql=$condb->query($selsql);
-		    				while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-		    				{    					
+			    		try
+			    		{
+			    			$sql='SELECT id, name FROM company order by name LIMIT 50';
+			    			$sqlprep=$condb->prepare($sql);
+			    			$sqlprep->execute();
+			    		}
+			    		catch (PDOExeption $e)
+			    		{
+			    			include '../form/errorhtml.php';
+			    			exit;
+			    		}	
+		    			if($sqlprep->rowCount()>0)
+		    			{
+		    				$result=$sqlprep->fetchall();
+		    				foreach ($result as $res)
+							{					
+		    						
 		    					if($res['id']==$id_company)
 		    					{
-		    						//$select='selected';
+		    						
 		    						$select='selected';
 		    					}
 		    						
 		    					else
 		    					{
 		    						$select='';
-		    					}	
+		    					}
 		    					echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
 		    						
 		    				}
-		    				?>
-	    				</select> 
+		    			}
+		    		?>
+	    			</select> 
 	    		</div>
 	    		<div id="addcomp"  class="divoff">
 	    			<div class="field">
@@ -279,9 +309,6 @@
 	    	<div class="field" >
 	    		<?php	include $_SERVER['DOCUMENT_ROOT'].'/html/addbutton.php';?>
 	    	</div>
-	    
-	    
-	    
 	    </form>
 	 </body>    
 </html>
