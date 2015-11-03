@@ -132,12 +132,12 @@
 		$body.='</table></body></html>';
 		
 	//Отправка почты через exchange	
-	$mailSMTP=new SendMailSmtpClass('max','zuneipod23', 'vs-00-ex-final.du.i-net.su','max@develug.ru',25);
+	$mailSMTP=new SendMailSmtpClass('itinfo','Passw0rd', 'vs-00-ex-final.du.i-net.su','itinfo@develug.ru',25);
 	//								логин  пароль		сервер							от кого			порт
 	// заголовок письма
 	$headers= "MIME-Version: 1.0\r\n";
 	$headers .= "Content-type: text/html; charset=utf-8\r\n"; // кодировка письма
-	$headers .= "From: Max <max@develug.ru>\r\n"; // от кого письмо
+	$headers .= "From: ITINFO <itinfo@develug.ru>\r\n"; // от кого письмо
 	$result =  $mailSMTP->send('max@develug.ru',  $ctrltitle, $body, $headers); // отправляем письмо
 	// $result =  $mailSMTP->send('Кому письмо', 'Тема письма', 'Текст письма', 'Заголовки письма');
 	if($result === true)

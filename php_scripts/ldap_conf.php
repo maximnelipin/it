@@ -11,9 +11,9 @@
 	//домен
 	$domain="@du.i-net.su";
 	//пользователь для подключения к серверу LDAP
-	$usrd="max".$domain;
+	$usrd="itinfo".$domain;
 	//Пароль пользоватлея LDAP
-	$pwdd="zuneipod23";
+	$pwdd="Passw0rd";
 	//OU с сотрудниками
 	$userous[0]="OU=users,OU=developmentug,OU=DU,OU=Users&Pcs,DC=du,DC=i-net,DC=su";
 	//OU с компами 1

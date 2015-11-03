@@ -5,6 +5,7 @@ select {
 .button{
 	margin-top:4px;	
 	margin-right:3px;	
+	margin-bottom:4px;	
 }
 .mainleft{
 	float:left;
@@ -19,12 +20,13 @@ select {
 	width:30%;
 	margin-bottom: 1%;
 	padding-left: 1%;	
+	margin-right: 2%;
 }
 .mainright{
 	float:left;
 	margin-bottom: 1%;
 	padding-left: 1%;
-	margin-left: 3%;	
+	margin-left: 4%;	
 	}
 	.ctrl{
 	border-top: 1px solid red;
