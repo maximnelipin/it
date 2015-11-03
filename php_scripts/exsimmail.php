@@ -1,6 +1,6 @@
 <?php
 	//Файл с классом отправки почты через соккеты
-	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/SendMailSmtpClass.php';
+	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/ExSendMailSmtpClass.php';
 	//Файл с функциями
 	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
 	//Файл подключения к БД
@@ -131,20 +131,21 @@
 		//Заканчиваем формирования текста письма
 		$body.='</table></body></html>';
 		
-		//Отправка почты через обычные сервера
-		$mailSMTP=new SendMailSmtpClass('nelipin.maxim@yandex.ru','pravoverniy', 'ssl://smtp.yandex.ru','MAX',465);
-		// заголовок письма
-		$headers= "MIME-Version: 1.0\r\n";
-		$headers .= "Content-type: text/html; charset=utf-8\r\n"; // кодировка письма
-		$headers .= "From: Max <nelipin.maxim@yandex.ru>\r\n"; // от кого письмо
-		$result =  $mailSMTP->send('nelmaxim@gmail.com', $ctrltitle, $body, $headers); // отправляем письмо
-		// $result =  $mailSMTP->send('Кому письмо', 'Тема письма', 'Текст письма', 'Заголовки письма');
-		if($result === true)
-		{
-			echo "Письмо успешно отправлено";
-		}
-		else
-		{					
-			echo "Письмо не отправлено. Ошибка: " . $result;
-		}
+	//Отправка почты через exchange	
+	$mailSMTP=new SendMailSmtpClass('max','zuneipod23', 'vs-00-ex-final.du.i-net.su','max@develug.ru',25);
+	//								логин  пароль		сервер							от кого			порт
+	// заголовок письма
+	$headers= "MIME-Version: 1.0\r\n";
+	$headers .= "Content-type: text/html; charset=utf-8\r\n"; // кодировка письма
+	$headers .= "From: Max <max@develug.ru>\r\n"; // от кого письмо
+	$result =  $mailSMTP->send('max@develug.ru',  $ctrltitle, $body, $headers); // отправляем письмо
+	// $result =  $mailSMTP->send('Кому письмо', 'Тема письма', 'Текст письма', 'Заголовки письма');
+	if($result === true)
+	{
+		echo "Письмо успешно отправлено";
+	}
+	else
+	{
+		echo "Письмо не отправлено. Ошибка: " . $result;
+	}
 ?>
