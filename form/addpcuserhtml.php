@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="../stylesheet/reset.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/general.css">
 <link rel="stylesheet" type="text/css" href="../stylesheet/add.css">
-<title>Добавление компьютеров и пользователей</title>
+<title><?php htmlout($pageTitle); ?></title>
 </head>
 
     <body>
@@ -15,6 +15,8 @@
 		   		 <input type="button" class="button" value="Закрыть окно" onClick=window.close();>  
 		    </div>
 	     <div>
-	    <h2 class="title"> Добавленные пользователи</h2>
+	    <h2 class="title"> <?php htmlout($ctrl);?></h2>
+	    
+	     
 	 </body>    
 </html>

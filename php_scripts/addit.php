@@ -13,7 +13,7 @@
 		ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
 		$pageTitle='Добавление сотрудников отдела ИТ';
 		$ctrl='Добавленные сотрудники отдела ИТ';
-		include $_SERVER['DOCUMENT_ROOT'].'/form/addithtml.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/addpcuserhtml.php';
 		if (isset($_POST['addit']))	
 		{
 			
@@ -40,9 +40,9 @@
 			echo '<table border=2>
    					<caption>Сотрудники ИТ-отдела</caption>
   					 <tr>
-    				<th>ФИО</th>
-    				<th>Логин</th>
-    				<th>Должность</th>    			
+    				<th>ФИО</th>    				
+    				<th>Должность</th>
+					<th>Логин</th>
    					</tr>';
 			//создаем временную таблицу для удаления записей, которых нет в AD.
 			try
@@ -57,6 +57,8 @@
 				include '../form/errorhtml.php';
 				exit;
 			}
+			//очищаем временные таблицы
+			delFromTbl('tempit',$condb);
 			//------------------Подготовка запросов
 			//Вставка во временную таблицу
 			$sqlit='insert into tempit set  login=:login, fio=:fio, func=:func';
@@ -215,17 +217,8 @@
 			echo '</table>';
 			header('Location .');
 			//Чистим временную таблицу
-			try 
-			{
-				$sql='delete from tempit';
-				$sqlprep->prepare($sql);
-				$sqlprep->execute();
-			}
-			catch (PDOException $e)
-			{
-				include '../form/errorhtml.php';
-				exit;
-			}
+			//очищаем временные таблицы
+			delFromTbl('tempit',$condb);
 			
 			
 		}

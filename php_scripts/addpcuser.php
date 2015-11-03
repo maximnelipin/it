@@ -13,6 +13,8 @@
 			$conn=ldap_connect($host, $port) or die("LDAP сервер не доступен");
 			//Включаем протокол третьей версии
 			ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
+			$pageTitle='Добавление пользователей и ПК';
+			$ctrl='Добавленные пользователи';
 			include $_SERVER['DOCUMENT_ROOT'].'/form/addpcuserhtml.php';
 			
 			//Задаем атрибуты, которые необходимо выбрать
@@ -69,12 +71,12 @@
 			//---------------------------создаем временную таблицу для удаления записей, которых нет в AD.
 			$sql='Create table if not exists tempuser (login varchar(50) not null primary key, fio tinytext, func tinytext, dept tinytext) CHARSET "utf8"';
 			$condb->exec($sql);
-			$sql='delete from tempuser where 1';
-			$condb->exec($sql);
+			//очищаем временные таблицы
+			delFromTbl('tempuser',$condb);
 			$sql='Create table if not exists temppc (name varchar(30) not null primary key, login varchar(50),descrip tinytext) CHARSET "utf8"';
 			$condb->exec($sql);
-			$sql='delete from temppc where 1';
-			$condb->exec($sql);
+			//очищаем временные таблицы
+			delFromTbl('temppc',$condb);
 			//--------------------Подготовка sql-запросов------------------------------
 			//Вствка во временную таблицу пользователей
 			$sqlitu='insert into tempuser set login=:login, fio=:fio, func=:func, dept=:dept';
@@ -140,31 +142,39 @@
 					else $valu['dept']='';
 					//Заполняем временную таблицу записями из AD	
 					try {
-						//для вывода ошибки
-						$sql=$sqlitu;
+						
 						$sqlpritu->execute($valu);
 					}
 					catch (PDOException $e)
 					{
-					
+						$sql=$sqlitu;
 						include '../form/errorhtml.php';
 						exit;
 					}
-					//Делаем запрос на выборку записи из таблицы listuser с логином $login					
-					$valsu['login']=$valu['login'];
-					$sqlprslu->execute($valsu);
-					$ressql=$sqlprslu->fetchall();
+					//Делаем запрос на выборку записи из таблицы listuser с логином $login
+					try 
+					{
+						$valsu['login']=$valu['login'];
+						$sqlprslu->execute($valsu);
+					}
+					catch (PDOException $e)
+					{
+						$sql=$sqlslu;
+						include '../form/errorhtml.php';
+						exit;
+					}
 					//Если пользователя в таблице listuser нет
-					if (!($ressql))
+					if($sqlprslu->rowCount()==0)
+					
 					{
 						//Добавляем его в таблицу
 						try {
-							$sql=$sqlilu;
+							
 							$sqlprilu->execute($valu);
 						}					
 						catch (PDOException $e)
 						{
-						
+							$sql=$sqlilu;
 							include '../form/errorhtml.php';
 							exit;
 						}								
@@ -172,12 +182,12 @@
 					else
 					{	//если есть такой логин в таблице, обновляем связанную запись
 						try {
-							$sql=$sqlulu;
+							
 							$sqlprulu->execute($valu);
 						}
 						catch (PDOException $e)
 						{
-									
+							$sql=$sqlulu;
 							include '../form/errorhtml.php';
 							exit;
 						}					
@@ -202,46 +212,53 @@
 						{$valu['dept']=$resit[$i]['department'][0];}
 					else $valu['dept']='';
 					//Заполняем временную таблицу записями из AD	
-					try {
-						//для вывода ошибки
-						$sql=$sqlitu;
+					try 
+					{
+												
 						$sqlpritu->execute($valu);
 					}
 					catch (PDOException $e)
 					{
-					
+						$sql=$sqlitu;
 						include '../form/errorhtml.php';
 						exit;
 					}
-					//Делаем запрос на выборку записи из таблицы listuser с логином $login					
+					
+					//Делаем запрос на выборку записи из таблицы listuser с логином $login	
+					try 
+					{
 					$valsu['login']=$valu['login'];
 					$sqlprslu->execute($valsu);
-					$ressql=$sqlprslu->fetchall();
+					}
+					catch (PDOExeption $e)
+					{
+						$sql=$sqlslu;
+						include '../form/errorhtml.php';
+						exit;
+					}
+					
 					//Если пользователя в таблице listuser нет
-				if (!($ressql))
+				if ($sqlprslu->rowCount()==0)
 				{
 					//Добавляем его в таблицу
 					try {
-				
-						$sql=$sqlilu;
 						$sqlprilu->execute($valu);
 					}
 					catch (PDOException $e)
 					{
-							
+						$sql=$sqlilu;
 						include '../form/errorhtml.php';
 						exit;
 					}
 				}
 				else
 				{	//если есть такой логин в таблице, обновляем связанную запись
-				try {
-					$sql=$sqlulu;
+				try {					
 					$sqlprulu->execute($valu);
 				}
 				catch (PDOException $e)
 				{
-				
+					$sql=$sqlulu;
 					include '../form/errorhtml.php';
 					exit;
 				}
@@ -250,37 +267,54 @@
 			 	$i++;			
 			}
 			//делаем выборку из listuser
-			$sql='select * from listuser order by fio';
-			$ressql=$condb->query($sql);
-			//перебираем записи из listuser
-			while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-			{	//Делаем выборку из tempuser
-				$valsu['login']=$res['login'];
-				$sqlprstu->execute($valsu);
-				//$sql='select login from tempuser where login="'.$res['login'].'"';
-				$restempuser=$sqlprstu->fetchall();
-				//Если логин есть и в listuser, и в tempuser(AD)
-				if ($restempuser)
-				{	//Выводим его как результат синхронизации
-					echo '<tr><td>'.html($res['fio']).'</td><td>'.html($res['func']).'</td><td>'.html($res['dept']).'</td><td>'.html($res['login']).'</td> </tr>';					
-				}
-				else 
-				{	//иначе удаяем запись с таким логином из таблицы listuser
-					try {
-						$sql=$sqldlu;
-						$sqlprdlu->execute($valsu);
-						
-						//$sql='delete from listuser where login="'.$res['login'].'"';
-						//$condb->exec($sql);
-					}
-					catch (PDOException $e)
+			try 
+			{
+				$sql='select * from listuser order by fio LIMIT 500';
+				$sqlprep=$condb->prepare($sql);
+				$sqlprep->execute();
+			}
+			catch (PDOExeption $e)
+			{
+				include '../form/errorhtml.php';
+				exit;
+			}
+			if($sqlprep->rowCount()>0)
+			{
+				$result=$sqlprep->fetchall();
+				//перебираем записи из listuser
+				foreach($result as $res)
+				{	//Делаем выборку из tempuser
+					try 
 					{
-					
+						$valsu['login']=$res['login'];
+						$sqlprstu->execute($valsu);
+					}
+					catch (PDOExeption $e)
+					{
+						$sql=$sqlstu;
 						include '../form/errorhtml.php';
 						exit;
 					}
+					//Если логин есть и в listuser, и в tempuser(AD)
+					if ($sqlprstu->rowCount()>0)
+					{	//Выводим его как результат синхронизации
+						echo '<tr><td>'.html($res['fio']).'</td><td>'.html($res['func']).'</td><td>'.html($res['dept']).'</td><td>'.html($res['login']).'</td> </tr>';					
+					}
+					else 
+					{	//иначе удаяем запись с таким логином из таблицы listuser
+						try 
+						{							
+							$sqlprdlu->execute($valsu);							
+						}
+						catch (PDOException $e)
+						{
+							$sql=$sqldlu;
+							include '../form/errorhtml.php';
+							exit;
+						}
+					}
+					
 				}
-				
 			}
 			//после окончания цикла заканчиваем вывод таблицы
 			echo '</table>';
@@ -318,13 +352,11 @@
 					//Заполняем временную таблицу записями из AD
 					try 
 					{
-						$sql=$sqlitpc;
-						$sqlpritpc->execute($valpc);
-						//$sql='insert into temppc set  name="'.$namepc.'", descrip="'.$descrip.'"';
-						//$condb->exec($sql);
+						$sqlpritpc->execute($valpc);						
 					}
 					catch (PDOException $e)
 					{
+						$sql=$sqlitpc;
 						include '../form/errorhtml.php';
 						exit;
 					}
@@ -336,106 +368,120 @@
 			
 			//--------Добавляем во временную таблицу Логины пользователей
 			//Выбираем всех пользователей
-			$sql='select login, fio from listuser where 1';
-			$respcsql=$condb->query($sql);
-			//пока всех не переберём
-			while ($respc=$respcsql->fetch(PDO::FETCH_ASSOC))
+			try {
+				$sql='select login, fio from listuser where 1 LIMIT 500';
+				$sqlprep=$condb->prepare($sql);
+				$sqlprep->execute();
+			}
+			catch (PDOExeption $e)
 			{
-				try {
-				//отбираем ПК, у которых в описании стоит выбранный пользователь
-				$valstpc['descrip']="%".$respc["fio"]."%";
-				//$sqlprstpc->bindParam(1,$valstpc);
-				$sql=$sqlstpc;
-				$sqlprstpc->execute($valstpc);
-				$respcsqlu=$sqlprstpc->fetchall();
-				//$sql='select name from temppc where descrip like "%'.$respc['fio'].'%"';
-				//$respcsqlu=$condb->query($sql);;
-				}
-				catch (PDOException $e)
-				{
-						
-					include '../form/errorhtml.php';
-					exit;
-				}
-				//заносим в поле login в отобранных записях пользователя
-				foreach ($respcsqlu as $respcu)
+				include '../form/errorhtml.php';
+				exit;
+			}
+			$respcsql=$condb->query($sql);
+			if($sqlprep->rowCount()>0)
+			{	
+				$result=$sqlprep->fetchall();
+				//пока всех не переберём
+				foreach ($result as $resu)
 				{
 					try {
-						$valutpc['login']= $respc['login'];
-						$valutpc['name']= $respcu['name'];
-						$sql=$sqlprutpc;
-						$sqlprutpc->execute($valutpc);
-						//$sql='update temppc set login="'.$respc['login'].'" where name="'.$respcu['name'].'"';
-						//$condb->exec($sql);
+					//отбираем ПК, у которых в описании стоит выбранный пользователь
+					$valstpc['descrip']="%".$resu["fio"]."%";				
+					$sqlprstpc->execute($valstpc);
+					
 					}
 					catch (PDOException $e)
 					{
-							
+						$sql=$sqlstpc;
 						include '../form/errorhtml.php';
 						exit;
+					}
+					//Если пользователь логинился на ПК
+					if($sqlprstpc->rowCount()>0)
+					{
+						$respcsqlu=$sqlprstpc->fetchall();
+						//заносим в поле login в отобранных записях пользователя
+						foreach ($respcsqlu as $respcu)
+						{
+							try {
+								$valutpc['login']= $resu['login'];
+								$valutpc['name']= $respcu['name'];							
+								$sqlprutpc->execute($valutpc);							
+							}
+							catch (PDOException $e)
+							{
+								$sql=$sqlprutpc;
+								include '../form/errorhtml.php';
+								exit;
+							}
+						}
 					}
 				}
 			}
 			//------Пененосим в базу----------
 			
 			//делаем выборку из listpc
-			$sql='select * from temppc order by name';
-			$ressql=$condb->query($sql);
-			//Цикл перебора записей  LDAP и внесения их в таблицу
-			while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-			{				
-				
-				try {
-					//Делаем запрос на выборку записи из таблицы listpc с именем $res['name']
-					$valslpc['name']=$res['name'];
-					$sql=$sqlslpc;
-					$sqlprslpc->execute($valslpc);
-				}
-				catch (PDOException $e)
-				{
-						
-					include '../form/errorhtml.php';
-					exit;
-				}
-				//$valslpc['name']=$res['name'];
-				
-				//$sql='select name from listpc where name="'.$res['name'].'"';
-				//$restempsql=$condb->query($sql);
-				//Если ПК в таблице listpc нет
-				$restempsql=$sqlprslpc->fetchall();
-				$valilpc['name']=$res['name'];
-				$valilpc['login']=$res['login'];
-				$valilpc['descrip']=$res['descrip'];
-				if (!($restempsql))
-				{	
-					//Добавляем его в таблицу
+			try 
+			{
+				$sql='select * from temppc order by name';
+				$sqlprep=$condb->prepare($sql);
+				$sqlprep->execute();
+			}
+			catch (PDOExeption $e)
+			{
+				include '../form/errorhtml.php';
+				exit;
+			}
+			if($sqlprep->rowCount()>0)
+			{			
+				$result=$sqlprep->fetchall();
+				//Цикл перебора записей  LDAP и внесения их в таблицу
+				foreach ($result as $res)
+				{				
+					
 					try {
-						$sql=$sqlilpc;
-						$sqlprilpc->execute($valilpc);
-						//$sql='insert into listpc set  name="'.$res['name'].'", login="'.$res['login'].'", descrip="'.$res['descrip'].'"';
-						//$condb->exec($sql);
+						//Делаем запрос на выборку записи из таблицы listpc с именем $res['name']
+						$valslpc['name']=$res['name'];						
+						$sqlprslpc->execute($valslpc);
 					}
 					catch (PDOException $e)
 					{
-							
+						$sql=$sqlslpc;
 						include '../form/errorhtml.php';
 						exit;
 					}
-				}
-				else
-				{	//если есть такой ПК в таблице, обновляем связанную запись
-					try {
-						$sql=$sqlulpc;
-						$sqlprulpc->execute($valilpc);
-						
-						//$sql='update listpc set   login="'.$res['login'].'", descrip="'.$res['descrip'].'" where name="'.$res['name'].'"';
-						//$condb->exec($sql);
+					//Подготовка значений для обновления и добавления в базу
+					$valilpc['name']=$res['name'];
+					$valilpc['login']=$res['login'];
+					$valilpc['descrip']=$res['descrip'];
+					
+					if ($sqlprslpc->rowCount()==0)
+					{	
+						//Добавляем его в таблицу
+						try 
+						{							
+							$sqlprilpc->execute($valilpc);							
+						}
+						catch (PDOException $e)
+						{
+							$sql=$sqlilpc;
+							include '../form/errorhtml.php';
+							exit;
+						}
 					}
-					catch (PDOException $e)
-					{
-			
-						include '../form/errorhtml.php';
-						exit;
+					else
+					{	//если есть такой ПК в таблице, обновляем связанную запись
+						try 
+						{							
+							$sqlprulpc->execute($valilpc);							
+						}
+						catch (PDOException $e)
+						{
+							$sql=$sqlulpc;
+							include '../form/errorhtml.php';
+							exit;
+						}
 					}
 				}
 			}
@@ -443,59 +489,65 @@
 			
 			//Удаляем отсутсвующие ПК в AD из базы
 			//делаем выборку из listpc
-			$sql='select * from listpc order by name';
-			$ressql=$condb->query($sql);
-			//перебираем записи из listpc
-			while ($res=$ressql->fetch(PDO::FETCH_ASSOC))
-			{	//Делаем выборку из tempuser
-				$valstpc1['name']=$res['name'];
-				
-				try 
-				{
-					$sql=$sqlstpc1;
-					$sqlprstpc1->execute($valstpc1);
-					//$sql='select name from temppc where name="'.$res['name'].'"';
-					//$restemppc=$condb->query($sql);
-				}
-				catch (PDOException $e)
-				{
-						
-					include '../form/errorhtml.php';
-					exit;
-				}
-				
-				$restemppc=$sqlprstpc1->fetchall();
-				//Если имя есть и в listuser, и в temppc(AD)
-				if ($restemppc)
-				{	//Выводим его как результат синхронизации
-					echo '<tr><td>'.html($res['name']).'</td><td>'.html($res['login']).'</td><td>'.html($res['descrip']).'</td> </tr>';
-				}
-				else
-				{	//иначе удаяем запись с таким именем из таблицы listuser
-					try {
-						$sql=$sqldlpc;
-						$sqlprdlpc->execute($valstpc1);
-						
-						//$sql='delete from listpc where name="'.$res['name'].'"';
-						//$condb->exec($sql);
+			try 
+			{
+				$sql='select * from listpc order by name';
+				$sqlprep=$condb->prepare($sql);
+				$sqlprep->execute();
+			}
+			catch (PDOExeption $e)
+			{
+				include '../form/errorhtml.php';
+				exit;
+			}
+			if($sqlprep->rowCount()>0)
+			{		
+				$result=$sqlprep->fetchall();
+			
+				//перебираем записи из listpc
+				foreach ($result as $res)
+				{	//Делаем выборку из tempuser
+					$valstpc1['name']=$res['name'];
+					
+					try 
+					{						
+						$sqlprstpc1->execute($valstpc1);						
 					}
 					catch (PDOException $e)
 					{
-							
+						$sql=$sqlstpc1;
 						include '../form/errorhtml.php';
 						exit;
 					}
+					
+					
+					//Если имя есть и в listuser, и в temppc(AD)
+					if ($sqlprstpc1->rowCount()>0)
+					{	//Выводим его как результат синхронизации
+						echo '<tr><td>'.html($res['name']).'</td><td>'.html($res['login']).'</td><td>'.html($res['descrip']).'</td> </tr>';
+					}
+					else
+					{	//иначе удаяем запись с таким именем из таблицы listuser
+						try {
+							$sql=$sqldlpc;
+							$sqlprdlpc->execute($valstpc1);
+						}
+						catch (PDOException $e)
+						{
+								
+							include '../form/errorhtml.php';
+							exit;
+						}
+					}
+				
 				}
-			
-			}			
+			}
 			//после окончания цикла заканчиваем вывод таблицы
 			echo '</table>';
-			//header('Location .');
 			//Чистим временную таблицу
-			$sql='delete from tempuser';
-			$condb->exec($sql);
-			$sql='delete from temppc';
-			$condb->exec($sql);
+			delFromTbl('tempuser',$condb);
+			delFromTbl('temppc',$condb);
+			
 			
 		}
 		//Если скрипт открыт не через main, то отправляем на главную

@@ -632,6 +632,21 @@ function numToMonth($num){
 	
 	return $month;
 }
+//---------Удаление из таблицы всей информации---------------
+function delFromTbl($table,$condb)
+{
+	try 
+		{
+			$sql='DELETE FROM '.$table;
+			$sqlprep=$condb->prepare($sql);
+			$sqlprep->execute();
+		}
+		catch (PDOExeption $e)
+		{
+			include '../form/errorhtml.php';
+			exit;
+		}
+}
 //---------Перекодировка для PDF---------------
 function iconPDF($str)
 {
