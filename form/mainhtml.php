@@ -41,9 +41,8 @@
 								
 			    					foreach ($result as $res)
 				    				{
-				    					$month=numToMonth($res['month']);
-				    					
-				    					echo '<option value='.html($res['month']).','.html($res['year']).'>'.html($month). " ".html($res['year']).'</option>';
+				    				
+				    					echo '<option value='.html($res['month']).','.html($res['year']).'>'.html(numToMonth($res['month'])). " ".html($res['year']).'</option>';
 				    					    					
 				    				}
 				    			}
