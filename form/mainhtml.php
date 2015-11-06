@@ -43,7 +43,7 @@
 				    				{
 				    					$month=numToMonth($res['month']);
 				    					
-				    					echo '<option value='.$res['month'].','.$res['year'].'>'.$month. " ".$res['year'].'</option>';
+				    					echo '<option value='.html($res['month']).','.html($res['year']).'>'.html($month). " ".html($res['year']).'</option>';
 				    					    					
 				    				}
 				    			}
@@ -79,7 +79,7 @@
 				    			
 				    				foreach ($result as $res)
 				    				{
-				    					echo '<option value='.$res['id'].'>'.$res['gateway'].'</option>';				    			
+				    					echo '<option value='.html($res['id']).'>'.html($res['gateway']).'</option>';				    			
 				    				}
 				    			}	
 			    			?>
@@ -119,7 +119,7 @@
 				    				 
 				    				foreach ($result as $res)
 				    				{
-				    					echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+				    					echo '<option value='.html($res['id']).'>'.html($res['name']).'</option>';
 				    				}
 				    			}								
 			    			?>
@@ -142,7 +142,7 @@
 								{
 									foreach($ressql as $res)
 									{
-										echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+										echo '<option value='.html($res['id']).'>'.html($res['name']).'</option>';
 									}
 								}
 			    			?>
@@ -166,7 +166,7 @@
 								{
 				    				foreach($ressql as $res)
 				    				{    					
-				    					echo '<option  value='.$res['login'].'>'.$res['fio'].'</option>';		    						
+				    					echo '<option  value='.html($res['login']).'>'.html($res['fio']).'</option>';		    						
 				    				}
 								}
 			    			?>
@@ -188,7 +188,7 @@
 								{
 				    				foreach($ressql as $res)
 				    				{  
-			    						echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+			    						echo '<option value='.html($res['id']).'>'.html($res['name']).'</option>';
 				    				}
 			    					    					
 			    				}
@@ -211,7 +211,7 @@
 								{
 									foreach($ressql as $res)
 									{
-										echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+										echo '<option value='.html($res['id']).'>'.html($res['name']).'</option>';
 									}
 								}
 			    			?>
@@ -246,7 +246,7 @@
 				    				 
 				    				foreach ($result as $res)
 				    				{
-				    					echo '<option value='.$res['id'].'>'.$res['name'].'</option>';
+				    					echo '<option value='.html($res['id']).'>'.html($res['name']).'</option>';
 				    				}
 				    			}								
 			    			?>	
@@ -278,7 +278,7 @@
 			   		 <?php if(isset($ctrls)):?>
 			    	
 				    	<?php foreach ($ctrls as $ctrl): ?>
-					 		<div>  <a   href=<?php echo htmlout($ctrl['url']);?> target=_blank> <?php echo htmlout($ctrl['name']); ?></a></div>
+					 		<div> <?php echo createLink($ctrl['name'],$ctrl['url'],"_blank")?> </div>
 						<?php endforeach;?> 
 					    
 					<?php endif;?> 

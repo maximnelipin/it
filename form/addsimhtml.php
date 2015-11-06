@@ -42,7 +42,7 @@
 		    					{
 		    						$select='';
 		    					}
-		    					echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
+		    					echo '<option '.$select.' value='.html($res['id']).'>'.html($res['name']).'</option>';
 		    				}
 		    			}
 	    			?>
@@ -67,7 +67,7 @@
 			    				{
 			    					$select='';
 			    				}	
-	    						echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
+	    						echo '<option '.$select.' value='.html($res['id']).'>'.html($res['name']).'</option>';
 							}
 						}
 	    			?>
@@ -94,7 +94,7 @@
 		    					{
 		    						$select='';
 		    					}			    					
-		    					echo '<option '.$select.' value='.$res['login'].'>'.$res['fio'].'</option>';		    						
+		    					echo '<option '.$select.' value='.html($res['login']).'>'.html($res['fio']).'</option>';		    						
 		    				}
 						}
 	    				?>

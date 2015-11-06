@@ -38,7 +38,7 @@
 		    					{
 		    						$select='';
 		    					}			    					
-		    					echo '<option '.$select.' value='.$res['login'].'>'.$res['fio'].'</option>';		    						
+		    					echo '<option '.$select.' value='.html($res['login']).'>'.html($res['fio']).'</option>';		    						
 		    				}
 						}
 	    				?>

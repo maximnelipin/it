@@ -36,7 +36,7 @@
 			    						$select='';
 			    					}
 			    					
-			    					echo '<option '.$select.' value='.$floor['id'].'>'.$build['build']. " ".$floor['floor'].' этаж </option>';
+			    					echo '<option '.$select.' value='.html($floor['id']).'>'.html($build['build']). " ".html($floor['floor']).' этаж </option>';
 			    				}
 			    			}
 		    			}

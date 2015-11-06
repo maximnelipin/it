@@ -76,7 +76,7 @@
 			    				{
 			    					$select='';
 			    				}	
-	    						echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
+	    						echo '<option '.$select.' value='.html($res['id']).'>'.html($res['name']).'</option>';
 							}
 						}
 	    			?>
@@ -119,7 +119,7 @@
 		    					{
 		    						$select='';
 		    					}
-		    					echo '<option '.$select.' value='.$res['id'].'>'.$res['extip'].'</option>';
+		    					echo '<option '.$select.' value='.html($res['id']).'>'.html($res['extip']).'</option>';
 		    						
 		    				}
 		    			}
@@ -207,7 +207,7 @@
 		    					{
 		    						$select='';
 		    					}
-		    					echo '<option '.$select.' value='.$res['id'].'>'.$res['srv'].' '.$res['typeppp'].'</option>';
+		    					echo '<option '.$select.' value='.html($res['id']).'>'.html($res['srv']).' '.html($res['typeppp']).'</option>';
 		    						
 		    				}
 		    			}
@@ -279,7 +279,7 @@
 		    					{
 		    						$select='';
 		    					}
-		    					echo '<option '.$select.' value='.$res['id'].'>'.$res['name'].'</option>';
+		    					echo '<option '.$select.' value='.html($res['id']).'>'.html($res['name']).'</option>';
 		    						
 		    				}
 		    			}

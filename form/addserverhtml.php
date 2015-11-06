@@ -61,7 +61,7 @@
 		    						}
 		    						//неолбходимо id оборудование, чтобы сделать привязку в таблице eqsrv
 		    						}
-		    						echo '<option '.$select.' value='.$res['id'].'>'.$res['name']. " ".$res['floor'].'-'.$res['cabinet'].'-'.$res['rack'].'-'.$res['unit'].'-'.$res['ip'].'-'.$res['phys'].'</option>';
+		    						echo '<option '.$select.' value='.html($res['id']).'>'.html($res['name']. " ".$res['floor'].'-'.$res['cabinet'].'-'.$res['rack'].'-'.$res['unit'].'-'.$res['ip'].'-'.$res['phys']).'</option>';
 		    					
 		    						
 		    					
@@ -98,7 +98,7 @@
 		    					{
 		    						$select='';
 		    					}			    					
-		    					echo '<option '.$select.' value='.$res['login'].'>'.$res['fio'].'</option>';		    						
+		    					echo '<option '.$select.' value='.html($res['login']).'>'.html($res['fio']).'</option>';		    						
 		    				}
 						}
 	    				?>

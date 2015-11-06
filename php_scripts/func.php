@@ -355,7 +355,7 @@ function serverInCab($id_cabinet,$condb)
 		    				<th>Описание</th>
 							<th>Оборудование</th>
 							<th>IP-адрес оборудования</th>
-							<th>Стойка</th> которого используется 
+							<th>Стойка</th>
 							<th>Юнит</th>
 							<th>Примечание</th>
 		   					</tr>');
