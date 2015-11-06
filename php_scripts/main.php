@@ -18,7 +18,7 @@
 		
 		foreach($result as $res)
 		{
-			$ctrls[]=array('url'=>$res['url'], 'name'=>$res['name']);			
+			$ctrls[]=array('url'=>html($res['url']), 'name'=>html($res['name']));			
 		}
 		
 		

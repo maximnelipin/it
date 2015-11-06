@@ -274,13 +274,20 @@ function getModelprints($condb)
 //----------Функция выборки принтеров по кабинетам
 function printerInCab($id_cabinet,$condb)
 {	
-	
+	try 
+	{
 	$sql='SELECT printers.netpath, sprinters.name, sprinters.cart, sprinters.drivers 
 			FROM printers LEFT JOIN sprinters ON printers.id_printer=sprinters.id 
 			WHERE printers.id_cabinet=:id_cabinet';
 	$sqlprep=$condb->prepare($sql);
 	$sqlprep->bindValue('id_cabinet',$id_cabinet);
 	$sqlprep->execute();
+	}
+	catch (PDOException $e)
+	{
+		include '../form/errorhtml.php';
+		exit;
+	}
 	//Если есть строки с таким условием
 	if ($sqlprep->rowCount()>0)
 	{	//Получаем массив значений
@@ -318,7 +325,8 @@ function printerInCab($id_cabinet,$condb)
 //----------Функция выборки серверов по кабинетам
 function serverInCab($id_cabinet,$condb)
 {
-
+	try 
+	{
 	$sql='SELECT servers.name, servers.type, servers.descrip, itusers.fio, equip.phys, equip.ip, equip.rack, equip.unit, equip.note
 			FROM equip
 			LEFT JOIN eqsrv ON equip.id = eqsrv.id_equip
@@ -328,6 +336,12 @@ function serverInCab($id_cabinet,$condb)
 	$sqlprep=$condb->prepare($sql);
 	$sqlprep->bindValue('id_cabinet',$id_cabinet);
 	$sqlprep->execute();
+	}
+	catch (PDOException $e)
+	{
+		include '../form/errorhtml.php';
+		exit;
+	}
 	//Если есть строки с таким условием
 	if ($sqlprep->rowCount()>0)
 	{	//Получаем массив значений
@@ -341,7 +355,7 @@ function serverInCab($id_cabinet,$condb)
 		    				<th>Описание</th>
 							<th>Оборудование</th>
 							<th>IP-адрес оборудования</th>
-							<th>Стойка</th>
+							<th>Стойка</th> которого используется 
 							<th>Юнит</th>
 							<th>Примечание</th>
 		   					</tr>');
@@ -374,7 +388,8 @@ function serverInCab($id_cabinet,$condb)
 //----------Функция выборки подключений и провайдеров по кабинетам
 function connInCab($id_cabinet,$condb)
 {
-
+	try 
+	{
 	$sql='SELECT conn.gateway, conn.typecon, conn.mask, conn.dhcp, conn.dns1, conn.dns2, conn.loginlk, conn.pwdlk, 
 			conn.contract, ppp.typeppp, ppp.srv AS srvppp, ppp.login AS loginppp, ppp.pwd AS pwdppp, 
 			extnet.extip,extnet.extmask, extnet.extgw, extnet.extdns1, extnet.extdns2, 
@@ -389,6 +404,13 @@ function connInCab($id_cabinet,$condb)
 	$sqlprep=$condb->prepare($sql);
 	$sqlprep->bindValue('id_cabinet',$id_cabinet);
 	$sqlprep->execute();
+	}
+	catch (PDOException $e)
+	{
+		include '../form/errorhtml.php';
+		exit;
+	}
+	// подготовка запроса на выборку провайдера
 	$sqlisp='SELECT * FROM isp WHERE id=:id';
 	$sqlprepisp=$condb->prepare($sqlisp);
 	//Если есть строки с таким условием
@@ -461,8 +483,19 @@ function connInCab($id_cabinet,$condb)
 					html($conn['loginlk']).'</td><td>'.
 					html($conn['pwdlk']).'</td><td>'.
 					html($conn['note']).'</td></tr>');
-			$sqlprepisp->bindValue('id',$conn['idisp']);
-			$sqlprepisp->execute();
+			try 
+			{
+				$sqlprepisp->bindValue('id',$conn['idisp']);
+				$sqlprepisp->execute();
+			} 
+			catch (PDOException $e)
+			{
+				$sql=$sqlisp;
+				include '../form/errorhtml.php';
+				exit;
+			}
+			if($sqlprepisp->rowCount()>0)
+			{
 			$isp=$sqlprepisp->fetch();
 			$resp.='<tr><td>'.
 					html($isp['name']).'</td><td>'.
@@ -474,6 +507,7 @@ function connInCab($id_cabinet,$condb)
 					html($isp['urllk']).'</td><td>'.
 					html($isp['netpath']).'</td><td>'.			
 					html($conn['note']).'</td></tr>';
+			}
 		}
 		$res[]=array('str'=>'</table> ');
 		$resp.='</table>';
@@ -517,7 +551,6 @@ function addPPP($condb)
 	try {
 			$fieldsppp=array('srv', 'login', 'pwd', 'typeppp');
 			$sql='insert into ppp set '.pdoSet($fieldsppp,$valuesppp);
-			echo $sql;
 			$sqlprep=$condb->prepare($sql);
 			$sqlprep->execute($valuesppp);
 			$_REQUEST['id_ppp']=$condb->lastInsertId();
@@ -572,7 +605,7 @@ function ping ($pinghost){
 	{	//Преодбразуем массив значений в строку с переносами
 		if(substr(PHP_OS, 0, 3) == "WIN")
 		{ //Для windows перекодируем результаты в utf-8
-		$resp.='<p>'.iconv("cp866","utf-8",$res).'</p>';
+		$resp.='<p>'.html(iconv("cp866","utf-8",$res)).'</p>';
 		}
 		else
 		{
@@ -670,6 +703,6 @@ function htmloutinput($text)
 //Формирование ссылок
 function createLink($linktext,$link, $target=NULL)
 {					//Текст    Путь   Цель
-	return '<a href="'.$link.'" target="'.$target.'">'.$linktext.'</a>';
+	return '<a href="'.html($link).'" target="'.html($target).'">'.html($linktext).'</a>';
 }
 ?>
