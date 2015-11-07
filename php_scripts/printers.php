@@ -7,8 +7,7 @@
 		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
 		//Файл подключения к БД
 		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
-		if(isset($_GET['printrep']))
-		{	
+			
 			
 			$ctrltitle="МФУ и Принтеры";
 			//Если получили id принтера
@@ -116,15 +115,18 @@
 						}
 					}	
 				}
-		}
-		else 
-		{ //Если перешли на страницу без парметров, то открываем главную
-			header('Location: main.php');
-			exit;
+		
+		else
+		{
+			
+			//Если не хватает парметров
+			$ctrltitle='Принтеры <p> Не получены необходимые параметры</P>';
+			
+					 
 		}
 		include $_SERVER['DOCUMENT_ROOT'].'/form/rep3html.php';
 		exit;
 	}
-	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
+	else header('Location: ../index.php?link='.str_replace('&','==',$_SERVER['REQUEST_URI']));
 	exit;
 ?>

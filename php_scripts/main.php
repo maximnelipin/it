@@ -30,7 +30,7 @@
 		include $_SERVER['DOCUMENT_ROOT'].'/form/mainhtml.php';
 		if($condb!=null) {$condb=NULL;}
 	}
-	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
+	else header('Location: ../index.php?link='.str_replace('&','==',$_SERVER['REQUEST_URI']));
 	exit;
 
 ?>

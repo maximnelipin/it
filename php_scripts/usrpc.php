@@ -8,18 +8,32 @@
 		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
 		//если есть пользователь
 		if(isset($_GET['usr']))
-		{
+		{	$ctrltitle="Список пользователей и ПК";
+			$ctrls='Список пользователей и ПК';
 			//Вывод всех пользователей и связанных ПК
 			if($_GET['usr']=="all")
 			{
-				//Делаем выборку
-				$sql='SELECT listuser.login as login, listuser.fio as fio, listuser.func as func, listuser.dept as dept, 
-						listpc.name as name, listpc.descrip as descrip
+				//Делаем выборку ПК и пользователей
+				try
+				{
+					$sql='SELECT listuser.login AS login, listuser.fio AS fio, 
+							listuser.func AS func, listuser.dept AS dept, listpc.name AS name, listpc.descrip AS descrip
+						FROM listuser
+						LEFT JOIN listpc ON listuser.login = listpc.login
+						UNION
+						SELECT listuser.login AS login, listuser.fio AS fio, listuser.func AS func, 
+							listuser.dept AS dept, listpc.name AS name, listpc.descrip AS descrip
 						FROM listuser
 						RIGHT JOIN listpc ON listuser.login = listpc.login
-						ORDER BY listuser.fio';
-				$sqlprep=$condb->prepare($sql);
-				$sqlprep->execute();
+						ORDER BY fio';
+					$sqlprep=$condb->prepare($sql);
+					$sqlprep->execute();
+				}
+				catch (PDOExeption $e)
+				{
+					include '../form/errorhtml.php';
+					exit;
+				}
 				if($sqlprep->rowCount()>0)
 				{				
 					$result=$sqlprep->fetchall();
@@ -42,8 +56,7 @@
 					}
 					$params[]=array('str'=>'<table>');
 				}
-				$ctrltitle="Список пользователей и ПК";
-				$ctrls='Список пользователей и ПК';
+				
 			}
 			
 			//Если получили логин в виде e-mail
@@ -165,14 +178,17 @@
 				
 			}
 		}	
-		else 
-		{ //Если перешли на страницу без парметров, то открываем главную
-			header('Location: main.php');
-			exit;
-		}			
+		else
+		{
+			//Если не хватает парметров		
+			$params[]=array('str'=>'');
+			$ctrltitle="Пользователи и ПК";
+			$ctrls='Не получены необходимые параметры';			
+								 
+		}	
 		include $_SERVER['DOCUMENT_ROOT'].'/form/rep1html.php';
 		exit;		
 	}
-	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
+	else header('Location: ../index.php?link='.str_replace('&','==',$_SERVER['REQUEST_URI']));
 	exit;
 ?>

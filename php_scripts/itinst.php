@@ -11,7 +11,7 @@
 			//Делаем выборку инструкций
 		try
 		{
-			$sql='SELECT * FROM itinst	ORDER BY name';
+			$sql='SELECT * FROM itinst	ORDER BY name LIMIT 50';
 			$sqlprep=$condb->prepare($sql);
 			$sqlprep->execute();
 		}
@@ -31,10 +31,17 @@
 				$params[]=array('str'=>'<div class=ainst>'.createLink(html($res['name']),html($res['url']),"_blank").'</a> </div>');
 			}
 			$params[]=array('str'=>'</div>');
+			$ctrltitle="Инструкции для сотрудников отдела ИТ";
+			$ctrls='Инструкции для сотрудников отдела ИТ';
 		}
-		$ctrltitle="Инструкции для сотрудников отдела ИТ";
-		$ctrls='Инструкции для сотрудников отдела ИТ';
 		
+		else
+		{
+			//Не хватает параметров
+			$params[]=array('str'=>'');
+			$ctrltitle="Инструкции для сотрудников отдела ИТ";
+			$ctrls='Нет инструкций для сотрудников отдела ИТ';
+		}
 		include $_SERVER['DOCUMENT_ROOT'].'/form/rep1html.php';
 		exit;
 	}

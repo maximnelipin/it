@@ -18,6 +18,7 @@
 			include '../form/errorhtml.php';
 			exit;
 		}
+		
 		if($sqlprep->rowCount()>0)
 		{
 			$result=$sqlprep->fetchall();
@@ -46,13 +47,21 @@
 				'</td></td> </tr>');	
 				}
 			$params[]=array('str'=>'<table>');
+			$ctrltitle="Контрагенты";
+			$ctrls='Контрагенты';
 		}
-				$ctrltitle="Контрагенты";
-				$ctrls='Контрагенты';
+				
+		else
+		{
+			//Не хватает параметров
+			$params[]=array('str'=>'');
+			$ctrltitle="Контрагенты";			
+			$ctrls='Нет контрагентов';					 
+		}
 				
 		include $_SERVER['DOCUMENT_ROOT'].'/form/rep1html.php';
 		exit;		
 	}
-	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
+	else header('Location: ../index.php?link='.str_replace('&','==',$_SERVER['REQUEST_URI']));
 	exit;
 ?>

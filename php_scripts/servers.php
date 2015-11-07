@@ -6,8 +6,7 @@
 		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
 		//Файл подключения к БД
 		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
-		if(isset($_GET['srvrep']))
-		{	
+			
 			
 			$ctrltitle="Сервера";
 			//Если получили серер
@@ -133,15 +132,15 @@
 					}	
 				}	
 			}
-		}
-		else 
-		{ //Если перешли на страницу без парметров, то открываем главную
-			header('Location: main.php');
-			exit;
+		
+		else
+		{
+			//Если не хватает парметров
+			$ctrltitle='Провайдеры Не получены необходимые параметры';					 
 		}
 		include $_SERVER['DOCUMENT_ROOT'].'/form/rep3html.php';
 		exit;
 	}
-	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
+	else header('Location: ../index.php?link='.str_replace('&','==',$_SERVER['REQUEST_URI']));
 	exit;
 ?>

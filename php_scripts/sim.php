@@ -1,13 +1,13 @@
 <?php
 	session_start();
-	
+	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
+	//Файл подключения к БД
 	if(isset($_SESSION['user_id']))
 	{	
 		//Файл для работы с pdf.
  		include $_SERVER['DOCUMENT_ROOT'].'/php_scripts/fpdf.php';
  		//Файл с функциями
-		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
-		//Файл подключения к БД
+		
 		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
 		$ctrltitle='Сим-карты';
 		$ctrls='Сим-карты';
@@ -113,8 +113,6 @@
 				{
 					$pdf=new FPDF('L','mm','A4');
 					$pdf->AddPage();
-					$pdf->AddFont('TimesNewRomanPSMT','','times.php');
-					$pdf->AddFont('TimesNewRomanPS-BoldMT','B','timesb.php');
 					$pdf->AddFont('ArialMT','','a2c023acb498ea969bcb0e43b4925663_arial.php');
 					//Устанавливаем шрифт
 					$pdf->SetFont('ArialMT','',14);
@@ -136,14 +134,14 @@
 					$widthbuild=60;
 					$widthpay=25;
 					$widthnote=70;
+					$color=false;
 					$pdf->Cell($widthnum,$hig,iconPDF('Номер'),1,0,'C',false);
 					$pdf->Cell($widthisp,$hig,iconPDF('Оператор'),1,0,'C',false);
 					$pdf->Cell($widthbuild,$hig,iconPDF('Объект'),1,0,'C',false);
 					$pdf->Cell($widthfio,$hig,iconPDF('Числиться за'),1,0,'C',false);
 					$pdf->Cell($widthpay,$hig,iconPDF('Оплата'),1,0,'C',false);
 					$pdf->Cell($widthnote,$hig,iconPDF('Примечание'),1,1,'C',false);
-					$i=0;
-					$color=true;
+					
 					foreach ($result as $res)						
 					{	
 						$color=!$color;
@@ -167,14 +165,15 @@
 				exit;
 			}
 		}
-		else 
-		{ //Если перешли на страницу без парметров, то открываем главную
-			header('Location: main.php');
-			exit;
+		else
+		{	//Не хватает параметров
+			$params[]=array('str'=>'');
+			$ctrltitle="Сим-карты";
+			$ctrls='Не хватает парметров';					 
 		}
 		include $_SERVER['DOCUMENT_ROOT'].'/form/rep1html.php';
 		exit;
 	}
-	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
+	else header('Location: ../index.php?link='.str_replace('&','==',$_SERVER['REQUEST_URI']));
 	exit;
 ?>

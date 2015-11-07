@@ -26,10 +26,18 @@
 				
 				$params[]=array('str'=>'<div class=ainst> '.createLink(html($res['name']),html($res['url']),"_blank").' </div>');
 			}
+			$params[]=array('str'=>'</div>');
+			$ctrltitle="Инструкции для пользователей";
+			$ctrls='Инструкции для пользователей';
 		}
-		$params[]=array('str'=>'</div>');
-		$ctrltitle="Инструкции для пользователей";
-		$ctrls='Инструкции для пользователей';	
+		
+		else
+		{
+			//Не хватает параметров
+			$params[]=array('str'=>'');
+			$ctrltitle="Инструкции для пользователей";
+			$ctrls='Нет инструкций для пользователей';
+		}
 		include $_SERVER['DOCUMENT_ROOT'].'/form/rep1html.php';
 		exit;
 ?>

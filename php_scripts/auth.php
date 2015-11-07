@@ -54,8 +54,12 @@
 			$_SESSION['user_id']=$login;
 			if(isset($_GET['link']))
 			{
+				
+				$link=str_replace('==','&',$_GET['link']);
 				if($conn!=null){ldap_unbind($conn);}
-				header("Location: ..".$_GET['link']);
+				header("Location: ..".$link);
+				//if($conn!=null){ldap_unbind($conn);}
+				//header("Location: ..".$_GET['link']);
 				exit;
 			}
 			else 

@@ -9,8 +9,10 @@
 		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
 		
 		//Если получилили здание
+		
 		if(isset($_GET['build']))
-		{
+		{	
+			
 			//---------------------Выбираем информацию о зданиии
 			try 
 			{
@@ -139,10 +141,14 @@
 			}
 		}
 			
-		else 
-		{ //Если перешли на страницу без парметров, то открываем главную
-			header('Location: main.php');
-			exit;
+		else
+		{
+			$params[]=array('str'=>'');
+			//Если нет дат дежурств в выбранном месяце
+			$ctrltitle='Здания';
+			$address='';
+			$ctrls='Не получены необходимые параметры';
+					 
 		}
 			
 		include $_SERVER['DOCUMENT_ROOT'].'/form/rep2html.php';
@@ -152,6 +158,6 @@
 		
 		
 	}
-	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
+	else header('Location: ../index.php?link='.str_replace('&','==',$_SERVER['REQUEST_URI']));
 	exit;
 ?>

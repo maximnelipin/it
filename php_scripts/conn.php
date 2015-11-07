@@ -7,8 +7,9 @@
 		//Файл подключения к БД
 		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
 		
+		
 		//Если поступил id поля с адресом шлюза
-		if(isset($_GET['gwlan']))
+		if(isset($_GET['gwlan']) AND (isset($_GET['ping']) OR isset($_GET['conn']) ))
 		{	
 			//Вывод всех точек
 			if($_GET['gwlan']=="all")
@@ -105,16 +106,19 @@
 					$ctrltitle="Доступность ЛВС (ПИНГ)";
 				}
 			}
+			else $ctrltitle='Не получены необходимые параметры';
 		}	
-		else 
-		{ //Если перешли на страницу без парметров, то открываем главную
-			header('Location: main.php');
-			exit;
-		}
+		else
+		{
+			//$params[]=array('str'=>'');
+			//Если нет дат дежурств в выбранном месяце
+			$ctrltitle='Подключения и пинги Не получены необходимые параметры';
 			
+					 
+		}
 		include $_SERVER['DOCUMENT_ROOT'].'/form/rep3html.php';
 		exit;
 	}
-	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);
+	else header('Location: ../index.php?link='.str_replace('&','==',$_SERVER['REQUEST_URI']));
 	exit;
 ?>

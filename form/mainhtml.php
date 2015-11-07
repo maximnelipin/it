@@ -148,7 +148,7 @@
 			    		</select> 	
 			    	
 				    	<div>
-					    	<input type="submit" class="button" size="70" name="isprep"  value="Отчёт">	    	    	   
+					    	<input type="submit" class="button" size="70"  value="Отчёт">	    	    	   
 					   	</div>
 			    	</div>
 			    </form> 
@@ -195,7 +195,7 @@
 			    		</select> 	
 			    	
 				    	<div>
-				    		<input type="submit" class="button" size="70" name="usrpc"  value="Отчёт">    	    	   
+				    		<input type="submit" class="button" size="70"   value="Отчёт">    	    	   
 				   		</div>
 			    	</div>
 			    </form>
@@ -217,7 +217,7 @@
 			    		</select> 	
 			    	
 				    	<div>
-					    	<input type="submit" class="button" size="70" name="printrep"  value="Отчёт">	    	    	   
+					    	<input type="submit" class="button" size="70"   value="Отчёт">	    	    	   
 					   	</div>
 			    	</div>
 			    </form>  
@@ -251,7 +251,7 @@
 			    			?>	
 			    		</select> 			    	
 				    	<div>
-					    	<input type="submit" class="button" size="70" name="srvrep"  value="Отчёт">	    	    	   
+					    	<input type="submit" class="button" size="70"  value="Отчёт">	    	    	   
 					   	</div>
 			    	</div>
 			    </form>  
