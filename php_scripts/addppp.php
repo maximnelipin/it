@@ -22,18 +22,7 @@
 		//Добавляем 
 		if (isset($_REQUEST['srv']) && isset($_REQUEST['addform']))	
 		{
-				try 
-				{
-					$fields=array('typeppp', 'srv', 'login', 'pwd');
-					$sql='insert into ppp set '.pdoSet($fields,$values);
-					$sqlprep=$condb->prepare($sql);
-					$sqlprep->execute($values);
-				}
-				catch (PDOException $e)
-				{
-					include '../form/errorhtml.php';
-					exit;
-				}
+				addPPP($condb);
 			
 			header('Location: '.$_SERVER['PHP_SELF'].'?add');
 			exit;
@@ -95,7 +84,7 @@
 			{
 				$sql='DELETE FROM ppp WHERE id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':id',$_POST['id']);
+				$sqlprep->bindValue(':id',$_REQUEST['id']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)

@@ -38,10 +38,10 @@
 		if (isset($_REQUEST['gateway']) && isset($_REQUEST['addform']))
 		{
 			//Если добавляем
-			if($_POST['radextnet']=="add")
+			if($_REQUEST['radextnet']=="add")
 			{
 				//Если вносим новый внешний ip
-				if(isset($_POST['extip']))
+				if(isset($_REQUEST['extip']))
 				{
 					addExtip($condb);
 			
@@ -51,18 +51,18 @@
 			//----------------------Добавление параметров ppp
 			//Аналогично добавлению внешнего ip
 				
-			if($_POST['radppp']=="sel")
+			if($_REQUEST['radppp']=="sel")
 			{	//Если ppp не выбрано, 
-				if($_POST['id_ppp']=='none')
+				if($_REQUEST['id_ppp']=='none')
 				{	//то заносим пустое значение в базу
-					$_POST['id_ppp']='';
+					$_REQUEST['id_ppp']='';
 				}
 			
 			}
-			if($_POST['radppp']=="add")
+			if($_REQUEST['radppp']=="add")
 			{
 					
-				if(isset($_POST['srv']))
+				if(isset($_REQUEST['srv']))
 				{
 					addPPP($condb);						
 				}
@@ -71,10 +71,10 @@
 				
 			//------------------------Добавление компании
 			//Аналогично добавлению внешнего ip
-			if($_POST['radcomp']=="add")
+			if($_REQUEST['radcomp']=="add")
 			{
 					
-				if(isset($_POST['name']))
+				if(isset($_REQUEST['name']))
 				{
 					addCompany($condb);
 				}
@@ -143,10 +143,10 @@
 		if (isset($_REQUEST['editform']))
 		{
 			//Если добавляем
-			if($_POST['radextnet']=="add")
+			if($_REQUEST['radextnet']=="add")
 			{
 				//Если забит внешний ip
-				if(isset($_POST['extip']))
+				if(isset($_REQUEST['extip']))
 				{
 					addExtip($condb);
 				}

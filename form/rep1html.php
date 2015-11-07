@@ -23,7 +23,7 @@
 			    <h2 class="title"><?php echo $ctrl1;?> </h2>   
 			</div>	
 			<?php  foreach ($params1 as $param1): ?>
-					<?php echo $param1['str']; ?>	
+					<?php echo html($param1['str']); ?>	
 			<?php endforeach;?>  
 		<?php endif;?>
 		<?php if(isset($params2)):?>
@@ -31,7 +31,7 @@
 			    <h2 class="title"> <?php echo $ctrl2;?></h2>     
 			</div>	
 			<?php   foreach ($params2 as $param2): ?>
-					<?php echo $param2['str']; ?>	
+					<?php echo html($param2['str']); ?>	
 			<?php endforeach;?> 			    		
 		<?php endif;?>						    
 		<div class="field">					    		    

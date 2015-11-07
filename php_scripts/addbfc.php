@@ -24,7 +24,7 @@
 			exit;
 		}
 		//Добавляем 
-		if (isset($_GET['add_build']))
+		if (isset($_REQUEST['add_build']))
 		{
 			try {
 		
@@ -42,9 +42,9 @@
 				exit;
 			}
 			//Получаем список этажей			
-			$Dfloor=str_getcsv($_POST["floor"], ",");
+			$Dfloor=str_getcsv($_REQUEST["floor"], ",");
 			//Получаем список всех кабинетов на этажах
-			$Dcab=str_getcsv($_POST["cabinet"], ";");
+			$Dcab=str_getcsv($_REQUEST["cabinet"], ";");
 			//----------вставка этажей и кабинетов на них--------------			
 			addFloor($id_build, $Dfloor, $Dcab,$condb);		
 			header('Location: '.$_SERVER['PHP_SELF'].'?add_b');
@@ -107,7 +107,7 @@
 			{
 				$sql='DELETE FROM build WHERE id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':id',$_POST['id']);
+				$sqlprep->bindValue(':id',$_REQUEST['id']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -140,11 +140,11 @@
 		{
 		
 			//Получаем список этажей
-			$Dfloor=str_getcsv($_POST["floor"], ",");
+			$Dfloor=str_getcsv($_REQUEST["floor"], ",");
 			//Получаем список всех кабинетов на этажах
-			$Dcab=str_getcsv($_POST["cabinet"], ";");
+			$Dcab=str_getcsv($_REQUEST["cabinet"], ";");
 			//----------вставка этажей и кабинетов на них--------------
-			addFloor($_POST["id_build"], $Dfloor, $Dcab, $condb);
+			addFloor($_REQUEST["id_build"], $Dfloor, $Dcab, $condb);
 		
 			header('Location: '.$_SERVER['PHP_SELF'].'?add_f');
 			exit;
@@ -208,7 +208,7 @@
 			{
 				$sql='DELETE FROM floor WHERE id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':id',$_POST['id_1']);
+				$sqlprep->bindValue(':id',$_REQUEST['id_1']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
@@ -238,7 +238,7 @@
 		if (isset($_REQUEST['cabinet']) && isset($_REQUEST['add_cab']))
 		{
 			
-			addCab($_POST['id_floor'], $_POST['cabinet'], $condb);
+			addCab($_REQUEST['id_floor'], $_REQUEST['cabinet'], $condb);
 			
 			header('Location: '.$_SERVER['PHP_SELF'].'?add_c');
 			exit;

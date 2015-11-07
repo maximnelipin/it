@@ -26,14 +26,14 @@
 					 <div> 
 					 	<h2 class="title1">
 								 <?php //выводим номер этажа 
-									echo $param1['str']; ?>
+									echo html($param1['str']); ?>
 						</h2>
 					</div>			
 				<?php //перебираем кабинеты  
 					if (isset($params2)):							
 						foreach ($params2 as $param2):				 
 							if ($param2['id_floor']==$param1['id']):?>
-								 <div> <h2 class="title2"><?php echo $param2['str']?></h2></div>
+								 <div> <h2 class="title2"><?php echo html($param2['str'])?></h2></div>
 								<div class="m_title2">
 									<?php 									
 										//вывод принтеров

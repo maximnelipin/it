@@ -79,7 +79,7 @@
 				$fields=array("netpath","id_cabinet","id_printer","note");
 				$sql='update printers set '.pdoSet($fields,$values).' where id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$values["id"]=$_POST['id'];
+				$values["id"]=$_REQUEST['id'];
 				$sqlprep->execute($values);
 			}
 			catch (PDOException $e)

@@ -60,7 +60,7 @@
 							$resc.=$resconn['str'];
 						}
 						//Формируем строку с подключением и связанным провайдером в данном кабинете	
-						$params[]=array('res'=>$resc, 'build'=>$res['name'].' '.$res['address'].' '.$res['floor'].' этаж '.$res['cabinet']);
+						$params[]=array('res'=>$resc, 'title'=>html($res['name'].' '.$res['address'].' '.$res['floor'].' этаж '.$res['cabinet']));
 					}
 						//Заголовок страницы
 					$ctrltitle="Отчёт по подключениям";
@@ -100,7 +100,7 @@
 						//пингуем
 						$respings=ping($res['gateway']);
 						//Записываем результат пинга в элемент массива
-						$params[]=array('res'=>$respings, 'build'=>$res['name']);
+						$params[]=array('res'=>$respings, 'title'=>html($res['name']));
 					}
 					$ctrltitle="Доступность ЛВС (ПИНГ)";
 				}
@@ -112,7 +112,7 @@
 			exit;
 		}
 			
-		include $_SERVER['DOCUMENT_ROOT'].'/form/rep4html.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/form/rep3html.php';
 		exit;
 	}
 	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF']);

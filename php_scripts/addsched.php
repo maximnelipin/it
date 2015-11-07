@@ -99,7 +99,7 @@
 			{
 				$sql='DELETE FROM schedule WHERE dateduty=:dateduty';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':dateduty',$_POST['id']);
+				$sqlprep->bindValue(':dateduty',$_REQUEST['id']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)

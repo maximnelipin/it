@@ -42,9 +42,9 @@
 				exit;
 			}
 			//Если он связан с оборудованием
-			if(!empty($_POST['id_equip']))
+			if(!empty($_REQUEST['id_equip']))
 			{	//Для каждого выбранного оборудования
-				foreach ($_POST['id_equip'] as $id_equip)
+				foreach ($_REQUEST['id_equip'] as $id_equip)
 				{	//Добавляем записьв связующую таблицу eqsrv
 					try {
 						$sql='insert into eqsrv set id_equip=:id_equip, id_srv=:id_srv';
@@ -105,7 +105,7 @@
 				$fields=array("name","type","descrip","login","note");
 				$sql='update servers set '.pdoSet($fields,$values).' where id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$values["id"]=$_POST['id'];
+				$values["id"]=$_REQUEST['id'];
 				$sqlprep->execute($values);
 			}
 			catch (PDOException $e)
@@ -115,7 +115,7 @@
 			}
 			
 			
-			if(!empty($_POST['id_equip']))
+			if(!empty($_REQUEST['id_equip']))
 			{
 				//удаляем всё связи с оборудованием
 				try
@@ -131,7 +131,7 @@
 					exit;
 				}
 				//добавляем новые записи
-				foreach ($_POST['id_equip'] as $id_equip)
+				foreach ($_REQUEST['id_equip'] as $id_equip)
 				{
 					try {
 							
