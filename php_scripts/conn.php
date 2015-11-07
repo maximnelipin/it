@@ -68,7 +68,7 @@
 				}
 			}			
 			//Выводим на страницу, если есть ping
-			if(isset($_GET['ping']))
+			elseif(isset($_GET['ping']))
 			{	
 				try
 				{

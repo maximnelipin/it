@@ -9,6 +9,11 @@
 </head>
     <body>
     	<?php	include $_SERVER['DOCUMENT_ROOT'].'/html/header.php';	?>
+	    <div class="field">					    		    
+			<div class="btn_close">
+			   <input type="button" class="button" value="Закрыть окно" onClick=window.close();>  
+			</div>
+		</div>
 	    <div>
 			  <h2 class="title"> <?php echo $ctrltitle;?></h2>    
 		</div>
