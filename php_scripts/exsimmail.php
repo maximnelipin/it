@@ -1,10 +1,10 @@
 <?php
 	//Файл с классом отправки почты через соккеты
-	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/ExSendMailSmtpClass.php';
+	include_once 'ExSendMailSmtpClass.php';
 	//Файл с функциями
-	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
+	include_once 'func.php';
 	//Файл подключения к БД
-	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
+	include_once 'mysql_conf.php';
 		
 		//Вычитаем половину стоимости оплаты за месяц
 		//Вычитание происходит по лицевым счётам

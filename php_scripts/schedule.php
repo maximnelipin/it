@@ -184,7 +184,9 @@
 			    	{
 			    		//обрабатываем неделю
 			    		for($j=0;$j<7;$j++)
-			    		{	
+			    		{	//Если восвресенье, то после него переходим на новую строку
+				    		if($j==6) $ln=1;
+				    		else $ln=0;
 			    	
 			    			//Если в массиве не пустой элемент
 			    			if(!empty($month[$i][$j]))
@@ -203,9 +205,7 @@
 					    		break;
 					    		}
 				    		}
-				    		//Если восвресенье, то после него переходим на новую строку
-				    		if($j==6) $ln=1;
-				    		else $ln=0;
+				    		
 			    			//Если суббота или воскресенье
 			    			if($j==5 || $j==6)
 			    			{
@@ -258,7 +258,7 @@
 	    //Закрываем подключение к базе
 		if($condb!=null) {$condb=NULL; exit;}
  	}		
-	else header('Location: ../index.php?link='.$_SERVER['PHP_SELF'].'?monyear='.$_REQUEST["monyear"]);
+	else header('Location: ../index.php?link='.str_replace('&','==',$_SERVER['REQUEST_URI']));
 	exit;
 
 	?>
