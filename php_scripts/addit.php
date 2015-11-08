@@ -23,7 +23,7 @@
 			if($conn)
 			{
 				//Входим в ldap
-				$bind=ldap_bind($conn,$usrd,$pwdd);
+				$bind=ldap_bind($conn,$usrd,$pwd);
 				//Если успешно
 				if($bind)
 				{
@@ -217,7 +217,6 @@
 			echo '</table>';
 			header('Location .');
 			//Чистим временную таблицу
-			//очищаем временные таблицы
 			delFromTbl('tempit',$condb);
 			
 			

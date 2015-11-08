@@ -58,8 +58,6 @@
 				$link=str_replace('==','&',$_GET['link']);
 				if($conn!=null){ldap_unbind($conn);}
 				header("Location: ..".$link);
-				//if($conn!=null){ldap_unbind($conn);}
-				//header("Location: ..".$_GET['link']);
 				exit;
 			}
 			else 

@@ -28,19 +28,17 @@ select {
 	padding-left: 1%;
 	margin-left: 4%;	
 	}
-	.ctrl{
-	border-top: 1px solid red;
-	padding-bottom:6px;
-	margin-top:1%;
-	padding-top:6px;
-	overflow: auto;
-	
-}
+
 .ctrl{
 	margin-bottom: 1%;
 	padding-left: 1%;
 	width: 90%;
-	margin-left: 3%;	
+	margin-left: 3%;
+	border-top: 1px solid red;
+	padding-bottom:6px;
+	margin-top:1%;
+	padding-top:6px;
+	overflow: auto;	
 }
 
 

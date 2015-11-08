@@ -13,7 +13,7 @@
 	//пользователь для подключения к серверу LDAP
 	$usrd="itinfo".$domain;
 	//Пароль пользоватлея LDAP
-	$pwdd="Passw0rd";
+	$pwd="Passw0rd";
 	//OU с сотрудниками
 	$userous[0]="OU=users,OU=developmentug,OU=DU,OU=Users&Pcs,DC=du,DC=i-net,DC=su";
 	//OU с компами 1

@@ -41,12 +41,7 @@ ul
 	padding-bottom:3px;
 	float:left;
 }
-.tblusrpc td:nth-child(1){
-	width:20%;	
-}
-.tblusrpc td:nth-child(2){
-	width:18%;	
-}
+
 .ainst {
 	margin-bottom:7px;
 }

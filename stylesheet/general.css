@@ -15,7 +15,7 @@ a {
 header .leftcolumn {
 	float: left;
 	padding-top: 1%;
-	width:41.5%;
+	width:40%;
 
 }
 header .centrcolumn {
@@ -63,12 +63,7 @@ label  {
 	font-size: 120%;	
 }
 
-.btn_close{
-	float:left;
-	width:150%;
-	margin-top:10px;
-	margin-bottom:10px;	
-}
+
 
 .title {	
 	font-size: 160%;
@@ -105,6 +100,12 @@ label  {
 	background-color:coral;
 	cursor: pointer;
 	font-size: 100%; 	
+}
+.btn_close{
+	float:left;
+	width:150%;
+	margin-top:10px;
+	margin-bottom:10px;	
 }
 
 .text{	
