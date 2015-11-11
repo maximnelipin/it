@@ -102,11 +102,13 @@
 		//Удаление контрагента
 		if (isset($_REQUEST['action']) && $_REQUEST['action']=='Удалить')
 		{
+			
+			//Удалояем оборудование
 			try
 			{
 				$sql='DELETE FROM equip WHERE id=:id';
 				$sqlprep=$condb->prepare($sql);
-				$sqlprep->bindValue(':id',$_REQUEST['id']);
+				$sqlprep->bindValue(':id',$_REQUEST['id_1']);
 				$sqlprep->execute();
 			}
 			catch (PDOException $e)
