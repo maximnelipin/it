@@ -85,7 +85,8 @@
 	    	<div class="field">
 	    		<label for="id_extnet" > Параметры внешнего подключения</label>
 	    		<div class="radio">
-		    		Выбрать <input type="radio" class="text"  name="radextnet" value="sel" checked onClick=selextnet();>
+		    		Выбрать 
+		    		<input type="radio" class="text"  name="radextnet" value="sel" checked onClick=selextnet();>
 		    		Ввести <input type="radio" class="text"  name="radextnet" value="add" onClick=addextnet();>
 	    		</div>
 	    		<div id="selextnet"  class="divon">

@@ -1,13 +1,11 @@
 <?php
-	session_start();
-	
+	session_start();	
 	if(isset($_SESSION['user_id']))
 	{	
 		//Файл с функциями
 		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
 		//Файл подключения к БД
-		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';
-			
+		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/mysql_conf.php';			
 			
 			$ctrltitle="МФУ и Принтеры";
 			//Если получили id принтера

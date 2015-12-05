@@ -18,9 +18,9 @@ select {
 }
 .radio {
 	font-size: 120%;
-	float:right;
-	margin-right:77%;
-	margin-bottom:1%;	
+	float:left;
+	margin-left: 2%;
+	margin-bottom:2%;	
 }
 .fieldcall
 {

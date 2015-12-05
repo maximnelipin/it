@@ -48,15 +48,17 @@
 			}
 			else die("Введён неверный логин или пароль или недоступен сервер LDAP. <a href='index.php'> Попробовать ещё раз </a>");
 		}
-		//Если пользователь принадлежит группе, пускаем на главную
+		//Если пользователь принадлежит группе
 		if ($check_num['count']!=0)
 		{
 			$_SESSION['user_id']=$login;
 			if(isset($_GET['link']))
 			{
 				
+				//Формируем несколько параметров
 				$link=str_replace('==','&',$_GET['link']);
 				if($conn!=null){ldap_unbind($conn);}
+				//Переходим на нужную ссылку				
 				header("Location: ..".$link);
 				exit;
 			}

@@ -9,10 +9,10 @@
 </head>
 
     <body>
-    <?php
-	include_once $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
-	include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
-	?>
+	    <?php
+		include_once $_SERVER['DOCUMENT_ROOT'].'/html/header.php';
+		include_once $_SERVER['DOCUMENT_ROOT'].'/php_scripts/func.php';
+		?>
 	    <h2 class="title"> Главная страница</h2>
 	    <div class="repmain">
 	   		<div class="mainleft">

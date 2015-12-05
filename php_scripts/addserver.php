@@ -1,6 +1,5 @@
 <?php
-	session_start();
-	
+	session_start();	
 	if(isset($_SESSION['user_id']))
 	{	
 		//Файл с функциями
@@ -212,7 +211,7 @@
 		{
 			$result=$sqlprepeq->fetchall();
 			foreach($result as $res)
-			{
+			{	//Массив для группировки
 				$params[]=array('id'=>$res['id'], 'name'=>$res['name']."-".$res['floor'].'-'.$res['cabinet'].'-'.$res['rack'].'-'.$res['unit'].'-'.$res['ip'].'-'.$res['phys']);
 				try 
 				{
@@ -229,7 +228,7 @@
 				{
 					$resultsrv=$sqlprepsrv->fetchall();					
 					foreach($resultsrv as $ressrv)
-					{	//массив для вложенной группы
+					{	//массив для элеметов, доступных для редактирования
 						$params1[]=array('id_1'=>$ressrv['id'], 'name'=>$ressrv['name'], 'id'=>$ressrv['id_equip']);
 							
 					}
@@ -241,6 +240,7 @@
 		$ctrltitle="серверами";
 		//Название ссылки в родительном падеже
 		$ctrladd=createLink("Добавить сервер","?add" );
+		//Отключить кнопки на признаке группировки
 		$btn_off='disabled';
 		
 		include $_SERVER['DOCUMENT_ROOT'].'/form/ctrl1html.php';

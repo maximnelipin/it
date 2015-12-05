@@ -1,6 +1,6 @@
 <?php
 //Данная функция взята с http://phpfaq.ru/pdo. Все права принадлежат автору
-//Если имена форм совпадают с полями таблице, то функция формирует строку для insert/update set
+//Если имена форм совпадают с полями таблице, то функция формирует строку для insert/update
 function pdoSet($fields, &$values, $source = array()) {
 	$set = '';
 	$values = array();
@@ -71,8 +71,7 @@ function addFloor($id_build, $Dfloor, $Dcab,$condb){
 			$sqlprep=$condb->prepare($sql);
 			$sqlprep->execute($valf);
 			//Получаем id введённого этажа
-			$id_floor=$condb->lastInsertId();
-			
+			$id_floor=$condb->lastInsertId();			
 			addCab($id_floor, $Dcab,$condb,$i);
 			//В след.итерации берём следующий набор этажей из парсенного массива
 			$i++;
@@ -457,7 +456,7 @@ function connInCab($id_cabinet,$condb)
 							<th>Личный кабинет</th>
 							<th>Папка с документами</th>
 							<th>Примечание</th>';
-		//Выводим 
+		//Формируем таблицу с подключением
 		foreach ($result as $conn)
 		{
 			$res[]=array('str'=> '<tr><td>'.
@@ -483,6 +482,7 @@ function connInCab($id_cabinet,$condb)
 					html($conn['loginlk']).'</td><td>'.
 					html($conn['pwdlk']).'</td><td>'.
 					html($conn['note']).'</td></tr>');
+			//Выбираем обслуживающего провайдера
 			try 
 			{
 				$sqlprepisp->bindValue('id',$conn['idisp']);
@@ -495,7 +495,7 @@ function connInCab($id_cabinet,$condb)
 				exit;
 			}
 			if($sqlprepisp->rowCount()>0)
-			{
+			{//Формируем таблицу с ним
 			$isp=$sqlprepisp->fetch();
 			$resp.='<tr><td>'.
 					html($isp['name']).'</td><td>'.
@@ -512,9 +512,6 @@ function connInCab($id_cabinet,$condb)
 		$res[]=array('str'=>'</table> ');
 		$resp.='</table>';
 		$res[]=array('str'=>$resp);
-
-
-
 	}
 	else
 	{
@@ -587,7 +584,6 @@ function ping ($pinghost){
 	if(substr(PHP_OS, 0, 3) == "WIN")
 	{
 		//Пингуем c Windows
-		//$result = explode("\n", `ping -n 4 -l 32 `.$pinghost);
 		exec('ping -n 4 -l 32 '.escapeshellcmd($pinghost), $result);
 			
 	}
@@ -599,8 +595,7 @@ function ping ($pinghost){
 	
 	
 	//Формирвем область с результатом пинга
-	$resp='<div class="ping">';
-	
+	$resp='<div class="ping">';	
 	foreach ($result as $res)
 	{	//Преодбразуем массив значений в строку с переносами
 		if(substr(PHP_OS, 0, 3) == "WIN")
